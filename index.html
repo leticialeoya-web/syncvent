@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Ventilação Mecânica — Assincronias | Mecânica | Curvas</title>
+
+<style>
+:root{
+  --bg:#ffffff;
+  --fg:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --card:#f9fafb;
+  --accent:#111827;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:16px;
+  font-family: Arial, sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+}
+.wrap{max-width:1040px;margin:0 auto}
+
+.legal{
+  max-width:1040px;
+  margin:10px auto 14px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:12px;
+  color:#374151;
+  background:var(--card);
+}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:10px 0 12px;
+  margin-bottom:12px;
+}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tabbtn{
+  padding:10px 12px;
+  font-size:14px;
+  cursor:pointer;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:12px;
+}
+.tabbtn.active{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent) inset;
+}
+.muted{color:var(--muted);font-size:12px}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px;
+  margin:12px 0;
+  background:var(--card);
+}
+
+h1{font-size:20px;margin:0 0 8px}
+h2{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px;line-height:1.45;color:#374151}
+
+iframe{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+}
+
+.hr{height:1px;background:var(--line);margin:12px 0}
+
+footer{
+  margin:28px 0 6px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  font-size:12px;
+  color:#4b5563;
+  line-height:1.55;
+}
+
+/* mobile */
+.mobileDock{
+  position:fixed;left:0;right:0;bottom:0;
+  padding:10px 12px;
+  background:rgba(255,255,255,.95);
+  border-top:1px solid var(--line);
+  display:none;
+}
+.mobileDock button{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--accent);
+  border-radius:12px;
+  background:#fff;
+}
+@media(max-width:820px){
+  body{padding-bottom:78px}
+  .mobileDock{display:block}
+}
+</style>
+</head>
+
+<body>
+
+<div class="legal">
+<strong>Aviso legal:</strong>
+Uso exclusivamente educacional. Não orienta conduta, ajustes ventilatórios ou decisões clínicas.
+Conteúdo protegido por direitos autorais.
+</div>
+
+<div class="wrap">
+
+<div class="topbar">
+  <div class="tabs">
+    <button class="tabbtn active" id="tabA">Assincronias</button>
+    <button class="tabbtn" id="tabM">Mecânica</button>
+    <button class="tabbtn" id="tabC">Curvas normais</button>
+    <button class="tabbtn" id="tabR">Manuais & Referências</button>
+    <span class="muted">Educacional</span>
+  </div>
+</div>
+
+<!-- ================= ASSINCRONIAS ================= -->
+<section id="secA">
+<h1>Assincronias Ventilatórias</h1>
+<p class="muted">Módulo isolado. Sem conflito de IDs ou JavaScript.</p>
+
+<iframe
+  srcdoc='
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"></head>
+<body>
+<!-- COLE AQUI TODO O HTML DO APP DE ASSINCRONIAS (A) SEM ALTERAR NADA -->
+</body>
+</html>'
+></iframe>
+</section>
+
+<!-- ================= MECÂNICA ================= -->
+<section id="secM" style="display:none">
+<h1>Mecânica Ventilatória</h1>
+<p class="muted">Módulo isolado. Leitura por curvas. Sem orientação de conduta.</p>
+
+<iframe
+  srcdoc='
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"></head>
+<body>
+<!-- COLE AQUI TODO O HTML DO APP DE MECÂNICA (B) SEM ALTERAR NADA -->
+</body>
+</html>'
+></iframe>
+</section>
+
+<!-- ================= CURVAS NORMAIS ================= -->
+<section id="secC" style="display:none">
+<h1>Curvas normais</h1>
+
+<div class="card">
+<h2>PCV — Pressão Controlada</h2>
+<img src="grafico_pcv.png" style="width:100%;border:1px solid var(--line);border-radius:12px">
+</div>
+
+<div class="card">
+<h2>VCV — Volume Controlado</h2>
+<img src="grafico_vcv.png" style="width:100%;border:1px solid var(--line);border-radius:12px">
+</div>
+
+<div class="card">
+<p class="muted">Traçados esquemáticos. Uso educacional.</p>
+</div>
+</section>
+
+<!-- ================= REFERÊNCIAS ================= -->
+<section id="secR" style="display:none">
+<h1>Manuais & Referências</h1>
+<p class="muted">Conteúdo externo. PDFs e buscas.</p>
+
+<div class="card">
+<ul>
+<li>Trigger / Sensitivity</li>
+<li>Flow termination</li>
+<li>Rise time</li>
+<li>Intrinsic PEEP</li>
+</ul>
+</div>
+</section>
+
+<footer>
+<p><b>Autoria:</b> Leticia Moreira © 2026</p>
+<p>Escopo educacional. Não substitui julgamento clínico.</p>
+</footer>
+
+</div>
+
+<div class="mobileDock">
+<button onclick="document.getElementById('secR').scrollIntoView()">Manuais & Referências</button>
+</div>
+
+<script>
+const tabs=[
+  ["tabA","secA"],
+  ["tabM","secM"],
+  ["tabC","secC"],
+  ["tabR","secR"]
+];
+tabs.forEach(([t,s])=>{
+  document.getElementById(t).onclick=()=>{
+    tabs.forEach(([tt,ss])=>{
+      document.getElementById(tt).classList.remove("active");
+      document.getElementById(ss).style.display="none";
+    });
+    document.getElementById(t).classList.add("active");
+    document.getElementById(s).style.display="block";
+    window.scrollTo(0,0);
+  };
+});
+</script>
+
+</body>
+</html>
