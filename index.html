@@ -140,14 +140,18 @@ Conteúdo protegido por direitos autorais.
   <section id="secAsync">
     <h1>Assincronias Ventilatórias</h1>
     <p class="muted">Módulo isolado. HTML carregado a partir de SRC_ASYNC.</p>
-    <iframe id="frameAsync"></iframe>
+    <iframe id="frameAsync"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        allow="clipboard-read; clipboard-write"></iframe>
   </section>
 
   <!-- MECÂNICA -->
   <section id="secMech" style="display:none;">
     <h1>Mecânica Ventilatória</h1>
     <p class="muted">Módulo isolado. HTML carregado a partir de SRC_MECH.</p>
-    <iframe id="frameMech"></iframe>
+    <iframe id="frameMech"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        allow="clipboard-read; clipboard-write"></iframe>
   </section>
 
   <!-- CURVAS NORMAIS -->
