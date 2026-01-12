@@ -924,7 +924,7 @@ Conteúdo protegido por direitos autorais.
         return el ? el.value : null;
       }
       function valRadio(name){
-        const el = document.querySelector(input[name="${name}"]:checked);
+        const el = document.querySelector(`input[name="${name}"]:checked`);
         return el ? el.value : null;
       }
       function labelTipoCiclo(v){
@@ -975,14 +975,14 @@ Conteúdo protegido por direitos autorais.
         const peepi = $("p_peepi").value;
 
         const parts=[];
-        if(ti)   parts.push(Ti ${fmtNum(ti)} s);
-        if(rise) parts.push(Rise/pressurização: ${rise});
-        if(trig) parts.push(Trigger: ${trig});
-        if(cyc)  parts.push(% ciclagem: ${fmtNum(cyc)}%);
-        if(fr)   parts.push(FR ${fmtNum(fr)});
-        if(vt)   parts.push(VT ${fmtNum(vt)} mL);
-        if(peep) parts.push(PEEP ${fmtNum(peep)} cmH2O);
-        if(peepi)parts.push(Auto-PEEP (PEEPi) ${fmtNum(peepi)} cmH2O);
+        if(ti)   parts.push(`Ti ${fmtNum(ti)} s`);
+        if(rise) parts.push(`Rise/pressurização: ${rise}`);
+        if(trig) parts.push(`Trigger: ${trig}`);
+        if(cyc)  parts.push(`% ciclagem: ${fmtNum(cyc)}%`);
+        if(fr)   parts.push(`FR ${fmtNum(fr)}`);
+        if(vt)   parts.push(`VT ${fmtNum(vt)} mL`);
+        if(peep) parts.push(`PEEP ${fmtNum(peep)} cmH2O`);
+        if(peepi)parts.push(`Auto-PEEP (PEEPi) ${fmtNum(peepi)} cmH2O`);
         return parts.length ? parts.join(" | ") : "Sem parâmetros adicionais informados.";
       }
 
@@ -1078,7 +1078,7 @@ Conteúdo protegido por direitos autorais.
             addB(b,"fluxo","expiracao","Fluxo expiratório não zera antes do ciclo seguinte.");
             addB(b,"pressao","expiracao","Baseline expiratório de pressão pode permanecer elevado (quando visível).");
             addB(b,"volume","expiracao","Volume pode não retornar ao baseline antes do ciclo seguinte (interpretação integrada).");
-            padroes.push(Auto-PEEP / hiperinsuflação dinâmica ${confidenceTag("alta")});
+            padroes.push(`Auto-PEEP / hiperinsuflação dinâmica ${confidenceTag("alta")}`);
             hipoteses.push("Aprisionamento aéreo pode coexistir com maior carga de disparo e com esforço inefetivo.");
             variaveis.push("Te, FR, Ti, resistência/obstrução, vazamentos.");
             if(quem==="ventilador") sinais.push("Contexto: próximo ciclo iniciado pelo ventilador (mandatório).");
@@ -1089,15 +1089,15 @@ if($("duploDisparo").checked){
   sinais.push("Padrão: duplo disparo (dois ciclos consecutivos com expiração mínima).");
   addB(b,"fluxo","ciclagem","Dois ciclos consecutivos com expiração mínima entre eles (empilhamento).");
   addB(b,"volume","ciclagem","Empilhamento de volume pode coexistir quando a expiração entre ciclos é mínima (interpretação integrada).");
-  padroes.push(Duplo disparo ${confidenceTag("média")});
+  padroes.push(`Duplo disparo ${confidenceTag("média")}`);
   hipoteses.push("Persistência do esforço neural além do término do primeiro ciclo e/ou término mecânico precoce podem coexistir com este padrão (modo-dependente).");
   variaveis.push("Critério de término/ciclagem, timing do ciclo, sincronização ciclo a ciclo, modo ventilatório.");
   bump("duplo_disparo",4);
 }
           if($("degrauExp").checked){
             const local = $("degrauExp_local").value;
-            sinais.push(Fluxo: degrau/entalhe no ramo expiratório (${local}).);
-            addB(b,"fluxo","expiracao",Degrau/entalhe no ramo expiratório (${local}).);
+            sinais.push(`Fluxo: degrau/entalhe no ramo expiratório (${local}).`);
+            addB(b,"fluxo","expiracao",`Degrau/entalhe no ramo expiratório (${local}).`);
             hipoteses.push("Pode coexistir com limitação expiratória, secreção/condensado ou esforço interferindo na expiração.");
             variaveis.push("Te, resistência/obstrução, secreções/condensado.");
             bump("expiratorio",1);
@@ -1108,7 +1108,7 @@ if($("duploDisparo").checked){
             addB(b,"fluxo","ciclagem","Término inspiratório com fluxo ainda positivo.");
             addB(b,"pressao","ciclagem","Sinais de esforço no fim da inspiração podem coexistir (modo-dependente).");
             addB(b,"volume","ciclagem","Finalização do ciclo pode ocorrer antes do término do esforço neural (interpretação integrada).");
-            padroes.push(Ciclagem precoce ${confidenceTag("alta")});
+            padroes.push(`Ciclagem precoce ${confidenceTag("alta")}`);
             hipoteses.push("Tempo mecânico inspiratório menor que o tempo neural.");
             variaveis.push("Critério de término, Ti, trigger, pressurização (modo-dependente).");
             bump("cic_precoce",4);
@@ -1119,7 +1119,7 @@ if($("duploDisparo").checked){
             addB(b,"fluxo","ciclagem","Fluxo aproxima-se de zero e a inspiração persiste.");
             addB(b,"pressao","inspiracao","Tentativa expiratória durante inspiração pode coexistir (modo-dependente).");
             addB(b,"volume","inspiracao","Volume estabiliza cedo apesar de inspiração prolongada (interpretação integrada).");
-            padroes.push(Ciclagem tardia ${confidenceTag("alta")});
+            padroes.push(`Ciclagem tardia ${confidenceTag("alta")}`);
             hipoteses.push("Tempo mecânico inspiratório maior que o tempo neural.");
             variaveis.push("Critério de término, Ti, transição inspiração→expiração, vazamento (NIV).");
             bump("cic_tardia",4);
@@ -1128,9 +1128,9 @@ if($("duploDisparo").checked){
           if($("concavidade").checked){
             const fase = $("concavidade_fase").value;
             const local= $("concavidade_local").value;
-            sinais.push(Fluxo: concavidade na ${fase} (${local}).);
-            if(fase==="inspiração") addB(b,"fluxo","inspiracao",Concavidade no fluxo inspiratório (${local}).);
-            else addB(b,"fluxo","expiracao",Concavidade no fluxo expiratório (${local}).);
+            sinais.push(`Fluxo: concavidade na ${fase} (${local}).`);
+            if(fase==="inspiração") addB(b,"fluxo","inspiracao",`Concavidade no fluxo inspiratório (${local}).`);
+            else addB(b,"fluxo","expiracao",`Concavidade no fluxo expiratório (${local}).`);
             hipoteses.push("Modulação por esforço/demanda; modo e timing definem a leitura.");
             variaveis.push("Forma do fluxo, pressurização/rise (modos a pressão), trigger e término (PSV).");
             bump("demanda",2);
@@ -1139,9 +1139,9 @@ if($("duploDisparo").checked){
           if($("convexidade").checked){
             const fase = $("convexidade_fase").value;
             const local= $("convexidade_local").value;
-            sinais.push(Fluxo: convexidade na ${fase} (${local}).);
-            if(fase==="inspiração") addB(b,"fluxo","inspiracao",Convexidade no fluxo inspiratório (${local}).);
-            else addB(b,"fluxo","expiracao",Convexidade no fluxo expiratório (${local}).);
+            sinais.push(`Fluxo: convexidade na ${fase} (${local}).`);
+            if(fase==="inspiração") addB(b,"fluxo","inspiracao",`Convexidade no fluxo inspiratório (${local}).`);
+            else addB(b,"fluxo","expiracao",`Convexidade no fluxo expiratório (${local}).`);
             hipoteses.push("Padrão imposto/assistência elevada pode deformar a curva; modo e contexto definem a leitura.");
             variaveis.push("Nível de suporte, pressurização/rise, vazamentos.");
             bump("imposto",1);
@@ -1165,8 +1165,8 @@ if($("duploDisparo").checked){
 
           if($("abaulamentoPlatoFluxo").checked){
             const local=$("abaulamentoPlato_local").value;
-            sinais.push(Fluxo: segunda elevação do fluxo inspiratório (${local}).);
-            addB(b,"fluxo","inspiracao",Segunda elevação do fluxo inspiratório (${local}).);
+            sinais.push(`Fluxo: segunda elevação do fluxo inspiratório (${local}).`);
+            addB(b,"fluxo","inspiracao",`Segunda elevação do fluxo inspiratório (${local}).`);
             addB(b,"pressao","inspiracao","Sinal compatível com esforço dentro da inspiração pode coexistir (modo-dependente).");
             hipoteses.push("Demanda variável durante a inspiração e/ou interação esforço–ventilador.");
             variaveis.push("Rise/pressurização, forma do fluxo, término (PSV), vazamentos.");
@@ -1192,7 +1192,7 @@ if($("duploDisparo").checked){
 if($("fluxoRetangularPC").checked){
   sinais.push("Mecânica: fluxo inspiratório em formato retangular em modo pressórico.");
   addB(b,"fluxo","inspiracao","Fluxo inspiratório com contorno retangular/achatado em modo pressórico (contextual).");
-  padroes.push(Resistência elevada (compatível) ${confidenceTag("média")});
+  padroes.push(`Resistência elevada (compatível) ${confidenceTag("média")}`);
   hipoteses.push("Padrão compatível com aumento de resistência/dificuldade de escoamento, quando observado em modos pressóricos (interpretação integrada).");
   variaveis.push("Resistência/obstrução, secreções, calibre do tubo, filtros/circuito, vazamentos.");
   bump("resistencia",2);
@@ -1245,7 +1245,7 @@ if($("fluxoRetangularPC").checked){
               addB(b,"fluxo","inspiracao","Segundo esforço sugerido por re-elevação do fluxo (meio/fim).");
             }
             if(acopl){
-              sinais.push(Reverse triggering: padrão repetitivo e acoplado (${padrao}).);
+              sinais.push(`Reverse triggering: padrão repetitivo e acoplado (${padrao}).`);
             }
             if(duplo){
               sinais.push("Reverse triggering: ciclo duplo associado.");
@@ -1253,19 +1253,19 @@ if($("fluxoRetangularPC").checked){
             }
 
             if((sPressao||sFluxo) && acopl){
-              padroes.push(Reverse triggering ${confidenceTag(conf)});
+              padroes.push(`Reverse triggering ${confidenceTag(conf)}`);
               hipoteses.push("Entrainment: ciclo mandatório pode coexistir com esforço neural tardio acoplado.");
               variaveis.push("Tipo de ciclo mandatório, timing (Ti/FR), detecção de esforço, repetição ciclo a ciclo.");
               bump("rt",4);
             }else{
-              padroes.push(Suspeita de reverse triggering (critérios incompletos) ${confidenceTag("baixa")});
+              padroes.push(`Suspeita de reverse triggering (critérios incompletos) ${confidenceTag("baixa")}`);
               bump("rt",1);
             }
           }
 
           const peepiVal=parseNum($("p_peepi").value);
           if(peepiVal && peepiVal>0){
-            hipoteses.push(Dado adicional: PEEPi informada = ${peepiVal} cmH2O.);
+            hipoteses.push(`Dado adicional: PEEPi informada = ${peepiVal} cmH2O.`);
           }
 
           const sinaisU = unique(sinais);
@@ -1274,7 +1274,7 @@ if($("fluxoRetangularPC").checked){
           const varU = unique(variaveis);
 
           if(sinaisU.length===0){
-            resultado.textContent=Ciclo: ${ctxCiclo} | Modo: ${ctxModo}. Nenhum achado selecionado.;
+            resultado.textContent=`Ciclo: ${ctxCiclo} | Modo: ${ctxModo}. Nenhum achado selecionado.`;
             return;
           }
 
@@ -1298,7 +1298,7 @@ if($("fluxoRetangularPC").checked){
             return "<ul><li>"+a.map(x=>escapeHtml(x)).join("</li><li>")+"</li></ul>";
           }
 
-          const curvasHTML = 
+          const curvasHTML = `
             <div class="k">Análise por curva e por momento</div>
 
             <div class="card" style="background:#fff;">
@@ -1330,9 +1330,9 @@ if($("fluxoRetangularPC").checked){
                 <div><div class="muted">Expiração</div>${listOrDash(b.volume.expiracao)}</div>
               </div>
             </div>
-          ;
+          `;
 
-          const html = 
+          const html = `
             <div class="p" style="font-weight:700; font-size:14px;">Teste clínico – Assincronias Ventilatórias</div>
 
             <div class="k">Contexto</div>
@@ -1343,12 +1343,12 @@ if($("fluxoRetangularPC").checked){
             </div>
 
             <div class="k">1) Sinais selecionados</div>
-            <ul>${sinaisU.map(s=><li>${escapeHtml(s)}</li>).join("")}</ul>
+            <ul>${sinaisU.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>
 
             <div class="k">2) Padrões compatíveis (síntese)</div>
             <div class="p">${
               padroesU.length
-                ? padroesU.map(x=><div>${x}</div>).join("")
+                ? padroesU.map(x=>`<div>${x}</div>`).join("")
                 : "<span class='muted'>Sem padrão dominante identificado.</span>"
             }</div>
 
@@ -1356,10 +1356,10 @@ if($("fluxoRetangularPC").checked){
             <div class="p">${escapeHtml(leituraConsolidada)}</div>
 
             <div class="k">4) Hipóteses interpretativas (educacionais)</div>
-            ${hipU.length ? <ul>${hipU.map(h=><li>${escapeHtml(h)}</li>).join("")}</ul> : "<div class='muted'>—</div>"}
+            ${hipU.length ? `<ul>${hipU.map(h=>`<li>${escapeHtml(h)}</li>`).join("")}</ul>` : "<div class='muted'>—</div>"}
 
             <div class="k">5) Variáveis frequentemente associadas (localização no ventilador/manual)</div>
-            ${varU.length ? <ul>${varU.map(v=><li>${escapeHtml(v)}</li>).join("")}</ul> : "<div class='muted'>—</div>"}
+            ${varU.length ? `<ul>${varU.map(v=>`<li>${escapeHtml(v)}</li>`).join("")}</ul>` : "<div class='muted'>—</div>"}
 
             ${curvasHTML}
 
@@ -1367,7 +1367,7 @@ if($("fluxoRetangularPC").checked){
             <div class="p">
               Texto gerado para fins educacionais. Não substitui julgamento clínico, avaliação individual ou protocolos institucionais.
             </div>
-          ;
+          `;
 
           saidaGerada.innerHTML = html;
           cardSaida.style.display="block";
@@ -1394,32 +1394,32 @@ if($("fluxoRetangularPC").checked){
         const lines=[];
         lines.push("Teste clínico – Assincronias Ventilatórias");
         lines.push("");
-        lines.push(Contexto: Ciclo: ${s.ctxCiclo} | Modo: ${s.ctxModo});
-        lines.push(Parâmetros informados: ${s.ctxParams});
+        lines.push(`Contexto: Ciclo: ${s.ctxCiclo} | Modo: ${s.ctxModo}`);
+        lines.push(`Parâmetros informados: ${s.ctxParams}`);
         lines.push("");
         lines.push("1) Sinais selecionados:");
-        s.sinais.forEach(x=>lines.push(- ${x}));
+        s.sinais.forEach(x=>lines.push(`- ${x}`));
         lines.push("");
         lines.push("2) Padrões compatíveis (síntese):");
-        (s.padroes.length ? s.padroes : ["—"]).forEach(x=>lines.push(- ${x}));
+        (s.padroes.length ? s.padroes : ["—"]).forEach(x=>lines.push(`- ${x}`));
         lines.push("");
         lines.push("3) Leitura integrada (educacional):");
         lines.push(s.leitura);
         lines.push("");
         lines.push("4) Hipóteses interpretativas (educacionais):");
-        (s.hip.length ? s.hip : ["—"]).forEach(x=>lines.push(- ${x}));
+        (s.hip.length ? s.hip : ["—"]).forEach(x=>lines.push(`- ${x}`));
         lines.push("");
         lines.push("5) Variáveis frequentemente associadas (localização no ventilador/manual):");
-        (s.vars.length ? s.vars : ["—"]).forEach(x=>lines.push(- ${x}));
+        (s.vars.length ? s.vars : ["—"]).forEach(x=>lines.push(`- ${x}`));
         lines.push("");
 
         function dump(curvaLabel, obj){
           function j(a){ return unique(a).join(" | ") || "—"; }
           lines.push(curvaLabel);
-          lines.push(- Disparo: ${j(obj.disparo)});
-          lines.push(- Inspiração: ${j(obj.inspiracao)});
-          lines.push(- Término: ${j(obj.ciclagem)});
-          lines.push(- Expiração: ${j(obj.expiracao)});
+          lines.push(`- Disparo: ${j(obj.disparo)}`);
+          lines.push(`- Inspiração: ${j(obj.inspiracao)}`);
+          lines.push(`- Término: ${j(obj.ciclagem)}`);
+          lines.push(`- Expiração: ${j(obj.expiracao)}`);
           lines.push("");
         }
         lines.push("Análise por curva e por momento:");
