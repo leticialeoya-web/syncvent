@@ -1468,7 +1468,56 @@ if($("fluxoRetangularPC").checked){
       showTab("ess");
     })();
   </script>
+  <script>
+(function(){
+  // ====== ABAS DO SITE (Assincronias | Mecânica | Curvas | Referências) ======
+  const tabs = [
+    ["tabAsync","secAsync"],
+    ["tabMech","secMech"],
+    ["tabNorm","secNorm"],
+    ["tabRefs","secRefs"]
+  ];
+
+  function show(secId){
+    tabs.forEach(([btnId, sec])=>{
+      const b = document.getElementById(btnId);
+      const s = document.getElementById(sec);
+      if(!b || !s) return;
+      const on = (sec === secId);
+      b.classList.toggle("active", on);
+      s.style.display = on ? "block" : "none";
+    });
+    window.scrollTo(0,0);
+  }
+
+  tabs.forEach(([btnId, secId])=>{
+    const b = document.getElementById(btnId);
+    if(!b) return;
+    b.addEventListener("click", ()=>show(secId));
+  });
+
+  // ====== CARREGAR MÓDULOS NOS IFRAMES (SRC_ASYNC / SRC_MECH) ======
+  function load(frameId, srcId){
+    const frame = document.getElementById(frameId);
+    const srcEl = document.getElementById(srcId);
+    if(!frame || !srcEl) return;
+
+    const html = (srcEl.value || "").trim();
+    if(!html || html.includes("COLE AQUI")) return;
+
+    frame.srcdoc = html;
+  }
+
+  load("frameAsync","SRC_ASYNC");
+  load("frameMech","SRC_MECH");
+
+  // Aba inicial
+  show("secAsync");
+})();
+</script>
+
 </body>
+  
 </html>
 </textarea>
 
