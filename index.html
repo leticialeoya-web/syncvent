@@ -128,10 +128,10 @@ Conteúdo protegido por direitos autorais.
 
   <div class="topbar">
     <div class="tabs">
-      <button id="tabAsync" class="tabbtn active">Assincronias</button>
-      <button id="tabMech" class="tabbtn">Mecânica</button>
-      <button id="tabNorm" class="tabbtn">Curvas normais</button>
-      <button id="tabRefs" class="tabbtn">Manuais & Referências</button>
+      <button id="tabAsync" class="tabbtn active"type="button">Assincronias</button>
+      <button id="tabMech" class="tabbtn"type="button">Mecânica</button>
+      <button id="tabNorm" class="tabbtn"type="button">Curvas normais</button>
+      <button id="tabRefs" class="tabbtn"type="button">Manuais & Referências</button>
       <span class="muted">Educacional</span>
     </div>
   </div>
@@ -649,7 +649,8 @@ Conteúdo protegido por direitos autorais.
     </section>
 
     <!-- ====================== MANUAIS & REFERÊNCIAS (FINAL DO APP) ====================== -->
-    <section id="secRefs">
+    <section id="secRefs" style="display:none;">
+
       <h1>Manuais & Referências</h1>
       <p class="muted">
         Links externos (PDF direto quando disponível; quando não, página oficial). Inclui busca no YouTube,
@@ -1477,47 +1478,36 @@ if($("fluxoRetangularPC").checked){
 
 <script>
 (function(){
-  const tabs=[
+  const tabs = [
     ["tabAsync","secAsync"],
     ["tabMech","secMech"],
     ["tabNorm","secNorm"],
     ["tabRefs","secRefs"]
   ];
 
-  function show(sec){
-    tabs.forEach(([t,s])=>{
-      document.getElementById(t).classList.toggle("active",s===sec);
-      document.getElementById(s).style.display=(s===sec)?"block":"none";
+  function show(secId){
+    tabs.forEach(([btnId, sec])=>{
+      const b = document.getElementById(btnId);
+      const s = document.getElementById(sec);
+      if(!b || !s) return;
+      const on = (sec === secId);
+      b.classList.toggle("active", on);
+      s.style.display = on ? "block" : "none";
     });
     window.scrollTo(0,0);
   }
 
-  document.getElementById("tabAsync").onclick=()=>show("secAsync");
-  document.getElementById("tabMech").onclick=()=>show("secMech");
-  document.getElementById("tabNorm").onclick=()=>show("secNorm");
-  document.getElementById("tabRefs").onclick=()=>show("secRefs");
+  tabs.forEach(([btnId, secId])=>{
+    const b = document.getElementById(btnId);
+    if(!b) return;
+    b.addEventListener("click", ()=>show(secId));
+  });
 
-  function load(frameId, srcId){
-  const html = (document.getElementById(srcId).value || "").trim();
-  if(!html || html.includes("COLE AQUI")) return;
-
-  const base = '<base target="_blank" rel="noopener">';
-  let final = html;
-
-  if (/<head[^>]*>/i.test(final)) {
-    final = final.replace(/<head[^>]*>/i, (m) => m + base);
-  } else {
-    final = base + final;
-  }
-
-  document.getElementById(frameId).srcdoc = final;
-}
-
-
-  load("frameAsync","SRC_ASYNC");
-  load("frameMech","SRC_MECH");
+  // inicial
+  show("secAsync");
 })();
 </script>
+
 
 </body>
 </html>
