@@ -1498,10 +1498,21 @@ if($("fluxoRetangularPC").checked){
   document.getElementById("tabRefs").onclick=()=>show("secRefs");
 
   function load(frameId, srcId){
-    const html=document.getElementById(srcId).value.trim();
-    if(!html || html.includes("COLE AQUI")) return;
-    document.getElementById(frameId).srcdoc=html;
+  const html = (document.getElementById(srcId).value || "").trim();
+  if(!html || html.includes("COLE AQUI")) return;
+
+  const base = '<base target="_blank" rel="noopener">';
+  let final = html;
+
+  if (/<head[^>]*>/i.test(final)) {
+    final = final.replace(/<head[^>]*>/i, (m) => m + base);
+  } else {
+    final = base + final;
   }
+
+  document.getElementById(frameId).srcdoc = final;
+}
+
 
   load("frameAsync","SRC_ASYNC");
   load("frameMech","SRC_MECH");
