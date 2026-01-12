@@ -916,7 +916,7 @@ Conteúdo protegido por direitos autorais.
         debugBox.textContent=String(msg||"Erro");
       }
       window.onerror = function(message, source, lineno, colno){
-        showError(Erro de JavaScript: ${message}\nLinha: ${lineno}:${colno});
+        showError(`Erro de JavaScript: ${message}\nLinha: ${lineno}:${colno}`);
       };
 
       function getTipoCiclo(){
