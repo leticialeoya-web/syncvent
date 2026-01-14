@@ -4,20 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SyncVent</title>
-  <meta name="description" content="SyncVent — Plataforma educacional para raciocínio clínico em ventilação mecânica no adulto." />
+  <meta name="description" content="SyncVent — Plataforma educacional (adulto) para raciocínio clínico em ventilação mecânica, SARA e sepse." />
 
   <style>
     :root{
-      --bg:#0b0f17;
-      --panel:#0f1624;
-      --panel2:#0c1320;
-      --text:#eaf0ff;
-      --muted:#a9b6d6;
-      --line:rgba(180,200,255,.16);
-      --blue:#2d7dff;
-      --blue2:#5aa0ff;
-      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --bg:#0b0f17; --panel:#0f1624; --panel2:#0c1320;
+      --text:#eaf0ff; --muted:#a9b6d6; --line:rgba(180,200,255,.16);
+      --blue:#2d7dff; --blue2:#5aa0ff; --shadow: 0 10px 30px rgba(0,0,0,.45);
       --radius:16px;
+      --ok: rgba(60, 255, 160, .16);
+      --warn: rgba(255, 200, 80, .14);
+      --bad: rgba(255, 80, 80, .14);
     }
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
@@ -35,14 +32,12 @@
 
     /* Splash */
     #splash{
-      position:fixed; inset:0;
+      position:fixed; inset:0; z-index:9999; padding:24px;
       background: linear-gradient(180deg, #000 0%, #070a10 45%, #0b0f17 100%);
       display:flex; align-items:center; justify-content:center;
-      z-index:9999;
-      padding:24px;
     }
     .splashCard{
-      width:min(760px, 100%);
+      width:min(960px, 100%);
       border:1px solid rgba(255,255,255,.10);
       border-radius:24px;
       background: rgba(15,22,36,.55);
@@ -50,65 +45,32 @@
       box-shadow: var(--shadow);
       padding:28px;
     }
-    .brandRow{
-      display:flex; align-items:center; gap:14px;
-      margin-bottom:10px;
-    }
+    .brandRow{ display:flex; align-items:center; gap:14px; margin-bottom:10px; }
     .logo{
-      width:48px; height:48px;
-      border-radius:14px;
+      width:48px; height:48px; border-radius:14px;
       background: linear-gradient(135deg, rgba(45,125,255,1) 0%, rgba(90,160,255,1) 55%, rgba(255,255,255,.9) 130%);
       box-shadow: 0 10px 30px rgba(45,125,255,.35);
       position:relative;
     }
     .logo:after{
-      content:"";
-      position:absolute; inset:10px;
-      border-radius:10px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.22);
+      content:""; position:absolute; inset:10px; border-radius:10px;
+      background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.22);
     }
-    .brandTitle{
-      display:flex; flex-direction:column;
-      gap:2px;
-    }
-    .brandTitle h1{
-      margin:0; font-size:28px; letter-spacing:.4px;
-    }
-    .brandTitle .sub{
-      margin:0; color:var(--muted); font-size:13px;
-    }
-    .splashBody{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:18px;
-    }
-    @media (max-width:860px){
-      .splashBody{ grid-template-columns:1fr; }
-    }
+    .brandTitle h1{ margin:0; font-size:28px; letter-spacing:.4px; }
+    .brandTitle .sub{ margin:2px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
+
+    .splashBody{ margin-top:14px; display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; }
+    @media (max-width:860px){ .splashBody{ grid-template-columns:1fr; } }
     .splashBox{
       border:1px solid var(--line);
       border-radius:18px;
       background: rgba(12,19,32,.55);
       padding:14px;
     }
-    .splashBox h2{
-      margin:0 0 8px 0;
-      font-size:14px;
-      color:#dce6ff;
-      letter-spacing:.2px;
-    }
-    .splashBox p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.5;
-      font-size:13px;
-    }
-    .btnRow{
-      display:flex; gap:10px; justify-content:flex-end; align-items:center;
-      margin-top:14px;
-    }
+    .splashBox h2{ margin:0 0 8px 0; font-size:14px; color:#dce6ff; letter-spacing:.2px; }
+    .splashBox p{ margin:0; color:var(--muted); line-height:1.5; font-size:13px; }
+
+    .btnRow{ display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
     .btn{
       border:1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.06);
@@ -116,7 +78,7 @@
       padding:10px 14px;
       border-radius:14px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:900;
       letter-spacing:.2px;
     }
     .btnPrimary{
@@ -125,39 +87,25 @@
       box-shadow: 0 12px 26px rgba(45,125,255,.22);
       color:#081022;
     }
-    .btn:active{ transform: translateY(1px); }
 
-    /* App shell */
     header{
       position:sticky; top:0; z-index:50;
       border-bottom:1px solid var(--line);
       background: rgba(7,10,16,.55);
       backdrop-filter: blur(10px);
     }
-    .wrap{ width:min(1180px, 100%); margin:0 auto; padding:16px 16px; }
-    .topRow{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px;
-    }
-    .topLeft{
-      display:flex; align-items:center; gap:12px;
-      min-width: 240px;
-    }
+    .wrap{ width:min(1260px, 100%); margin:0 auto; padding:16px 16px; }
+    .topRow{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
+    .topLeft{ display:flex; align-items:center; gap:12px; min-width:240px; }
     .miniLogo{
       width:34px; height:34px; border-radius:12px;
       background: linear-gradient(135deg, rgba(45,125,255,1) 0%, rgba(90,160,255,1) 55%, rgba(255,255,255,.9) 130%);
       border:1px solid rgba(255,255,255,.12);
     }
-    .appName{
-      display:flex; flex-direction:column;
-      line-height:1.1;
-    }
     .appName strong{ font-size:15px; letter-spacing:.2px; }
     .appName span{ font-size:12px; color:var(--muted); }
-    nav{
-      display:flex; gap:8px; flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+
+    nav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
     .tab{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
@@ -165,7 +113,7 @@
       padding:9px 12px;
       border-radius:999px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:900;
       font-size:13px;
     }
     .tab.active{
@@ -175,12 +123,9 @@
     }
 
     main{ padding:18px 0 28px; }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:14px;
-    }
+    .grid{ display:grid; grid-template-columns: 1.12fr .88fr; gap:14px; }
     @media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
     .card{
       border:1px solid var(--line);
       border-radius: var(--radius);
@@ -196,27 +141,12 @@
       color:#dce6ff;
       display:flex; align-items:center; justify-content:space-between; gap:8px;
     }
-    .hint{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.5;
-      margin:0 0 12px 0;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:640px){ .row{ grid-template-columns:1fr; } }
-    label{
-      display:block;
-      font-size:12px;
-      color:#cfe0ff;
-      margin-bottom:6px;
-      font-weight:800;
-      letter-spacing:.15px;
-    }
-    select, input{
+    .hint{ color:var(--muted); font-size:12px; line-height:1.5; margin:0 0 12px 0; }
+
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width:720px){ .row{ grid-template-columns:1fr; } }
+    label{ display:block; font-size:12px; color:#cfe0ff; margin-bottom:6px; font-weight:900; letter-spacing:.15px; }
+    select, input, textarea{
       width:100%;
       padding:10px 11px;
       border-radius:14px;
@@ -225,68 +155,18 @@
       color:var(--text);
       outline:none;
     }
-    select:focus, input:focus{
+    select:focus, input:focus, textarea:focus{
       border-color: rgba(90,160,255,.75);
       box-shadow: 0 0 0 3px rgba(90,160,255,.16);
     }
-    .mutedSmall{ color:var(--muted); font-size:12px; margin-top:6px; line-height:1.45; }
-    .pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      color:#dce6ff;
-      font-size:12px;
-      font-weight:800;
-    }
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap;
-      align-items:center; justify-content:flex-end;
-      margin-top:10px;
-    }
-    .btnSmall{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      padding:9px 12px;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:800;
-      font-size:13px;
-    }
-    .btnSmall.primary{
-      border-color: rgba(45,125,255,.55);
-      background: rgba(45,125,255,.18);
-    }
-    .btnSmall.danger{
-      border-color: rgba(255,255,255,.16);
-      background: rgba(255,80,80,.12);
-    }
-
-    .resultBox{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      border-radius: 16px;
-      padding:12px;
-      min-height: 160px;
-      white-space: pre-wrap;
-      line-height: 1.55;
-      font-size: 13px;
-      color:#eaf0ff;
-    }
-    .subgrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:860px){ .subgrid{ grid-template-columns:1fr; } }
+    textarea{ min-height:92px; resize:vertical; }
 
     details{
       border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
       background: rgba(0,0,0,.18);
       padding:10px 12px;
+      margin-top:12px;
     }
     details summary{
       cursor:pointer;
@@ -297,13 +177,56 @@
       list-style:none;
     }
     details summary::-webkit-details-marker{ display:none; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color:#dce6ff;
+      font-size:12px;
+      font-weight:900;
+    }
+    .pill.ok{ background: var(--ok); }
+    .pill.warn{ background: var(--warn); }
+    .pill.bad{ background: var(--bad); }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; margin-top:12px; }
+    .btnSmall{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+    }
+    .btnSmall.primary{
+      border-color: rgba(45,125,255,.55);
+      background: rgba(45,125,255,.18);
+    }
+    .btnSmall.danger{ background: rgba(255,80,80,.12); }
+
+    .resultBox{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding:12px;
+      min-height: 240px;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-size: 13px;
+      color:#eaf0ff;
+    }
+
+    .subgrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width:860px){ .subgrid{ grid-template-columns:1fr; } }
+
     .sigList{
-      margin:10px 0 0 0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:8px;
+      margin:10px 0 0 0; padding:0; list-style:none;
+      display:grid; grid-template-columns: 1fr 1fr; gap:8px;
     }
     @media (max-width:720px){ .sigList{ grid-template-columns:1fr; } }
     .sigItem{
@@ -314,17 +237,48 @@
       background: rgba(255,255,255,.03);
     }
     .sigItem input{ width:auto; margin-top:2px; }
-    .sigItem span{
-      color:var(--text);
-      font-size:13px;
-      line-height:1.35;
+
+    .tableWrap{
+      overflow:auto;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      background: rgba(0,0,0,.18);
+    }
+    table{ border-collapse:collapse; width:100%; min-width:720px; font-size:12px; }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      text-align:left;
+      vertical-align:top;
+      color:#eaf0ff;
+    }
+    th{ color:#dce6ff; letter-spacing:.2px; background: rgba(255,255,255,.03); }
+    .hl{ background: rgba(45,125,255,.12); outline: 1px solid rgba(45,125,255,.35); }
+
+    .refs{
+      margin-top:8px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background: rgba(0,0,0,.14);
+      padding:10px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .refs b{ color:#dce6ff; }
+    .tag{
+      display:inline-block;
+      margin-right:8px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color:#dce6ff;
+      font-size:11px;
+      font-weight:900;
     }
 
-    .imgGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
+    .imgGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
     @media (max-width:980px){ .imgGrid{ grid-template-columns:1fr; } }
     .imgCard{
       border:1px solid rgba(255,255,255,.12);
@@ -332,25 +286,8 @@
       border-radius: 18px;
       padding:12px;
     }
-    .imgCard h3{
-      margin:0 0 8px 0;
-      font-size:13px;
-      color:#dce6ff;
-    }
-    .imgCard img{
-      width:100%;
-      height:auto;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:#000;
-      display:block;
-    }
-    .imgNote{
-      margin:8px 0 0 0;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
-    }
+    .imgCard h3{ margin:0 0 8px 0; font-size:13px; color:#dce6ff; }
+    .imgCard img{ width:100%; height:auto; border-radius: 14px; border:1px solid rgba(255,255,255,.10); background:#000; display:block; }
 
     footer{
       border-top:1px solid var(--line);
@@ -360,7 +297,6 @@
       font-size:12px;
       line-height:1.55;
     }
-    .legal strong{ color:#dce6ff; }
   </style>
 </head>
 
@@ -372,28 +308,23 @@
         <div class="logo" aria-hidden="true"></div>
         <div class="brandTitle">
           <h1>SyncVent</h1>
-          <p class="sub">Plataforma educacional — Ventilação mecânica no adulto (checklist + raciocínio clínico)</p>
+          <p class="sub">Adulto • Definidores (SARA/sepse) • Mecânica e assincronia • Pontos de atenção com evidência (Guideline/Cochrane/PubMed)</p>
         </div>
       </div>
 
       <div class="splashBody">
         <div class="splashBox">
           <h2>Uso e limites</h2>
-          <p>
-            Instrumento exclusivamente educacional para organizar raciocínio clínico e estudo.
-            Não substitui julgamento profissional, protocolos locais ou decisões assistenciais.
-          </p>
+          <p>Instrumento exclusivamente educacional. Não orienta ajustes ventilatórios nem condutas terapêuticas. Use para estudo e discussão multiprofissional.</p>
         </div>
         <div class="splashBox">
           <h2>Autoria e direitos</h2>
-          <p>
-            Conteúdo e estrutura protegidos. Uso não autorizado, reprodução ou exploração comercial são vedados.
-          </p>
+          <p>© 2026 Leticia Moreira. Todos os direitos reservados. Proibida reprodução, distribuição, adaptação ou uso comercial sem autorização expressa e por escrito.</p>
         </div>
       </div>
 
       <div class="btnRow">
-        <button class="btn" type="button" id="btnSplashInfo">Termos</button>
+        <button class="btn" type="button" id="btnSplashTerms">Termos</button>
         <button class="btn btnPrimary" type="button" id="btnEnter">Entrar</button>
       </div>
     </div>
@@ -405,14 +336,15 @@
         <div class="topLeft">
           <div class="miniLogo" aria-hidden="true"></div>
           <div class="appName">
-            <strong>SyncVent</strong>
-            <span>Adulto • Checklist compacto + análise expandida</span>
+            <strong>SyncVent</strong><br/>
+            <span>Adulto • Pontos de atenção por cenário</span>
           </div>
         </div>
 
         <nav aria-label="Navegação principal">
-          <button class="tab active" id="tabCompact" type="button">Checklist compacto</button>
-          <button class="tab" id="tabExpanded" type="button">Análise expandida</button>
+          <button class="tab active" id="tabCompact" type="button">Checklist & Definidores</button>
+          <button class="tab" id="tabExpanded" type="button">Mecânica & Assincronia</button>
+          <button class="tab" id="tabPeepWean" type="button">PEEP & Desmame</button>
           <button class="tab" id="tabNormals" type="button">Curvas normais</button>
           <button class="tab" id="tabAbout" type="button">Sobre & Termos</button>
         </nav>
@@ -425,13 +357,8 @@
     <section id="secCompact">
       <div class="grid">
         <div class="card">
-          <h2>
-            Checklist compacto
-            <span class="pill" id="pillAdultOnly">Adulto-only</span>
-          </h2>
-          <p class="hint">
-            Preencha o contexto mínimo. A síntese compacta abre automaticamente os módulos da análise expandida quando elegíveis.
-          </p>
+          <h2>Checklist & Definidores <span class="pill" id="pillAdultOnly">Adulto-only</span></h2>
+          <p class="hint">Preencha os definidores. A saída entrega pontos de atenção em VM por cenário, cada um com evidência robusta (Guideline/Cochrane/PubMed).</p>
 
           <div class="row">
             <div>
@@ -441,11 +368,10 @@
                 <option value="nao">Não</option>
               </select>
             </div>
-
             <div>
               <label>Tipo de suporte</label>
               <select id="support_type">
-                <option value="invasivo">Invasivo (TET/Traqueostomia)</option>
+                <option value="invasivo">Invasivo</option>
                 <option value="niv">NIV</option>
                 <option value="hfno">HFNO</option>
                 <option value="o2_conv">O₂ convencional</option>
@@ -453,137 +379,51 @@
             </div>
           </div>
 
-          <div class="card" style="margin-top:12px; padding:12px; background:rgba(0,0,0,.18);">
-            <h2 style="margin-bottom:8px;">
-              Painel ventilatório atual (dados)
-              <span class="pill" id="pillVentPanel">contexto</span>
-            </h2>
-
-            <div class="row" id="panelInvasive">
-              <div>
-                <label>Modo ventilatório (invasivo)</label>
-                <select id="vent_mode">
-                  <option value="vc">VC</option>
-                  <option value="pc">PC</option>
-                  <option value="psv">PSV</option>
-                  <option value="prvc">PRVC</option>
-                  <option value="outro">Outro</option>
-                </select>
-              </div>
-              <div>
-                <label>FiO₂ (fração)</label>
-                <input id="fio2" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.40" />
-              </div>
-              <div>
-                <label>PEEP (cmH₂O)</label>
-                <input id="peep" type="number" step="1" min="0" max="30" placeholder="Ex.: 8" />
-              </div>
-              <div>
-                <label>FR total (rpm)</label>
-                <input id="rr_total" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" />
-              </div>
-              <div>
-                <label>VT exalado (mL)</label>
-                <input id="vt_exhaled_ml" type="number" step="1" min="0" max="1200" placeholder="Ex.: 420" />
-              </div>
-              <div>
-                <label>VM (L/min)</label>
-                <input id="minute_vent_lmin" type="number" step="0.1" min="0" max="40" placeholder="Ex.: 9.2" />
-              </div>
-              <div>
-                <label>Ppico (cmH₂O)</label>
-                <input id="ppeak" type="number" step="1" min="0" max="80" placeholder="Ex.: 28" />
-              </div>
-              <div>
-                <label>Pplat (cmH₂O)</label>
-                <input id="pplat" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" />
-              </div>
+          <details open>
+            <summary>Painel ventilatório atual (dados)</summary>
+            <div class="row" id="panelInvasive" style="margin-top:10px;">
+              <div><label>FiO₂ (fração)</label><input id="fio2" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
+              <div><label>PEEP (cmH₂O)</label><input id="peep" type="number" step="1" min="0" max="30" placeholder="Ex.: 8" /></div>
+              <div><label>VT exalado (mL)</label><input id="vt_exhaled_ml" type="number" step="1" min="0" max="1200" placeholder="Ex.: 420" /></div>
+              <div><label>Pplat (cmH₂O)</label><input id="pplat" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" /></div>
+              <div><label>ΔP (auto)</label><input id="dp_auto" type="text" readonly /></div>
+              <div><label>FR total (rpm)</label><input id="rr_total" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" /></div>
             </div>
 
-            <div class="row" id="panelNIV" style="display:none;">
-              <div>
-                <label>Interface (NIV)</label>
-                <select id="niv_interface">
-                  <option value="facial">Máscara facial</option>
-                  <option value="total_face">Total face</option>
-                  <option value="nasal">Nasal</option>
-                  <option value="helmet">Helmet</option>
-                  <option value="outra">Outra</option>
-                </select>
-              </div>
-              <div>
-                <label>FiO₂ (fração)</label>
-                <input id="fio2_niv" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" />
-              </div>
-              <div>
-                <label>EPAP/CPAP (cmH₂O)</label>
-                <input id="epap" type="number" step="1" min="0" max="30" placeholder="Ex.: 10" />
-              </div>
-              <div>
-                <label>IPAP/PS (cmH₂O)</label>
-                <input id="ipap" type="number" step="1" min="0" max="40" placeholder="Ex.: 18" />
-              </div>
-              <div>
-                <label>FR total (rpm)</label>
-                <input id="rr_total_niv" type="number" step="1" min="0" max="80" placeholder="Ex.: 28" />
-              </div>
-              <div>
-                <label>VT (se disponível)</label>
-                <input id="vt_niv" type="number" step="1" min="0" max="1200" placeholder="Ex.: 380" />
-              </div>
+            <div class="row" id="panelNIV" style="display:none; margin-top:10px;">
+              <div><label>FiO₂ (fração)</label><input id="fio2_niv" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
+              <div><label>EPAP/CPAP (cmH₂O)</label><input id="epap" type="number" step="1" min="0" max="30" placeholder="Ex.: 10" /></div>
+              <div><label>FR total (rpm)</label><input id="rr_total_niv" type="number" step="1" min="0" max="80" placeholder="Ex.: 28" /></div>
+              <div><label>VT (se disponível)</label><input id="vt_niv" type="number" step="1" min="0" max="1200" placeholder="Ex.: 380" /></div>
             </div>
 
-            <div class="row" id="panelHFNO" style="display:none;">
-              <div>
-                <label>Fluxo (L/min)</label>
-                <input id="hfno_flow" type="number" step="1" min="0" max="80" placeholder="Ex.: 50" />
-              </div>
-              <div>
-                <label>FiO₂ (fração)</label>
-                <input id="fio2_hfno" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.60" />
-              </div>
-              <div>
-                <label>FR total (rpm)</label>
-                <input id="rr_total_hfno" type="number" step="1" min="0" max="80" placeholder="Ex.: 30" />
-              </div>
-              <div style="display:none;"></div>
+            <div class="row" id="panelHFNO" style="display:none; margin-top:10px;">
+              <div><label>Fluxo (L/min)</label><input id="hfno_flow" type="number" step="1" min="0" max="80" placeholder="Ex.: 50" /></div>
+              <div><label>FiO₂ (fração)</label><input id="fio2_hfno" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.60" /></div>
+              <div><label>FR total (rpm)</label><input id="rr_total_hfno" type="number" step="1" min="0" max="80" placeholder="Ex.: 30" /></div>
+              <div></div>
             </div>
+          </details>
 
-            <div class="mutedSmall" id="dpInfo"></div>
-          </div>
-
-          <details style="margin-top:12px;" open>
+          <details open>
             <summary>PBW + VT normalizado (ferramenta)</summary>
             <div class="row" style="margin-top:10px;">
               <div>
                 <label>Sexo para PBW</label>
                 <select id="pbw_sex">
-                  <option value="nao_disponivel">Não disponível</option>
-                  <option value="masculino">Masculino</option>
-                  <option value="feminino">Feminino</option>
+                  <option value="nao">Não disponível</option>
+                  <option value="m">Masculino</option>
+                  <option value="f">Feminino</option>
                 </select>
-                <div class="mutedSmall">PBW é estimado por altura/sexo para padronização (não é peso real).</div>
               </div>
-              <div>
-                <label>Altura (cm)</label>
-                <input id="height_cm" type="number" step="0.1" min="120" max="220" placeholder="Ex.: 168" />
-              </div>
-              <div>
-                <label>PBW calculado (kg)</label>
-                <input id="pbw_kg" type="text" readonly />
-              </div>
-              <div>
-                <label>VT (mL) para cálculo</label>
-                <input id="vt_for_calc" type="number" step="1" min="0" max="1200" placeholder="Se invasivo, pode copiar do VT exalado" />
-              </div>
-              <div>
-                <label>VT (mL/kg PBW)</label>
-                <input id="vt_ml_per_kg" type="text" readonly />
-              </div>
+              <div><label>Altura (cm)</label><input id="height_cm" type="number" step="0.1" min="120" max="220" placeholder="Ex.: 168" /></div>
+              <div><label>PBW (kg) (auto)</label><input id="pbw_kg" type="text" readonly /></div>
+              <div><label>VT (mL) para cálculo</label><input id="vt_for_calc" type="number" step="1" min="0" max="1200" placeholder="Pode copiar do VT exalado" /></div>
+              <div><label>VT (mL/kg PBW) (auto)</label><input id="vt_mlkg" type="text" readonly /></div>
               <div>
                 <label>Confiabilidade do VT</label>
                 <select id="vt_reliability">
-                  <option value="nao_disponivel">Não disponível</option>
+                  <option value="nao">Não disponível</option>
                   <option value="alta">Alta</option>
                   <option value="media">Média</option>
                   <option value="baixa">Baixa</option>
@@ -592,266 +432,93 @@
             </div>
           </details>
 
-          <details style="margin-top:12px;" open>
-            <summary>Intubação / via aérea / tempo / imagem</summary>
-
-            <div id="invOnlyBlocks" style="margin-top:10px;">
-              <div class="row">
-                <div>
-                  <label>Causa principal da intubação</label>
-                  <select id="intubation_cause">
-                    <option value="hipoxemia">Hipoxemia / insuficiência respiratória hipoxêmica</option>
-                    <option value="hipercapnia">Hipercapnia / insuficiência ventilatória</option>
-                    <option value="protecao_via_aerea">Rebaixamento de consciência / proteção de via aérea</option>
-                    <option value="choque">Choque / instabilidade hemodinâmica</option>
-                    <option value="pcr">Parada cardiorrespiratória</option>
-                    <option value="trauma">Trauma</option>
-                    <option value="procedimento">Procedimento/cirurgia</option>
-                    <option value="falha_niv_hfno">Falha de NIV/HFNO</option>
-                    <option value="outra">Outra</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Dispositivo</label>
-                  <select id="airway_device">
-                    <option value="tet">Tubo orotraqueal (TET)</option>
-                    <option value="traqueostomia">Traqueostomia</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row">
-                <div>
-                  <label>Tamanho do tubo (ID, mm) — máximo 9,0</label>
-                  <input id="tube_id_mm" type="number" step="0.5" min="5" max="9" placeholder="Ex.: 7.5" />
-                </div>
-                <div>
-                  <label>Fixação na rima (cm) — máximo 26</label>
-                  <input id="tube_rima_cm" type="number" step="1" min="18" max="26" placeholder="Ex.: 23" />
-                </div>
-              </div>
-
-              <div class="row">
-                <div>
-                  <label>Impacto mecânico relacionado à via aérea artificial</label>
-                  <select id="airway_mechanical_impact">
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
-                    <option value="incerto">Incerto</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Dias desde intubação</label>
-                  <input id="days_since_intubation" type="number" step="1" min="0" max="365" placeholder="Ex.: 6" />
-                </div>
-                <div>
-                  <label>Dias em ventilação mecânica invasiva</label>
-                  <input id="days_on_invasive_mv" type="number" step="1" min="0" max="365" placeholder="Ex.: 6" />
-                </div>
-                <div>
-                  <label>Extubação/reintubação nesta internação</label>
-                  <select id="reintubation_this_stay">
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
-                    <option value="incerto">Incerto</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
+          <details open>
+            <summary>Definidor de SARA (Berlin) + P/F</summary>
             <div class="row" style="margin-top:10px;">
               <div>
-                <label>Imagem disponível</label>
-                <select id="imaging_type">
-                  <option value="rx">Rx tórax</option>
-                  <option value="tc">TC tórax</option>
-                  <option value="us">US pulmonar</option>
-                  <option value="nenhum">Nenhum</option>
-                </select>
-              </div>
-              <div>
-                <label>Data/hora da imagem (opcional)</label>
-                <input id="imaging_datetime" type="datetime-local" />
-              </div>
-            </div>
-
-            <div class="row" style="margin-top:10px;">
-              <div>
-                <label>Achados radiológicos (seleção múltipla)</label>
-                <select id="imaging_findings" multiple size="6">
-                  <option value="bilateral_difuso">Opacidades bilaterais difusas</option>
-                  <option value="unilateral_predominante">Opacidades unilaterais predominantes</option>
-                  <option value="consolidacao_focal">Consolidação focal</option>
-                  <option value="atelectasia">Atelectasia</option>
-                  <option value="derrame_pleural">Derrame pleural</option>
-                  <option value="pneumotorax">Pneumotórax</option>
-                  <option value="intersticial_reticular">Padrão intersticial/reticular</option>
-                  <option value="hiperinsuflacao">Hiperinsuflação</option>
+                <label>Início ≤ 7 dias</label>
+                <select id="ards_onset_7d">
+                  <option value="sim">Sim</option>
+                  <option value="nao">Não</option>
                   <option value="incerto">Incerto</option>
                 </select>
-                <div class="mutedSmall">No desktop: Ctrl+clique para múltiplos itens.</div>
               </div>
               <div>
-                <label>Confiabilidade</label>
-                <select id="imaging_reliability">
-                  <option value="laudo">Laudo disponível</option>
-                  <option value="descricao">Descrição clínica sem laudo</option>
-                  <option value="incerta">Incerta</option>
+                <label>Opacidades bilaterais</label>
+                <select id="ards_bilateral_imaging">
+                  <option value="sim">Sim</option>
+                  <option value="nao">Não</option>
+                  <option value="incerto">Incerto</option>
                 </select>
-
-                <div style="margin-top:10px;">
-                  <label>SARA compatível</label>
-                  <select id="ards_compatible">
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
-                    <option value="incompleto">Incompleto</option>
-                  </select>
-                </div>
-
-                <div style="margin-top:10px;">
-                  <label>Sepse</label>
-                  <select id="sepsis_status">
-                    <option value="nao">Não</option>
-                    <option value="provavel">Provável</option>
-                    <option value="sim">Sim</option>
-                  </select>
-                </div>
-
-                <div style="margin-top:10px;">
-                  <label>Choque séptico provável</label>
-                  <select id="septic_shock_probable">
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
-                    <option value="incerto">Incerto</option>
-                  </select>
-                </div>
               </div>
+              <div>
+                <label>Edema cardiogênico dominante?</label>
+                <select id="ards_cardiogenic_dominant">
+                  <option value="nao">Não</option>
+                  <option value="sim">Sim</option>
+                  <option value="incerto">Incerto</option>
+                </select>
+              </div>
+              <div><label>PaO₂ (mmHg)</label><input id="pao2" type="number" step="1" min="0" max="600" placeholder="Ex.: 80" /></div>
+              <div><label>FiO₂ (fração) (para P/F)</label><input id="fio2_pf" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
+              <div><label>PEEP/CPAP (cmH₂O) (Berlin usa ≥5)</label><input id="peep_pf" type="number" step="1" min="0" max="30" placeholder="Ex.: 8" /></div>
+              <div><label>P/F (auto)</label><input id="pf_ratio" type="text" readonly /></div>
+              <div><label>SARA (auto)</label><input id="ards_result" type="text" readonly /></div>
             </div>
           </details>
 
-          <details style="margin-top:12px;" open>
-            <summary>Fenótipos e moduladores (compacto)</summary>
-
+          <details open>
+            <summary>Definidor de Sepse/Choque (Sepsis-3 operacional)</summary>
             <div class="row" style="margin-top:10px;">
               <div>
-                <label>Hipoxemia predominante</label>
-                <select id="predominant_hypoxemia">
-                  <option value="nao">Não</option>
+                <label>Infecção suspeita/confirmada</label>
+                <select id="infection_suspected">
                   <option value="sim">Sim</option>
+                  <option value="nao">Não</option>
+                  <option value="incerto">Incerto</option>
                 </select>
               </div>
+              <div><label>ΔSOFA (numérico)</label><input id="sofa_delta" type="number" step="1" min="0" max="24" placeholder="Ex.: 3" /></div>
               <div>
-                <label>Hipercapnia predominante</label>
-                <select id="predominant_hypercapnia">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div>
-                <label>Falha por bomba (suspeita)</label>
-                <select id="pump_failure_suspected">
+                <label>Vasopressor para PAM ≥65</label>
+                <select id="vasopressor_pam65">
                   <option value="nao">Não</option>
                   <option value="sim">Sim</option>
                   <option value="incerto">Incerto</option>
                 </select>
               </div>
-              <div>
-                <label>Padrão obstrutivo (suspeita)</label>
-                <select id="obstructive_pattern_suspected">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>Lactato (mmol/L)</label><input id="lactate" type="number" step="0.1" min="0" max="30" placeholder="Ex.: 3.2" /></div>
+              <div><label>Sepse (auto)</label><input id="sepsis_result" type="text" readonly /></div>
+              <div><label>Choque séptico (auto)</label><input id="shock_result" type="text" readonly /></div>
+            </div>
+          </details>
+
+          <details open>
+            <summary>Gatilhos: mecânica, assincronia e cenários</summary>
+            <div class="row" style="margin-top:10px;">
+              <div><label>Fenótipo obstrutivo (suspeita)</label>
+                <select id="obstructive_suspected"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
               </div>
-              <div>
-                <label>Padrão restritivo (suspeita)</label>
-                <select id="restrictive_pattern_suspected">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>Fenótipo restritivo (suspeita)</label>
+                <select id="restrictive_suspected"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
               </div>
-              <div>
-                <label>Aumento de resistência (suspeita)</label>
-                <select id="increased_resistance_suspected">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>Alto esforço (suspeita)</label>
+                <select id="high_effort"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
               </div>
-              <div>
-                <label>Alto esforço (suspeita)</label>
-                <select id="high_effort_suspected">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>Assincronia relevante (suspeita)</label>
+                <select id="major_async"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
               </div>
-              <div>
-                <label>Assincronia relevante (suspeita)</label>
-                <select id="major_asynchrony_suspected">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>DPOC conhecida</label>
+                <select id="copd_known"><option value="nao">Não</option><option value="sim">Sim</option></select>
               </div>
-              <div>
-                <label>Neurocrítico</label>
-                <select id="neuro_critical">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
+              <div><label>Doença neuromuscular</label>
+                <select id="neuromuscular"><option value="nao">Não</option><option value="sim">Sim</option></select>
               </div>
-              <div>
-                <label>Doença neuromuscular</label>
-                <select id="neuromuscular_disease">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
+              <div><label>Neurocrítico</label>
+                <select id="neuro_critical"><option value="nao">Não</option><option value="sim">Sim</option></select>
               </div>
-              <div>
-                <label>DPOC conhecida</label>
-                <select id="known_copd">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div>
-                <label>Restritiva conhecida/suspeita</label>
-                <select id="known_or_suspected_restrictive_dz">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div>
-                <label>Trauma recente</label>
-                <select id="recent_trauma">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div>
-                <label>Doença unilateral grave</label>
-                <select id="severe_unilateral_lung_disease">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div>
-                <label>Obesidade relevante</label>
-                <select id="obesity_relevant">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div>
-                <label>Insuficiência cardíaca coexistente</label>
-                <select id="heart_failure_coexisting">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
+              <div><label>Unilateral grave</label>
+                <select id="unilateral_severe"><option value="nao">Não</option><option value="sim">Sim</option></select>
               </div>
             </div>
           </details>
@@ -859,22 +526,16 @@
           <div class="actions">
             <button class="btnSmall danger" type="button" id="btnReset">Limpar</button>
             <button class="btnSmall" type="button" id="btnSave">Salvar</button>
-            <button class="btnSmall primary" type="button" id="btnRunCompact">Gerar síntese compacta</button>
+            <button class="btnSmall primary" type="button" id="btnRun">Gerar análise</button>
           </div>
         </div>
 
         <div class="card">
-          <h2>
-            Síntese compacta (gerada)
-            <span class="pill" id="pillConfidence">confiança</span>
-          </h2>
-          <p class="hint">
-            Saída educacional baseada nos dados preenchidos. A análise expandida detalha justificativas por sinais observáveis.
-          </p>
-          <div class="resultBox" id="compactResult"></div>
-
-          <div class="actions" style="justify-content:flex-start; margin-top:12px;">
-            <button class="btnSmall primary" type="button" id="btnGoExpanded">Abrir análise expandida</button>
+          <h2>Saída (pontos de atenção + evidência) <span class="pill" id="pillConfidence">confiança</span></h2>
+          <p class="hint">A saída é educacional: prioriza o que observar e como organizar raciocínio, sem prescrever ajustes.</p>
+          <div class="resultBox" id="outCompact"></div>
+          <div class="actions" style="justify-content:flex-start;">
+            <button class="btnSmall primary" type="button" id="btnGoExpanded">Abrir Mecânica & Assincronia</button>
           </div>
         </div>
       </div>
@@ -884,987 +545,1039 @@
     <section id="secExpanded" style="display:none;">
       <div class="grid">
         <div class="card">
-          <h2>
-            Análise expandida (módulos elegíveis)
-            <span class="pill" id="pillModules">módulos</span>
-          </h2>
-          <p class="hint">
-            Selecione sinais observáveis. Cada módulo exige pelo menos 1 sinal marcado para gerar inferências educacionais.
-          </p>
-
+          <h2>Mecânica & Assincronia (módulos) <span class="pill" id="pillModules">módulos</span></h2>
+          <p class="hint">Marque ≥1 sinal observável por módulo. Isso gera justificativa e melhora a confiança do raciocínio.</p>
           <div class="subgrid" id="modulesContainer"></div>
-
           <div class="actions">
-            <button class="btnSmall" type="button" id="btnRunExpanded">Gerar justificativa expandida</button>
+            <button class="btnSmall primary" type="button" id="btnRunExpanded">Gerar justificativa expandida</button>
           </div>
         </div>
 
         <div class="card">
-          <h2>
-            Justificativa expandida (gerada)
-            <span class="pill" id="pillExpandedConfidence">confiança</span>
-          </h2>
-          <p class="hint">
-            O texto abaixo descreve quais sinais sustentam inferências e como isso impacta a confiança, sem orientar ajuste.
-          </p>
-          <div class="resultBox" id="expandedResult"></div>
+          <h2>Justificativa expandida (gerada) <span class="pill" id="pillExpConf">confiança</span></h2>
+          <p class="hint">Foco: assincronia e mecânica (sinais → inferências educacionais → impacto nos pontos de atenção).</p>
+          <div class="resultBox" id="outExpanded"></div>
         </div>
       </div>
     </section>
 
-    <!-- =================== Normal Curves =================== -->
+    <!-- =================== PEEP & Weaning =================== -->
+    <section id="secPeepWean" style="display:none;">
+      <div class="grid">
+        <div class="card">
+          <h2>PEEP/FiO₂ tables (referência) + evidência</h2>
+          <p class="hint">Tabelas refletem estratégias usadas em ensaios. O destaque por FiO₂ é educacional. Não prescreve ajuste.</p>
+
+          <div class="row">
+            <div><label>FiO₂ atual (fração)</label><input id="peep_fio2_input" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.60" /></div>
+            <div>
+              <label>Estratégia (para destaque)</label>
+              <select id="peep_strategy">
+                <option value="lower">Lower PEEP / Higher FiO₂ (ARDSNet)</option>
+                <option value="higher">Higher PEEP / Lower FiO₂ (referência)</option>
+              </select>
+            </div>
+          </div>
+
+          <details open>
+            <summary>Lower PEEP / Higher FiO₂ (ARDSNet – referência)</summary>
+            <div class="tableWrap" style="margin-top:10px;">
+              <table id="tblLower">
+                <thead><tr><th>Faixa FiO₂</th><th>PEEP na tabela (cmH₂O)</th></tr></thead>
+                <tbody>
+                  <tr data-min="0.30" data-max="0.40"><td>0.30–0.40</td><td>5</td></tr>
+                  <tr data-min="0.40" data-max="0.50"><td>0.40–0.50</td><td>5–8</td></tr>
+                  <tr data-min="0.50" data-max="0.60"><td>0.50–0.60</td><td>8–10</td></tr>
+                  <tr data-min="0.60" data-max="0.70"><td>0.60–0.70</td><td>8–10</td></tr>
+                  <tr data-min="0.70" data-max="0.80"><td>0.70–0.80</td><td>10–14</td></tr>
+                  <tr data-min="0.80" data-max="0.90"><td>0.80–0.90</td><td>14</td></tr>
+                  <tr data-min="0.90" data-max="1.00"><td>0.90–1.00</td><td>14–18</td></tr>
+                  <tr data-min="1.00" data-max="1.01"><td>1.00</td><td>18–24</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details>
+            <summary>Higher PEEP / Lower FiO₂ (referência)</summary>
+            <div class="tableWrap" style="margin-top:10px;">
+              <table id="tblHigher">
+                <thead><tr><th>Faixa FiO₂</th><th>PEEP na tabela (cmH₂O)</th></tr></thead>
+                <tbody>
+                  <tr data-min="0.30" data-max="0.40"><td>0.30–0.40</td><td>5–14</td></tr>
+                  <tr data-min="0.40" data-max="0.50"><td>0.40–0.50</td><td>14–16</td></tr>
+                  <tr data-min="0.50" data-max="0.51"><td>0.50</td><td>16–18</td></tr>
+                  <tr data-min="0.50" data-max="0.80"><td>0.50–0.80</td><td>18–20</td></tr>
+                  <tr data-min="0.80" data-max="1.00"><td>0.80–1.00</td><td>22</td></tr>
+                  <tr data-min="1.00" data-max="1.01"><td>1.00</td><td>24</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details open>
+            <summary>Recrutamento, titulação e PEEP — síntese + evidência robusta</summary>
+            <div class="refs" id="peepEvidenceBox"></div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>Desmame difícil/prolongado + IMT (educacional)</h2>
+          <p class="hint">Definidor e pontos de atenção com evidência (Cochrane/PubMed/guidelines), sem prescrição.</p>
+
+          <details open>
+            <summary>Definidor (estrutura educacional)</summary>
+            <div class="row" style="margin-top:10px;">
+              <div>
+                <label>SBT já iniciado?</label>
+                <select id="wean_sbt_started">
+                  <option value="nao">Não</option>
+                  <option value="sim">Sim</option>
+                </select>
+              </div>
+              <div><label>Nº tentativas de SBT</label><input id="wean_sbt_attempts" type="number" step="1" min="0" max="10" value="0" /></div>
+              <div><label>Dias desde 1º SBT</label><input id="wean_days_since_first_sbt" type="number" step="1" min="0" max="30" value="0" /></div>
+              <div>
+                <label>Traqueostomia</label>
+                <select id="wean_trach">
+                  <option value="nao">Não</option>
+                  <option value="sim">Sim</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="refs" style="margin-top:10px;" id="weanResultBox"></div>
+          </details>
+
+          <details open>
+            <summary>Treino muscular inspiratório (IMT) — síntese + evidência</summary>
+            <div class="refs" id="imtEvidenceBox"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== Normals =================== -->
     <section id="secNormals" style="display:none;">
       <div class="card">
         <h2>Curvas normais – PCV e VCV</h2>
-        <p class="hint">
-          Referências visuais educacionais. Para funcionar, os arquivos PNG devem estar no repositório com os nomes abaixo.
-        </p>
-
+        <p class="hint">Arquivos esperados na raiz do repositório: <b>pcv_normal.png</b> e <b>vcv_normal.png</b>.</p>
         <div class="imgGrid">
           <div class="imgCard">
             <h3>PCV – curvas normais</h3>
             <img src="pcv_normal.png" alt="Curvas normais PCV" />
-            <p class="imgNote">Arquivo esperado: <strong>pcv_normal.png</strong> (na raiz do repositório).</p>
           </div>
-
           <div class="imgCard">
             <h3>VCV – curvas normais</h3>
             <img src="vcv_normal.png" alt="Curvas normais VCV" />
-            <p class="imgNote">Arquivo esperado: <strong>vcv_normal.png</strong> (na raiz do repositório).</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- =================== About/Terms =================== -->
+    <!-- =================== About =================== -->
     <section id="secAbout" style="display:none;">
       <div class="card">
         <h2>Sobre & Termos</h2>
-        <p class="hint">
-          SyncVent é uma plataforma educacional destinada a adultos, focada em checklist e raciocínio clínico em ventilação mecânica.
-        </p>
 
         <div class="card" style="background:rgba(0,0,0,.18); box-shadow:none;">
           <h2>Uso educacional</h2>
           <p class="hint" style="margin:0;">
-            Este software não fornece prescrição, ajuste ventilatório ou decisão terapêutica. Não substitui protocolos locais, avaliação
-            multiprofissional e julgamento clínico. O conteúdo é apresentado para estudo e treinamento.
+            SyncVent não fornece prescrição, ajuste ventilatório ou decisão terapêutica. É um organizador de raciocínio e estudo.
           </p>
         </div>
 
         <div class="card" style="margin-top:12px; background:rgba(0,0,0,.18); box-shadow:none;">
-          <h2>Direitos autorais e restrições</h2>
+          <h2>Direitos autorais</h2>
           <p class="hint" style="margin:0;">
-            © 2026 Leticia Moreira. Todos os direitos reservados. É proibida a reprodução total ou parcial, distribuição, adaptação,
-            engenharia reversa, disponibilização pública, ou qualquer uso comercial do conteúdo, estrutura, textos, lógica e interface
-            do SyncVent sem autorização expressa e por escrito da autora.
+            © 2026 Leticia Moreira. Todos os direitos reservados. Proibida reprodução, distribuição, adaptação, disponibilização pública
+            ou uso comercial do conteúdo, estrutura, textos, lógica e interface sem autorização expressa e por escrito.
           </p>
         </div>
       </div>
     </section>
 
     <footer>
-      <div class="legal">
-        <strong>SyncVent</strong> — © 2026 <strong>Leticia Moreira</strong>. Todos os direitos reservados.<br/>
-        Uso educacional. Não constitui orientação clínica. Proibida reprodução e uso comercial sem autorização expressa.
-      </div>
+      <strong>SyncVent</strong> — © 2026 <strong>Leticia Moreira</strong>. Todos os direitos reservados.<br/>
+      Uso educacional. Não constitui orientação clínica. Proibida reprodução e uso comercial sem autorização expressa.
     </footer>
   </main>
 
   <script>
     "use strict";
 
-    /* ======== Basic deterrents (UI) ======== */
+    // UX barriers (não é proteção técnica real; reduz cópia casual)
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("dragstart", (e) => e.preventDefault());
 
-    /* ======== Tabs ======== */
-    const tabCompact  = document.getElementById("tabCompact");
-    const tabExpanded = document.getElementById("tabExpanded");
-    const tabNormals  = document.getElementById("tabNormals");
-    const tabAbout    = document.getElementById("tabAbout");
+    const $ = (id)=>document.getElementById(id);
 
-    const secCompact  = document.getElementById("secCompact");
-    const secExpanded = document.getElementById("secExpanded");
-    const secNormals  = document.getElementById("secNormals");
-    const secAbout    = document.getElementById("secAbout");
+    // Tabs
+    const tabCompact=$("tabCompact"), tabExpanded=$("tabExpanded"), tabPeepWean=$("tabPeepWean"), tabNormals=$("tabNormals"), tabAbout=$("tabAbout");
+    const secCompact=$("secCompact"), secExpanded=$("secExpanded"), secPeepWean=$("secPeepWean"), secNormals=$("secNormals"), secAbout=$("secAbout");
 
     function setTab(which){
-      const tabs = [
-        {btn:tabCompact, sec:secCompact, key:"compact"},
-        {btn:tabExpanded, sec:secExpanded, key:"expanded"},
-        {btn:tabNormals, sec:secNormals, key:"normals"},
-        {btn:tabAbout, sec:secAbout, key:"about"}
+      const tabs=[
+        {b:tabCompact,s:secCompact,k:"compact"},
+        {b:tabExpanded,s:secExpanded,k:"expanded"},
+        {b:tabPeepWean,s:secPeepWean,k:"peepwean"},
+        {b:tabNormals,s:secNormals,k:"normals"},
+        {b:tabAbout,s:secAbout,k:"about"},
       ];
       tabs.forEach(t=>{
-        const on = (t.key===which);
-        t.btn.classList.toggle("active", on);
-        t.sec.style.display = on ? "block" : "none";
+        const on=t.k===which;
+        t.b.classList.toggle("active",on);
+        t.s.style.display=on?"block":"none";
       });
       window.scrollTo({top:0, behavior:"smooth"});
     }
-    tabCompact.onclick  = () => setTab("compact");
-    tabExpanded.onclick = () => setTab("expanded");
-    tabNormals.onclick  = () => setTab("normals");
-    tabAbout.onclick    = () => setTab("about");
+    tabCompact.onclick=()=>setTab("compact");
+    tabExpanded.onclick=()=>setTab("expanded");
+    tabPeepWean.onclick=()=>setTab("peepwean");
+    tabNormals.onclick=()=>setTab("normals");
+    tabAbout.onclick=()=>setTab("about");
 
-    /* ======== Splash ======== */
-    const splash = document.getElementById("splash");
-    document.getElementById("btnEnter").onclick = () => {
-      splash.style.display = "none";
-      splash.setAttribute("aria-hidden","true");
-    };
-    document.getElementById("btnSplashInfo").onclick = () => {
-      splash.style.display = "none";
-      splash.setAttribute("aria-hidden","true");
-      setTab("about");
-    };
+    // Splash
+    const splash=$("splash");
+    $("btnEnter").onclick=()=>{ splash.style.display="none"; splash.setAttribute("aria-hidden","true"); };
+    $("btnSplashTerms").onclick=()=>{ splash.style.display="none"; splash.setAttribute("aria-hidden","true"); setTab("about"); };
 
-    /* ======== Elements ======== */
-    const E = (id)=>document.getElementById(id);
+    // Inputs
+    const adult_18_plus=$("adult_18_plus");
+    const support_type=$("support_type");
+    const panelInvasive=$("panelInvasive"), panelNIV=$("panelNIV"), panelHFNO=$("panelHFNO");
 
-    const adult_18_plus = E("adult_18_plus");
-    const support_type = E("support_type");
+    const fio2=$("fio2"), peep=$("peep"), vt_exhaled_ml=$("vt_exhaled_ml"), pplat=$("pplat"), dp_auto=$("dp_auto");
+    const pbw_sex=$("pbw_sex"), height_cm=$("height_cm"), pbw_kg=$("pbw_kg"), vt_for_calc=$("vt_for_calc"), vt_mlkg=$("vt_mlkg"), vt_reliability=$("vt_reliability");
 
-    const panelInvasive = E("panelInvasive");
-    const panelNIV = E("panelNIV");
-    const panelHFNO = E("panelHFNO");
-    const invOnlyBlocks = E("invOnlyBlocks");
+    const ards_onset_7d=$("ards_onset_7d"), ards_bilateral_imaging=$("ards_bilateral_imaging"), ards_cardiogenic_dominant=$("ards_cardiogenic_dominant");
+    const pao2=$("pao2"), fio2_pf=$("fio2_pf"), peep_pf=$("peep_pf"), pf_ratio=$("pf_ratio"), ards_result=$("ards_result");
 
-    const vent_mode = E("vent_mode");
-    const fio2 = E("fio2");
-    const peep = E("peep");
-    const rr_total = E("rr_total");
-    const vt_exhaled_ml = E("vt_exhaled_ml");
-    const minute_vent_lmin = E("minute_vent_lmin");
-    const ppeak = E("ppeak");
-    const pplat = E("pplat");
+    const infection_suspected=$("infection_suspected"), sofa_delta=$("sofa_delta"), vasopressor_pam65=$("vasopressor_pam65"), lactate=$("lactate");
+    const sepsis_result=$("sepsis_result"), shock_result=$("shock_result");
 
-    const pbw_sex = E("pbw_sex");
-    const height_cm = E("height_cm");
-    const pbw_kg = E("pbw_kg");
-    const vt_for_calc = E("vt_for_calc");
-    const vt_ml_per_kg = E("vt_ml_per_kg");
-    const vt_reliability = E("vt_reliability");
+    const obstructive_suspected=$("obstructive_suspected"), restrictive_suspected=$("restrictive_suspected"), high_effort=$("high_effort"), major_async=$("major_async");
+    const copd_known=$("copd_known"), neuromuscular=$("neuromuscular"), neuro_critical=$("neuro_critical"), unilateral_severe=$("unilateral_severe");
 
-    const intubation_cause = E("intubation_cause");
-    const airway_device = E("airway_device");
-    const tube_id_mm = E("tube_id_mm");
-    const tube_rima_cm = E("tube_rima_cm");
-    const airway_mechanical_impact = E("airway_mechanical_impact");
-    const days_since_intubation = E("days_since_intubation");
-    const days_on_invasive_mv = E("days_on_invasive_mv");
-    const reintubation_this_stay = E("reintubation_this_stay");
+    const outCompact=$("outCompact"), outExpanded=$("outExpanded");
+    const pillConfidence=$("pillConfidence"), pillExpConf=$("pillExpConf"), pillModules=$("pillModules");
+    const modulesContainer=$("modulesContainer");
 
-    const imaging_type = E("imaging_type");
-    const imaging_datetime = E("imaging_datetime");
-    const imaging_findings = E("imaging_findings");
-    const imaging_reliability = E("imaging_reliability");
+    // PEEP tab
+    const peep_fio2_input=$("peep_fio2_input");
+    const peep_strategy=$("peep_strategy");
+    const tblLower=$("tblLower");
+    const tblHigher=$("tblHigher");
+    const peepEvidenceBox=$("peepEvidenceBox");
 
-    const ards_compatible = E("ards_compatible");
-    const sepsis_status = E("sepsis_status");
-    const septic_shock_probable = E("septic_shock_probable");
+    // Weaning/IMT tab
+    const wean_sbt_started=$("wean_sbt_started");
+    const wean_sbt_attempts=$("wean_sbt_attempts");
+    const wean_days_since_first_sbt=$("wean_days_since_first_sbt");
+    const wean_trach=$("wean_trach");
+    const weanResultBox=$("weanResultBox");
+    const imtEvidenceBox=$("imtEvidenceBox");
 
-    const predominant_hypoxemia = E("predominant_hypoxemia");
-    const predominant_hypercapnia = E("predominant_hypercapnia");
-    const pump_failure_suspected = E("pump_failure_suspected");
-    const obstructive_pattern_suspected = E("obstructive_pattern_suspected");
-    const restrictive_pattern_suspected = E("restrictive_pattern_suspected");
-    const increased_resistance_suspected = E("increased_resistance_suspected");
-    const high_effort_suspected = E("high_effort_suspected");
-    const major_asynchrony_suspected = E("major_asynchrony_suspected");
+    // Storage
+    const LS="syncvent_html_final_v1";
 
-    const neuro_critical = E("neuro_critical");
-    const neuromuscular_disease = E("neuromuscular_disease");
-    const known_copd = E("known_copd");
-    const known_or_suspected_restrictive_dz = E("known_or_suspected_restrictive_dz");
-    const recent_trauma = E("recent_trauma");
-    const severe_unilateral_lung_disease = E("severe_unilateral_lung_disease");
-    const obesity_relevant = E("obesity_relevant");
-    const heart_failure_coexisting = E("heart_failure_coexisting");
+    function num(x){ const v=parseFloat(x); return Number.isFinite(v)?v:null; }
 
-    const dpInfo = E("dpInfo");
-    const compactResult = E("compactResult");
-    const expandedResult = E("expandedResult");
-    const modulesContainer = E("modulesContainer");
-
-    const pillConfidence = E("pillConfidence");
-    const pillExpandedConfidence = E("pillExpandedConfidence");
-    const pillModules = E("pillModules");
-
-    /* ======== Storage ======== */
-    const LS_KEY = "syncvent_v1_state";
-
-    function getSelectedMulti(selectEl){
-      return Array.from(selectEl.selectedOptions).map(o=>o.value);
-    }
-    function setSelectedMulti(selectEl, values){
-      const set = new Set(values || []);
-      Array.from(selectEl.options).forEach(opt=>{ opt.selected = set.has(opt.value); });
-    }
+    function saveState(){ localStorage.setItem(LS, JSON.stringify(getState())); }
+    function resetAll(){ localStorage.removeItem(LS); location.reload(); }
 
     function getState(){
-      const st = {
-        adult_18_plus: adult_18_plus.value,
-        support_type: support_type.value,
+      return {
+        adult: adult_18_plus.value,
+        support: support_type.value,
+        fio2: fio2.value, peep: peep.value, vt: vt_exhaled_ml.value, pplat: pplat.value,
 
-        vent_mode: vent_mode.value,
-        fio2: fio2.value,
-        peep: peep.value,
-        rr_total: rr_total.value,
-        vt_exhaled_ml: vt_exhaled_ml.value,
-        minute_vent_lmin: minute_vent_lmin.value,
-        ppeak: ppeak.value,
-        pplat: pplat.value,
+        pbwSex: pbw_sex.value, h: height_cm.value, vtCalc: vt_for_calc.value, vtRel: vt_reliability.value,
 
-        pbw_sex: pbw_sex.value,
-        height_cm: height_cm.value,
-        vt_for_calc: vt_for_calc.value,
-        vt_reliability: vt_reliability.value,
+        ards_onset: ards_onset_7d.value,
+        ards_bilat: ards_bilateral_imaging.value,
+        ards_card: ards_cardiogenic_dominant.value,
+        pao2: pao2.value, fio2pf: fio2_pf.value, peeppf: peep_pf.value,
 
-        intubation_cause: intubation_cause.value,
-        airway_device: airway_device.value,
-        tube_id_mm: tube_id_mm.value,
-        tube_rima_cm: tube_rima_cm.value,
-        airway_mechanical_impact: airway_mechanical_impact.value,
-        days_since_intubation: days_since_intubation.value,
-        days_on_invasive_mv: days_on_invasive_mv.value,
-        reintubation_this_stay: reintubation_this_stay.value,
+        inf: infection_suspected.value,
+        sofa: sofa_delta.value,
+        vaso: vasopressor_pam65.value,
+        lact: lactate.value,
 
-        imaging_type: imaging_type.value,
-        imaging_datetime: imaging_datetime.value,
-        imaging_findings: getSelectedMulti(imaging_findings),
-        imaging_reliability: imaging_reliability.value,
+        obs: obstructive_suspected.value,
+        res: restrictive_suspected.value,
+        effort: high_effort.value,
+        async: major_async.value,
+        copd: copd_known.value,
+        nm: neuromuscular.value,
+        neuro: neuro_critical.value,
+        uni: unilateral_severe.value,
 
-        ards_compatible: ards_compatible.value,
-        sepsis_status: sepsis_status.value,
-        septic_shock_probable: septic_shock_probable.value,
+        peepFio2: peep_fio2_input.value,
+        peepStrat: peep_strategy.value,
 
-        predominant_hypoxemia: predominant_hypoxemia.value,
-        predominant_hypercapnia: predominant_hypercapnia.value,
-        pump_failure_suspected: pump_failure_suspected.value,
-        obstructive_pattern_suspected: obstructive_pattern_suspected.value,
-        restrictive_pattern_suspected: restrictive_pattern_suspected.value,
-        increased_resistance_suspected: increased_resistance_suspected.value,
-        high_effort_suspected: high_effort_suspected.value,
-        major_asynchrony_suspected: major_asynchrony_suspected.value,
-
-        neuro_critical: neuro_critical.value,
-        neuromuscular_disease: neuromuscular_disease.value,
-        known_copd: known_copd.value,
-        known_or_suspected_restrictive_dz: known_or_suspected_restrictive_dz.value,
-        recent_trauma: recent_trauma.value,
-        severe_unilateral_lung_disease: severe_unilateral_lung_disease.value,
-        obesity_relevant: obesity_relevant.value,
-        heart_failure_coexisting: heart_failure_coexisting.value
+        weanStarted: wean_sbt_started.value,
+        weanAttempts: wean_sbt_attempts.value,
+        weanDays: wean_days_since_first_sbt.value,
+        weanTrach: wean_trach.value
       };
-      return st;
     }
 
     function setState(st){
       if(!st) return;
 
-      adult_18_plus.value = st.adult_18_plus ?? "sim";
-      support_type.value = st.support_type ?? "invasivo";
+      adult_18_plus.value = st.adult ?? "sim";
+      support_type.value = st.support ?? "invasivo";
 
-      vent_mode.value = st.vent_mode ?? "vc";
       fio2.value = st.fio2 ?? "";
       peep.value = st.peep ?? "";
-      rr_total.value = st.rr_total ?? "";
-      vt_exhaled_ml.value = st.vt_exhaled_ml ?? "";
-      minute_vent_lmin.value = st.minute_vent_lmin ?? "";
-      ppeak.value = st.ppeak ?? "";
+      vt_exhaled_ml.value = st.vt ?? "";
       pplat.value = st.pplat ?? "";
 
-      pbw_sex.value = st.pbw_sex ?? "nao_disponivel";
-      height_cm.value = st.height_cm ?? "";
-      vt_for_calc.value = st.vt_for_calc ?? "";
-      vt_reliability.value = st.vt_reliability ?? "nao_disponivel";
+      pbw_sex.value = st.pbwSex ?? "nao";
+      height_cm.value = st.h ?? "";
+      vt_for_calc.value = st.vtCalc ?? "";
+      vt_reliability.value = st.vtRel ?? "nao";
 
-      intubation_cause.value = st.intubation_cause ?? "hipoxemia";
-      airway_device.value = st.airway_device ?? "tet";
-      tube_id_mm.value = st.tube_id_mm ?? "";
-      tube_rima_cm.value = st.tube_rima_cm ?? "";
-      airway_mechanical_impact.value = st.airway_mechanical_impact ?? "nao";
-      days_since_intubation.value = st.days_since_intubation ?? "";
-      days_on_invasive_mv.value = st.days_on_invasive_mv ?? "";
-      reintubation_this_stay.value = st.reintubation_this_stay ?? "nao";
+      ards_onset_7d.value = st.ards_onset ?? "sim";
+      ards_bilateral_imaging.value = st.ards_bilat ?? "incerto";
+      ards_cardiogenic_dominant.value = st.ards_card ?? "incerto";
+      pao2.value = st.pao2 ?? "";
+      fio2_pf.value = st.fio2pf ?? "";
+      peep_pf.value = st.peeppf ?? "";
 
-      imaging_type.value = st.imaging_type ?? "rx";
-      imaging_datetime.value = st.imaging_datetime ?? "";
-      setSelectedMulti(imaging_findings, st.imaging_findings ?? []);
-      imaging_reliability.value = st.imaging_reliability ?? "laudo";
+      infection_suspected.value = st.inf ?? "incerto";
+      sofa_delta.value = st.sofa ?? "";
+      vasopressor_pam65.value = st.vaso ?? "incerto";
+      lactate.value = st.lact ?? "";
 
-      ards_compatible.value = st.ards_compatible ?? "nao";
-      sepsis_status.value = st.sepsis_status ?? "nao";
-      septic_shock_probable.value = st.septic_shock_probable ?? "nao";
+      obstructive_suspected.value = st.obs ?? "nao";
+      restrictive_suspected.value = st.res ?? "nao";
+      high_effort.value = st.effort ?? "nao";
+      major_async.value = st.async ?? "nao";
+      copd_known.value = st.copd ?? "nao";
+      neuromuscular.value = st.nm ?? "nao";
+      neuro_critical.value = st.neuro ?? "nao";
+      unilateral_severe.value = st.uni ?? "nao";
 
-      predominant_hypoxemia.value = st.predominant_hypoxemia ?? "nao";
-      predominant_hypercapnia.value = st.predominant_hypercapnia ?? "nao";
-      pump_failure_suspected.value = st.pump_failure_suspected ?? "nao";
-      obstructive_pattern_suspected.value = st.obstructive_pattern_suspected ?? "nao";
-      restrictive_pattern_suspected.value = st.restrictive_pattern_suspected ?? "nao";
-      increased_resistance_suspected.value = st.increased_resistance_suspected ?? "nao";
-      high_effort_suspected.value = st.high_effort_suspected ?? "nao";
-      major_asynchrony_suspected.value = st.major_asynchrony_suspected ?? "nao";
+      peep_fio2_input.value = st.peepFio2 ?? "";
+      peep_strategy.value = st.peepStrat ?? "lower";
 
-      neuro_critical.value = st.neuro_critical ?? "nao";
-      neuromuscular_disease.value = st.neuromuscular_disease ?? "nao";
-      known_copd.value = st.known_copd ?? "nao";
-      known_or_suspected_restrictive_dz.value = st.known_or_suspected_restrictive_dz ?? "nao";
-      recent_trauma.value = st.recent_trauma ?? "nao";
-      severe_unilateral_lung_disease.value = st.severe_unilateral_lung_disease ?? "nao";
-      obesity_relevant.value = st.obesity_relevant ?? "nao";
-      heart_failure_coexisting.value = st.heart_failure_coexisting ?? "nao";
-
-      refreshUI();
-      computePBW();
-      computeDP();
-      autoVTForCalc();
-      computeVTperPBW();
+      wean_sbt_started.value = st.weanStarted ?? "nao";
+      wean_sbt_attempts.value = st.weanAttempts ?? "0";
+      wean_days_since_first_sbt.value = st.weanDays ?? "0";
+      wean_trach.value = st.weanTrach ?? "nao";
     }
 
-    function saveState(){
-      localStorage.setItem(LS_KEY, JSON.stringify(getState()));
-    }
-
-    function resetState(){
-      localStorage.removeItem(LS_KEY);
-      location.reload();
-    }
-
-    /* ======== UI logic ======== */
     function refreshUI(){
-      const st = getState();
-
-      const inv = (st.support_type === "invasivo");
+      const inv = support_type.value==="invasivo";
       panelInvasive.style.display = inv ? "grid" : "none";
-      invOnlyBlocks.style.display = inv ? "block" : "none";
+      panelNIV.style.display = (support_type.value==="niv") ? "grid" : "none";
+      panelHFNO.style.display = (support_type.value==="hfno") ? "grid" : "none";
 
-      panelNIV.style.display  = (st.support_type === "niv") ? "grid" : "none";
-      panelHFNO.style.display = (st.support_type === "hfno") ? "grid" : "none";
-
-      // Tube fields only relevant for TET
-      const isTET = inv && (st.airway_device === "tet");
-      tube_id_mm.disabled = !isTET;
-      tube_rima_cm.disabled = !isTET;
-
-      // Imaging blocks
-      const imgNone = (st.imaging_type === "nenhum");
-      imaging_datetime.disabled = imgNone;
-      imaging_findings.disabled = imgNone;
-      imaging_reliability.disabled = imgNone;
-
-      // Adult-only gate
-      if(st.adult_18_plus !== "sim"){
-        compactResult.textContent = "Instrumento aplicável apenas a pacientes adultos (≥ 18 anos).";
-        modulesContainer.innerHTML = "";
-        expandedResult.textContent = "";
-        pillConfidence.textContent = "bloqueado";
-        pillExpandedConfidence.textContent = "bloqueado";
+      if(adult_18_plus.value!=="sim"){
+        outCompact.textContent="Instrumento aplicável apenas a pacientes adultos (≥18 anos).";
+        outExpanded.textContent="";
+        modulesContainer.innerHTML="";
+        pillConfidence.textContent="bloqueado";
+        pillExpConf.textContent="bloqueado";
+        pillModules.textContent="bloqueado";
       }
     }
 
-    /* ======== Calculations ======== */
-    function computePBW(){
-      const sex = pbw_sex.value;
-      const h = parseFloat(height_cm.value);
-      if(!(sex==="masculino" || sex==="feminino") || !isFinite(h)){
-        pbw_kg.value = "";
-        return null;
-      }
-      const base = (sex==="masculino") ? 50 : 45.5;
-      const pbw = base + 0.91 * (h - 152.4);
-      const pbwFixed = Math.round(pbw * 10) / 10;
-      pbw_kg.value = String(pbwFixed);
-      return pbwFixed;
-    }
-
-    function computeDP(){
-      const pplatV = parseFloat(pplat.value);
-      const peepV  = parseFloat(peep.value);
-      if(isFinite(pplatV) && isFinite(peepV)){
-        const dp = pplatV - peepV;
-        dpInfo.textContent = `ΔP (Pplat - PEEP): ${dp.toFixed(1)} cmH₂O (cálculo educacional).`;
+    // --- Calculations ---
+    function calcDP(){
+      const Pplat=num(pplat.value), PEEP=num(peep.value);
+      if(Pplat!=null && PEEP!=null){
+        const dp=Pplat-PEEP;
+        dp_auto.value = dp.toFixed(1)+" cmH₂O";
         return dp;
       }
-      dpInfo.textContent = "";
+      dp_auto.value="";
       return null;
     }
 
-    function autoVTForCalc(){
-      // If VT exalado exists, prefill calc VT unless user already typed a different value
-      const vtex = parseFloat(vt_exhaled_ml.value);
-      const vtc  = parseFloat(vt_for_calc.value);
-      if(isFinite(vtex) && !isFinite(vtc)){
-        vt_for_calc.value = String(Math.round(vtex));
-      }
+    function calcPBW(){
+      const sex=pbw_sex.value;
+      const h=num(height_cm.value);
+      if(!(sex==="m"||sex==="f") || h==null){ pbw_kg.value=""; return null; }
+      const base=(sex==="m")?50:45.5;
+      const pbw=base + 0.91*(h-152.4);
+      const v=Math.round(pbw*10)/10;
+      pbw_kg.value=String(v);
+      return v;
     }
 
-    function computeVTperPBW(){
-      const pbw = computePBW();
-      const vt = parseFloat(vt_for_calc.value);
-      if(isFinite(pbw) && isFinite(vt) && pbw > 0){
-        const val = vt / pbw;
-        vt_ml_per_kg.value = val.toFixed(2);
+    function calcVTmlkg(){
+      const pbw=calcPBW();
+      const vt = num(vt_for_calc.value) ?? num(vt_exhaled_ml.value);
+      if(pbw!=null && vt!=null && pbw>0){
+        const val=vt/pbw;
+        vt_mlkg.value=val.toFixed(2);
         return val;
       }
-      vt_ml_per_kg.value = "";
+      vt_mlkg.value="";
       return null;
     }
 
-    /* ======== Expanded modules (core set) ======== */
+    function calcPF(){
+      const PaO2=num(pao2.value), FiO2=num(fio2_pf.value);
+      if(PaO2!=null && FiO2!=null && FiO2>0){
+        const pf=PaO2/FiO2;
+        pf_ratio.value=String(Math.round(pf));
+        return pf;
+      }
+      pf_ratio.value="";
+      return null;
+    }
+
+    function defineARDS(){
+      const onset=ards_onset_7d.value;
+      const bilat=ards_bilateral_imaging.value;
+      const cardi=ards_cardiogenic_dominant.value;
+      const pf=calcPF();
+      const PEEP=num(peep_pf.value);
+
+      let status="SARA: indefinida (dados incompletos)";
+      let sev="";
+
+      const coreOk = (onset==="sim" && bilat==="sim" && cardi!=="sim");
+      const coreNo = (onset==="nao" || bilat==="nao" || cardi==="sim");
+
+      if(coreNo){
+        status="SARA: não (critério essencial ausente)";
+      } else if(coreOk && pf!=null && PEEP!=null && PEEP>=5 && pf<=300){
+        status="SARA: sim (Berlin)";
+        if(pf<=100) sev="Grave (P/F ≤100)";
+        else if(pf<=200) sev="Moderada (P/F 101–200)";
+        else sev="Leve (P/F 201–300)";
+      } else if(coreOk){
+        status="SARA: provável (faltam P/F e/ou PEEP/CPAP ≥5 ou P/F ≤300)";
+      }
+
+      ards_result.value = sev ? `${status} — ${sev}` : status;
+      return {status, severity: sev, pf, peep: PEEP};
+    }
+
+    function defineSepsis(){
+      const inf=infection_suspected.value;
+      const sofa=num(sofa_delta.value);
+      const vaso=vasopressor_pam65.value;
+      const lact=num(lactate.value);
+
+      let seps="Sepse: indefinida (dados incompletos)";
+      if(inf==="nao") seps="Sepse: não (infecção ausente)";
+      else if(inf==="sim" && sofa!=null){
+        seps = (sofa>=2) ? "Sepse: sim (operacional)" : "Sepse: não (ΔSOFA < 2)";
+      } else if(inf!=="nao"){
+        seps="Sepse: provável (faltam dados)";
+      }
+
+      let shock="Choque séptico: não aplicável";
+      const lactHigh = (lact!=null && lact>2);
+
+      if(seps.startsWith("Sepse: sim")){
+        if(vaso==="sim" && lact!=null){
+          shock = lactHigh ? "Choque séptico: provável (vasopressor + lactato elevado)" : "Choque séptico: não sugerido (lactato não elevado)";
+        } else if(vaso==="sim" && lact==null){
+          shock = "Choque séptico: possível (vasopressor; lactato ausente)";
+        } else {
+          shock = "Choque séptico: não sugerido (sem vasopressor)";
+        }
+      } else if(seps.includes("provável")){
+        shock = (vaso==="sim") ? "Choque séptico: possível (sepse provável + vasopressor)" : "Choque séptico: não sugerido";
+      }
+
+      sepsis_result.value=seps;
+      shock_result.value=shock;
+      return {seps, shock, sofa, lact, vaso, inf};
+    }
+
+    // --- Evidence library (anchors) ---
+    // URLs are inside code (as requested). They are links, not citations.
+    const EVID = {
+      // ARDS
+      ESICM_2023: {tag:"Guideline", label:"ESICM ARDS Guidelines 2023 (PMC)", url:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/"},
+      ATS_2024: {tag:"Guideline", label:"ATS ARDS Update 2024 (AJRCCM)", url:"https://www.atsjournals.org/doi/10.1164/rccm.202311-2011ST"},
+      COCHRANE_PEEP_2021: {tag:"Cochrane", label:"Cochrane 2021 — Higher vs lower PEEP in ARDS", url:"https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD009098.pub3/full"},
+      COCHRANE_RECRUIT_2021: {tag:"Cochrane", label:"Cochrane 2021 — Recruitment maneuvers strategies", url:"https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD006667.pub4/full"},
+      ARDSNET_ARMA_2000: {tag:"PubMed/RCT", label:"ARDSNet ARMA (NEJM 2000) low VT trial (PDF)", url:"https://www.nejm.org/doi/pdf/10.1056/NEJM200005043421801"},
+      ALVEOLI_2004: {tag:"PubMed/RCT", label:"ALVEOLI Trial (NEJM 2004) PEEP strategy (PDF mirror)", url:"https://medschool.cuanschutz.edu/docs/librariesprovider60/education-docs/heartbeat-im-res/suggested-read/alveoli-peep-in-ards-nejm-2004.pdf"},
+      RECRUITMENT_ART_HARM: {tag:"PubMed/RCT", label:"ART trial-related analysis (recruitment + PEEP titration) — potential harm (PDF mirror)", url:"https://www.hcor.com.br/wp-content/uploads/2022/09/BJA-2019-epub-HTE-in-ART.pdf"},
+      BERLIN_2012: {tag:"Definition", label:"Berlin Definition of ARDS (PubMed)", url:"https://pubmed.ncbi.nlm.nih.gov/22797452/"},
+
+      // Sepsis
+      SEPSIS3_2016: {tag:"Definition", label:"Sepsis-3 definitions (JAMA 2016)", url:"https://jamanetwork.com/journals/jama/fullarticle/2492881"},
+      SSC_2021: {tag:"Guideline", label:"Surviving Sepsis Campaign 2021 (landing)", url:"https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-campaign-guidelines-2021"},
+
+      // Weaning/SBT
+      AARC_SBT_2024: {tag:"Guideline", label:"AARC CPG 2024 — Spontaneous Breathing Trial (PDF)", url:"https://www.aarc.org/wp-content/uploads/2023/11/CPG2024SpontaneousBreathingTrial.pdf"},
+      PROLONGED_WEAN_2024: {tag:"Review", label:"Review 2024 — Prolonged weaning (PMC)", url:"https://pmc.ncbi.nlm.nih.gov/articles/PMC11629167/"},
+      COCHRANE_PROTOCOL_WEAN: {tag:"Cochrane", label:"Cochrane — Protocolized weaning (search landing)", url:"https://www.cochranelibrary.com/search?searchBy=1&searchText=protocolized%20weaning%20mechanical%20ventilation"},
+      COCHRANE_SBT_PSV_TTUBE: {tag:"Cochrane", label:"Cochrane — PSV vs T-tube SBT (search landing)", url:"https://www.cochranelibrary.com/search?searchBy=1&searchText=pressure%20support%20versus%20T-tube%20spontaneous%20breathing%20trial"},
+
+      // IMT
+      IMT_PUBMED_SR_2025: {tag:"PubMed/SR", label:"IMT systematic review 2025 (PubMed)", url:"https://pubmed.ncbi.nlm.nih.gov/40566408/"},
+      IMT_EINSTEIN_2023: {tag:"SR", label:"IMT systematic review 2023 (einstein)", url:"https://journal.einstein.br/article/effects-of-inspiratory-muscle-training-on-weaning-from-mechanical-ventilation-and-other-aspects-a-systematic-review/"}
+    };
+
+    function refLines(keys){
+      return keys.map(k=>{
+        const e=EVID[k];
+        return `• [${e.tag}] ${e.label}\n  ${e.url}`;
+      }).join("\n");
+    }
+
+    // --- Points of attention generator (each point with robust evidence anchors) ---
+    function buildPoints(st, ards, seps){
+      const points = [];
+
+      // Universal VM (auditability)
+      points.push({
+        title:"Sempre: coerência e rastreabilidade do suporte",
+        why:[
+          "Organizar o raciocínio com tendência (oxigenação, ventilação, mecânica, esforço) antes de concluir mecanismos.",
+          "Priorizar assincronia/mecânica quando houver instabilidade ou desconforto."
+        ],
+        evidence:["ARDSNET_ARMA_2000"]
+      });
+
+      // ARDS
+      if(ards.status.startsWith("SARA: sim") || ards.status.startsWith("SARA: provável")){
+        points.push({
+          title:"SARA: definição e severidade (Berlin) + proteção pulmonar como auditoria",
+          why:[
+            "Usar critérios Berlin para consistência diagnóstica e para comunicar gravidade (P/F com PEEP/CPAP ≥5).",
+            "Descrever VT/PBW e ΔP como métricas de auditoria (sem prescrever ajuste)."
+          ],
+          evidence:["BERLIN_2012","ARDSNET_ARMA_2000","ESICM_2023"]
+        });
+
+        points.push({
+          title:"SARA: PEEP (alto vs baixo) — evidência é contextual",
+          why:[
+            "High vs low PEEP tem efeito pequeno/incerto em mortalidade global; o contexto e a gravidade importam.",
+            "Diretrizes recentes discutem PEEP mais alto em ARDS moderada-grave sem recrutamento de rotina."
+          ],
+          evidence:["COCHRANE_PEEP_2021","ATS_2024","ESICM_2023","ALVEOLI_2004"]
+        });
+
+        points.push({
+          title:"SARA: recrutamento e titulação — evitar rotinização de manobras agressivas",
+          why:[
+            "Manobras de recrutamento prolongadas/alta pressão não são recomendadas de rotina.",
+            "Há dados de potencial dano em estratégias de recrutamento+titulação em certos perfis."
+          ],
+          evidence:["ESICM_2023","ATS_2024","COCHRANE_RECRUIT_2021","RECRUITMENT_ART_HARM"]
+        });
+      }
+
+      // Sepsis
+      if(seps.seps.startsWith("Sepse: sim") || seps.seps.includes("provável")){
+        points.push({
+          title:"Sepse/choque: definição operacional e integração hemodinâmica–ventilatória",
+          why:[
+            "Definir sepse por infecção + disfunção orgânica (ΔSOFA) e choque por vasopressor + hiperlactatemia (quando disponível).",
+            "Em sepse/choque, a instabilidade circulatória pode alterar a leitura de oxigenação, mecânica e tolerância ao suporte."
+          ],
+          evidence:["SEPSIS3_2016","SSC_2021"]
+        });
+      }
+
+      // Obstructive / COPD
+      if(st.copd==="sim" || st.obs!=="nao"){
+        points.push({
+          title:"Fenótipo obstrutivo/DPOC: expiração incompleta, aprisionamento e assincronia",
+          why:[
+            "Atenção a sinais de expiração incompleta/hiperinsuflação dinâmica (curvas) e seu impacto em disparo e conforto.",
+            "Assincronia pode dominar o quadro de esforço e instabilidade."
+          ],
+          evidence:["ESICM_2023"]
+        });
+      }
+
+      // Restrictive
+      if(st.res!=="nao"){
+        points.push({
+          title:"Fenótipo restritivo: baixa complacência como hipótese e coerência com imagem",
+          why:[
+            "Baixa complacência sugere maior risco de carga mecânica; reforça necessidade de coerência entre imagem, oxigenação e mecânica.",
+            "Oscilações de esforço e assincronia podem amplificar instabilidade."
+          ],
+          evidence:["ESICM_2023","ATS_2024"]
+        });
+      }
+
+      // Neuro
+      if(st.neuro==="sim"){
+        points.push({
+          title:"Neurocrítico: estabilidade ventilatória/PaCO₂ como objetivo educacional",
+          why:[
+            "Oscilações ventilatórias (especialmente de CO₂) podem ser relevantes em neurocríticos; o foco é estabilidade, não um número fixo.",
+            "Esforço/assincronia podem aumentar variação ventilatória."
+          ],
+          evidence:["ATS_2024"]
+        });
+      }
+
+      // Neuromuscular / prolonged MV (proxy by neuromuscular flag or SBT tab values)
+      const daysSbt = num(wean_days_since_first_sbt?.value);
+      const sbtStarted = wean_sbt_started?.value === "sim";
+      if(st.nm==="sim" || sbtStarted || (daysSbt!=null && daysSbt>=7)){
+        points.push({
+          title:"VM prolongada / desmame difícil: rastreabilidade e reabilitação respiratória (IMT como módulo)",
+          why:[
+            "Classificar padrão de desmame melhora comunicação e rastreabilidade (educacional).",
+            "IMT tem evidência de melhora de força; impacto em desfechos de desmame é variável (heterogeneidade)."
+          ],
+          evidence:["PROLONGED_WEAN_2024","AARC_SBT_2024","IMT_PUBMED_SR_2025","IMT_EINSTEIN_2023"]
+        });
+      }
+
+      // Unilateral/seletiva (conceito)
+      if(st.uni==="sim"){
+        points.push({
+          title:"Doença unilateral grave: heterogeneidade e risco regional (conceito)",
+          why:[
+            "Assimetria pode gerar risco de lesão regional; reforça coerência com imagem e observação cuidadosa de curvas.",
+            "Discussão de ventilação diferencial é avançada e depende de contexto; aqui é apenas reconhecimento do cenário."
+          ],
+          evidence:["ESICM_2023"]
+        });
+      }
+
+      return points;
+    }
+
+    // --- Expanded modules (focus: mechanics + asynchrony) ---
     const MODULES = [
       {
-        id:"M_OXYGENATION_MECHANISMS",
-        title:"Oxigenação – mecanismos (educacional)",
-        eligibility: (st)=> ["invasivo","niv","hfno"].includes(st.support_type) && st.predominant_hypoxemia==="sim",
-        signals: [
-          {id:"spo2_variability", label:"Oscilações frequentes de SpO₂"},
-          {id:"desaturation_events", label:"Dessaturações recorrentes"},
-          {id:"positional_effect", label:"Efeito posicional sugerido"},
-          {id:"secretion_relation", label:"Relação com secreção/aspiração sugerida"},
-          {id:"heterogeneity_suspected", label:"Heterogeneidade/colapso sugeridos (conceito)"}
+        id:"M_ASYNC",
+        title:"Assincronia — disparo/fluxo/ciclagem/expiração",
+        elig:(st)=> st.async!=="nao" || st.effort!=="nao" || st.copd==="sim",
+        signals:[
+          {id:"trigger_issue", label:"Compatível com problema de disparo"},
+          {id:"flow_mismatch", label:"Compatível com mismatch de fluxo"},
+          {id:"cycling_issue", label:"Compatível com ciclagem precoce/tardia (conceito)"},
+          {id:"exp_incomplete", label:"Compatível com expiração incompleta (conceito)"}
         ],
-        inferText: (sel)=> {
-          const lines = [];
-          if(sel.size===0) return "";
-          lines.push("Leitura educacional: instabilidade de oxigenação pode refletir heterogeneidade/colapso, shunt, V/Q desigual ou fatores transitórios.");
-          lines.push("Pendências típicas: coerência com imagem, tendência de oxigenação e eventos associados.");
-          return lines.join("\n");
-        }
+        infer:(sel)=>[
+          "Inferência educacional: assincronia pode explicar desconforto, variação ventilatória e esforço elevado.",
+          "Impacto: priorizar identificação do padrão dominante e coerência com mecânica/tempo expiratório."
+        ].join("\n"),
+        evidence:["ESICM_2023"]
       },
       {
-        id:"M_CO2_VENTILATION",
-        title:"Ventilação – CO₂ (educacional)",
-        eligibility: (st)=> st.predominant_hypercapnia==="sim" || st.intubation_cause==="hipercapnia",
-        signals: [
-          {id:"rising_co2_trend", label:"Tendência de CO₂ em elevação (se disponível)"},
-          {id:"sudden_co2_change", label:"Mudança abrupta recente de CO₂ (se disponível)"},
-          {id:"effort_related_co2", label:"Relação entre esforço e CO₂ sugerida"},
-          {id:"dead_space_suspected", label:"Espaço morto aumentado sugerido (conceito)"},
-          {id:"hypoventilation_suspected", label:"Hipoventilação sugerida (conceito)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          return [
-            "Leitura educacional: hipercapnia pode decorrer de hipoventilação, aumento de espaço morto ou interação paciente–ventilador.",
-            "Pendências típicas: tendência temporal, coerência com mecânica/curvas e contexto clínico."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_ARDS_CONFIRMATION",
-        title:"SARA – confirmação e fenótipo (adulto)",
-        eligibility: (st)=> (st.ards_compatible==="sim" || st.ards_compatible==="incompleto") && st.imaging_type!=="nenhum",
-        signals: [
-          {id:"onset_within_7d", label:"Início ≤ 7 dias (confirmado)"},
-          {id:"bilateral_opacities", label:"Opacidades bilaterais em imagem"},
-          {id:"non_cardiogenic_dominant", label:"Edema cardiogênico não dominante (descrição/eco)"},
-          {id:"pf_ratio_known", label:"PaO₂/FiO₂ conhecido (se disponível)"},
-          {id:"peep_cpap_ge5", label:"PEEP/CPAP ≥ 5 (se aplicável)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          const hit = ["onset_within_7d","bilateral_opacities","non_cardiogenic_dominant"].filter(x=>sel.has(x)).length;
-          const conf = hit>=2 ? "média/alta" : "baixa/média";
-          return [
-            "Leitura educacional: sinais selecionados sustentam maior completude de critérios de SARA em adulto.",
-            `Coerência de critérios: ${conf}.`,
-            "Pendências típicas: exclusão de cardiogênico, dados objetivos de oxigenação e tendência temporal."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_SEPSIS_CONFIRMATION",
-        title:"Sepse – confirmação (Sepsis-3, adulto)",
-        eligibility: (st)=> st.sepsis_status==="sim" || st.sepsis_status==="provavel" || st.septic_shock_probable==="sim",
-        signals: [
-          {id:"infection_suspected", label:"Infecção suspeita/confirmada"},
-          {id:"organ_dysfunction", label:"Disfunção orgânica presente (descrição)"},
-          {id:"sofa_delta_ge2", label:"ΔSOFA ≥ 2 (confirmado)"},
-          {id:"vasopressor", label:"Necessidade de vasopressor (descrição)"},
-          {id:"lactate_high", label:"Lactato elevado (se disponível)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          const shockLikely = sel.has("vasopressor") && sel.has("lactate_high");
-          return [
-            "Leitura educacional: sepse/choque são definidos por infecção com disfunção orgânica (e, no choque, anormalidade circulatória/metabólica).",
-            shockLikely ? "Sinais selecionados aumentam a probabilidade educacional de choque séptico." : "Sinais selecionados sustentam sepse/sepse provável, conforme completude do SOFA e dados metabólicos.",
-            "Pendências típicas: rastreabilidade por sistemas e tendência de perfusão."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_AIRWAY_ARTIFICIAL_MECHANICS",
-        title:"Via aérea artificial – impacto na mecânica (educacional)",
-        eligibility: (st)=> st.support_type==="invasivo" && (st.airway_mechanical_impact==="sim" || st.airway_mechanical_impact==="incerto" || st.increased_resistance_suspected!=="nao" || st.predominant_hypercapnia==="sim"),
-        signals: [
-          {id:"sudden_mechanics_worse", label:"Piora súbita de mecânica sem explicação pulmonar clara"},
-          {id:"hypercapnia_disproportionate", label:"Hipercapnia desproporcional ao quadro radiológico (conceito)"},
-          {id:"secretion_plug", label:"Secreção/rolha suspeita (descrição)"},
-          {id:"post_manipulation", label:"Mudança temporal após manipulação do tubo (descrição)"},
-          {id:"tube_depth_extreme", label:"Fixação na rima em valores extremos (dentro do intervalo)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          return [
-            "Leitura educacional: um fator relacionado à via aérea artificial pode contribuir para aumento de resistência/carga ventilatória.",
-            "Pendências típicas: coerência com imagem, ausculta e tendência das curvas (sem orientar intervenção)."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_VT_PBW_NORMALIZATION",
-        title:"Normalização por PBW – VT (mL/kg) (educacional)",
-        eligibility: (st)=> st.support_type==="invasivo" && st.vt_reliability!=="nao_disponivel" && !!computeVTperPBW(),
-        signals: [
-          {id:"pbw_inputs_reliable", label:"Altura e sexo confiáveis para PBW"},
-          {id:"vt_reliable", label:"VT disponível com confiabilidade alta/média"},
-          {id:"ards_context", label:"SARA sim/incompleto (relevância aumentada)"},
-          {id:"high_effort_context", label:"Alto esforço/drive suspeito (contexto)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          const val = computeVTperPBW();
-          const pbw = computePBW();
-          const band = (val<6) ? "faixa baixa" : (val<=8) ? "faixa intermediária" : "faixa alta";
-          return [
-            `VT/PBW calculado: ${val.toFixed(2)} mL/kg (PBW=${pbw?.toFixed(1) ?? "?"} kg) — ${band} (classificação interna, não prescritiva).`,
-            "Leitura educacional: VT normalizado por PBW é um descritor usado para discutir proteção pulmonar em diretrizes, especialmente em SARA.",
-            "Pendências típicas: qualidade da medida de VT e confirmação da altura."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_OBSTRUCTION_FLOW_TIME",
-        title:"Obstrução – fluxo×tempo / tempo expiratório (educacional)",
-        eligibility: (st)=> st.obstructive_pattern_suspected!=="nao" || st.known_copd==="sim" || st.imaging_findings.includes("hiperinsuflacao"),
-        signals: [
+        id:"M_OBSTRUCTION",
+        title:"Mecânica (obstrução) — tempo expiratório/hiperinsuflação dinâmica",
+        elig:(st)=> st.obs!=="nao" || st.copd==="sim",
+        signals:[
           {id:"exp_flow_not_zero", label:"Fluxo expiratório não zera"},
           {id:"long_exp_tail", label:"Cauda expiratória prolongada"},
           {id:"volume_stacking", label:"Empilhamento em volume×tempo"},
-          {id:"cycle_trapping", label:"Aprisionamento sugerido por repetição ciclo a ciclo"}
+          {id:"cycle_trapping", label:"Aprisionamento por repetição ciclo a ciclo"}
         ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
+        infer:(sel)=>{
           const dyn = sel.has("exp_flow_not_zero") && sel.has("volume_stacking");
           return [
-            "Leitura educacional: sinais selecionados sustentam fisiologia obstrutiva/limitação ao fluxo.",
-            dyn ? "Combinação de sinais sugere hiperinsuflação dinâmica provável (educacional)." : "Risco de expiração incompleta/aprisionamento deve ser considerado como hipótese educacional.",
-            "Pendências típicas: coerência com imagem, história de DPOC e tendência de CO₂."
+            "Inferência educacional: sinais sustentam limitação ao fluxo/expiração incompleta.",
+            dyn ? "Combinação sugere hiperinsuflação dinâmica provável (educacional)." : "Risco de aprisionamento deve ser considerado como hipótese educacional."
           ].join("\n");
-        }
+        },
+        evidence:["ESICM_2023"]
       },
       {
-        id:"M_RESTRICTION_PV_LOOP",
-        title:"Restrição – pressão×tempo / loop P–V (educacional)",
-        eligibility: (st)=> st.restrictive_pattern_suspected!=="nao" || st.known_or_suspected_restrictive_dz!=="nao" || st.imaging_findings.includes("intersticial_reticular"),
-        signals: [
-          {id:"small_vt_large_pressure", label:"Pequeno VT para grande variação de pressão (conceito)"},
-          {id:"narrow_pv_loop", label:"Loop P–V estreito"},
-          {id:"reduced_hysteresis", label:"Histerese reduzida"},
-          {id:"no_obstructive_dominant", label:"Ausência de padrão obstrutivo predominante"}
+        id:"M_RESTRICTION",
+        title:"Mecânica (restrição) — baixa complacência como hipótese",
+        elig:(st)=> st.res!=="nao",
+        signals:[
+          {id:"small_vt_large_p", label:"Pequeno VT para grande variação de pressão (conceito)"},
+          {id:"pv_loop_narrow", label:"Loop P–V estreito (conceito)"},
+          {id:"hysteresis_low", label:"Histerese reduzida (conceito)"},
+          {id:"no_obstr_dominant", label:"Ausência de padrão obstrutivo predominante"}
         ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          const lowComp = sel.has("narrow_pv_loop") || sel.has("small_vt_large_pressure");
+        infer:(sel)=>{
+          const lowComp = sel.has("pv_loop_narrow") || sel.has("small_vt_large_p");
           return [
-            "Leitura educacional: sinais selecionados sustentam fenótipo restritivo/baixa complacência como hipótese.",
-            lowComp ? "Baixa complacência provável (educacional)." : "Restrição provável com necessidade de confirmação por coerência clínica e imagem.",
-            "Pendências típicas: padrão intersticial, gravidade de hipoxemia e tendência temporal."
+            "Inferência educacional: fenótipo restritivo/baixa complacência como hipótese.",
+            lowComp ? "Baixa complacência provável (educacional)." : "Restrição provável com necessidade de coerência clínica."
           ].join("\n");
-        }
+        },
+        evidence:["ESICM_2023","ATS_2024"]
       },
       {
-        id:"M_EFFORT_DRIVE",
-        title:"Esforço/Drive – curvas (educacional)",
-        eligibility: (st)=> st.high_effort_suspected!=="nao" || st.intubation_cause==="falha_niv_hfno",
-        signals: [
+        id:"M_EFFORT",
+        title:"Esforço/drive — sinais e impacto ventilatório (educacional)",
+        elig:(st)=> st.effort!=="nao" || st.neuro==="sim",
+        signals:[
           {id:"pressure_notches", label:"Entalhes/deflexões sugerindo esforço"},
-          {id:"pressure_oscillation", label:"Oscilações de pressão durante o ciclo"},
           {id:"double_trigger", label:"Dupla ativação/empilhamento sugeridos"},
-          {id:"irregular_timing", label:"Irregularidade consistente do timing do ciclo"}
+          {id:"irregular_timing", label:"Irregularidade consistente do timing"},
+          {id:"pressure_osc", label:"Oscilações de pressão durante o ciclo"}
         ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          return [
-            "Leitura educacional: sinais selecionados sugerem esforço/drive elevado e/ou interação paciente–ventilador subótima.",
-            "Pendências típicas: verificar coerência com assincronia, oxigenação e CO₂."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_ASYNCHRONY_PATTERNS",
-        title:"Assincronia – padrões (educacional)",
-        eligibility: (st)=> st.major_asynchrony_suspected!=="nao",
-        signals: [
-          {id:"trigger_issue", label:"Padrão de disparo alterado (conceito)"},
-          {id:"flow_mismatch", label:"Mismatch de fluxo (conceito)"},
-          {id:"cycling_issue", label:"Ciclagem precoce/tardia (conceito)"},
-          {id:"expiratory_issue", label:"Expiração incompleta (conceito)"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          return [
-            "Leitura educacional: padrões de assincronia podem explicar desconforto, esforço elevado e instabilidade ventilatória.",
-            "Pendências típicas: identificar padrão dominante e coerência com mecânica/tempo expiratório."
-          ].join("\n");
-        }
-      },
-      {
-        id:"M_NEURO_VENT_CONFLICTS",
-        title:"Neuro – conflitos ventilatórios (educacional)",
-        eligibility: (st)=> st.neuro_critical==="sim" || st.intubation_cause==="protecao_via_aerea",
-        signals: [
-          {id:"co2_instability", label:"Oscilações relevantes de CO₂ (se disponível)"},
-          {id:"hypervent_episodes", label:"Episódios de hiperventilação (descrição)"},
-          {id:"cough_effort_bursts", label:"Tosse/esforço em rajadas (descrição)"},
-          {id:"oxygenation_swings", label:"Instabilidade de oxigenação relevante"}
-        ],
-        inferText: (sel)=> {
-          if(sel.size===0) return "";
-          return [
-            "Leitura educacional: em neurocríticos, variabilidade ventilatória (especialmente de CO₂) pode ser clinicamente relevante.",
-            "Pendências típicas: estabilidade de ventilação, coerência com sedação/conforto (sem prescrever)."
-          ].join("\n");
-        }
+        infer:(sel)=>[
+          "Inferência educacional: esforço/drive elevado pode aumentar instabilidade e interagir com assincronia e mecânica.",
+          "Impacto: reforçar rastreabilidade do padrão e coerência com oxigenação/CO₂."
+        ].join("\n"),
+        evidence:["ESICM_2023","ATS_2024"]
       }
     ];
 
-    function getEligibleModules(st){
-      return MODULES.filter(m=>m.eligibility(st));
+    function eligibleModules(st){
+      return MODULES.filter(m=>m.elig(st));
     }
 
-    function buildModulesUI(){
-      const st = getState();
-      modulesContainer.innerHTML = "";
-      if(st.adult_18_plus !== "sim"){
-        pillModules.textContent = "bloqueado";
-        return;
-      }
+    function buildModules(){
+      const st = getCompactState();
+      modulesContainer.innerHTML="";
+      if(st.adult!=="sim"){ pillModules.textContent="bloqueado"; return; }
 
-      const eligible = getEligibleModules(st);
-      pillModules.textContent = `${eligible.length} módulos`;
+      const mods=eligibleModules(st);
+      pillModules.textContent = mods.length + " módulos";
 
-      eligible.forEach(mod=>{
-        const box = document.createElement("div");
-        box.className = "card";
-        box.style.background = "rgba(0,0,0,.18)";
-        box.style.boxShadow = "none";
+      mods.forEach(mod=>{
+        const box=document.createElement("div");
+        box.className="card";
+        box.style.background="rgba(0,0,0,.18)";
+        box.style.boxShadow="none";
 
-        const title = document.createElement("h2");
-        title.textContent = mod.title;
+        const h=document.createElement("h2");
+        h.textContent=mod.title;
 
-        const det = document.createElement("details");
-        det.open = true;
+        const det=document.createElement("details");
+        det.open=true;
 
-        const sum = document.createElement("summary");
-        sum.textContent = "Sinais observáveis (clique para marcar)";
+        const sum=document.createElement("summary");
+        sum.textContent="Sinais observáveis (marque ≥1)";
         det.appendChild(sum);
 
-        const ul = document.createElement("ul");
-        ul.className = "sigList";
+        const ul=document.createElement("ul");
+        ul.className="sigList";
 
         mod.signals.forEach(sig=>{
-          const li = document.createElement("li");
-          li.className = "sigItem";
+          const li=document.createElement("li");
+          li.className="sigItem";
 
-          const cb = document.createElement("input");
-          cb.type = "checkbox";
-          cb.id = `sig_${mod.id}_${sig.id}`;
+          const cb=document.createElement("input");
+          cb.type="checkbox";
+          cb.id=`sig_${mod.id}_${sig.id}`;
 
-          const sp = document.createElement("span");
-          sp.textContent = sig.label;
+          const sp=document.createElement("span");
+          sp.textContent=sig.label;
 
-          li.appendChild(cb);
-          li.appendChild(sp);
+          li.appendChild(cb); li.appendChild(sp);
           ul.appendChild(li);
         });
 
         det.appendChild(ul);
-        box.appendChild(title);
+
+        const ev=document.createElement("div");
+        ev.className="refs";
+        ev.innerHTML = `<b>Evidência (âncoras):</b><br/>` + renderRefs(mod.evidence);
+
+        box.appendChild(h);
         box.appendChild(det);
+        box.appendChild(ev);
 
         modulesContainer.appendChild(box);
       });
     }
 
-    function selectedSignalsForModule(mod){
-      const sel = new Set();
+    function selectedSignals(mod){
+      const s=new Set();
       mod.signals.forEach(sig=>{
-        const id = `sig_${mod.id}_${sig.id}`;
-        const cb = document.getElementById(id);
-        if(cb && cb.checked) sel.add(sig.id);
+        const cb=document.getElementById(`sig_${mod.id}_${sig.id}`);
+        if(cb && cb.checked) s.add(sig.id);
       });
-      return sel;
+      return s;
     }
 
-    /* ======== Compact synthesis ======== */
-    function summarizeCompact(){
-      const st = getState();
+    function renderRefs(keys){
+      return keys.map(k=>{
+        const e=EVID[k];
+        return `<span class="tag">${e.tag}</span> <a href="${e.url}" target="_blank" rel="noopener">${e.label}</a>`;
+      }).join("<br/>");
+    }
+
+    // compact state (subset for decision)
+    function getCompactState(){
+      return {
+        adult: adult_18_plus.value,
+        support: support_type.value,
+        obs: obstructive_suspected.value,
+        res: restrictive_suspected.value,
+        effort: high_effort.value,
+        async: major_async.value,
+        copd: copd_known.value,
+        nm: neuromuscular.value,
+        neuro: neuro_critical.value,
+        uni: unilateral_severe.value
+      };
+    }
+
+    // PEEP table highlighting
+    function clearHL(tbl){
+      Array.from(tbl.querySelectorAll("tbody tr")).forEach(tr=>tr.classList.remove("hl"));
+    }
+    function highlightForFiO2(tbl, fio2){
+      clearHL(tbl);
+      if(fio2==null) return;
+      const rows=Array.from(tbl.querySelectorAll("tbody tr"));
+      for(const tr of rows){
+        const mn=parseFloat(tr.getAttribute("data-min"));
+        const mx=parseFloat(tr.getAttribute("data-max"));
+        if(fio2>=mn && fio2<=mx){
+          tr.classList.add("hl");
+          return;
+        }
+      }
+      // If FiO2=1.0 sometimes doesn't match due to 1.01 max
+      if(Math.abs(fio2-1.0)<0.0001){
+        const last=rows[rows.length-1];
+        if(last) last.classList.add("hl");
+      }
+    }
+
+    // Weaning definidor (educational categories)
+    function classifyWeaning(){
+      const started = wean_sbt_started.value === "sim";
+      const attempts = num(wean_sbt_attempts.value) ?? 0;
+      const days = num(wean_days_since_first_sbt.value) ?? 0;
+      const trach = wean_trach.value === "sim";
+
+      let label="Desmame: não iniciado";
+      let notes=[];
+
+      if(!started){
+        label="Desmame: não iniciado (SBT não iniciado)";
+      } else {
+        // Simplified educational mapping: simple vs difficult vs prolonged (conceptual)
+        if(attempts<=1 && days<=1){
+          label="Desmame: simples (educacional)";
+        } else if(attempts>=2 && attempts<=3 && days<7){
+          label="Desmame: difícil (educacional)";
+        } else if(attempts>=3 || days>=7){
+          label="Desmame: prolongado (educacional)";
+        } else {
+          label="Desmame: indeterminado (dados incompletos)";
+        }
+      }
+
+      if(trach){
+        notes.push("Traqueostomia presente: pode alterar trajetória e métricas clássicas; manter rastreabilidade educacional.");
+      }
+
+      return {label, notes};
+    }
+
+    // Populate evidence boxes (static)
+    function populateStaticEvidence(){
+      // PEEP evidence box
+      peepEvidenceBox.innerHTML =
+        `<b>Síntese educacional:</b><br/>
+         • PEEP alto vs baixo: efeito em mortalidade global é pequeno/incerto; depende de contexto e gravidade.<br/>
+         • Diretrizes recentes discutem PEEP mais alto em ARDS moderada-grave sem recrutamento rotineiro.<br/>
+         • Recrutamento prolongado/alta pressão não é recomendado de rotina; há dados de potencial dano em estratégias específicas.<br/>
+         <div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>
+         ${renderRefs(["COCHRANE_PEEP_2021","ATS_2024","ESICM_2023","ALVEOLI_2004","COCHRANE_RECRUIT_2021","RECRUITMENT_ART_HARM"])}</div>`;
+
+      // IMT evidence box
+      imtEvidenceBox.innerHTML =
+        `<b>Síntese educacional:</b><br/>
+         • IMT tende a melhorar força inspiratória; efeitos em sucesso/tempo de desmame variam conforme populações e protocolos.<br/>
+         • Tratar como módulo de reabilitação em VM prolongada/desmame difícil, com monitorização multiprofissional (conceito).<br/>
+         <div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>
+         ${renderRefs(["IMT_PUBMED_SR_2025","IMT_EINSTEIN_2023"])}</div>`;
+    }
+
+    // Main compact compute
+    function computeCompact(){
       refreshUI();
+      if(adult_18_plus.value!=="sim") return;
 
-      if(st.adult_18_plus !== "sim"){
-        pillConfidence.textContent = "bloqueado";
-        compactResult.textContent = "Instrumento aplicável apenas a pacientes adultos (≥ 18 anos).";
-        return;
-      }
+      calcDP();
+      calcVTmlkg();
+      const ards=defineARDS();
+      const seps=defineSepsis();
 
-      // Basic validation: tube constraints
-      if(st.support_type==="invasivo" && st.airway_device==="tet"){
-        const tid = parseFloat(st.tube_id_mm);
-        const rima = parseFloat(st.tube_rima_cm);
-        if(isFinite(tid) && tid > 9.0){
-          compactResult.textContent = "Erro: tamanho do tubo acima do máximo permitido (9,0).";
-          pillConfidence.textContent = "dados inválidos";
-          return;
-        }
-        if(isFinite(rima) && rima > 26){
-          compactResult.textContent = "Erro: fixação na rima acima do máximo permitido (26 cm).";
-          pillConfidence.textContent = "dados inválidos";
-          return;
-        }
-      }
+      // Confidence heuristic
+      let conf="média";
+      const pf = num(pf_ratio.value);
+      if(ards.status.includes("provável") && !pf) conf="baixa";
+      if(seps.seps.includes("provável") && (num(sofa_delta.value)==null)) conf="baixa";
+      if(ards.status.startsWith("SARA: sim") || seps.seps.startsWith("Sepse: sim")) conf="média/alta";
+      pillConfidence.textContent=conf;
 
-      const img = st.imaging_findings || [];
-      const priorities = [];
-      const risks = [];
-
-      // Scenario line
-      const parts = [];
-      if(st.support_type==="invasivo"){
-        parts.push("Suporte: invasivo");
-        parts.push(`Causa intubação: ${labelIntubCause(st.intubation_cause)}`);
-      } else {
-        parts.push(`Suporte: ${st.support_type}`);
-      }
-
-      // Classifications
-      let cls = [];
-      if(st.ards_compatible==="sim") cls.push("SARA: compatível");
-      if(st.ards_compatible==="incompleto") cls.push("SARA: incompleto");
-      if(st.sepsis_status==="sim") cls.push("Sepse: sim");
-      if(st.sepsis_status==="provavel") cls.push("Sepse: provável");
-      if(st.septic_shock_probable==="sim") cls.push("Choque séptico: provável");
-
-      // Imaging cues
-      if(img.includes("bilateral_difuso")) risks.push("Hipoxemia/heterogeneidade (imagem bilateral).");
-      if(img.includes("pneumotorax")) risks.push("Pneumotórax em imagem (relevante para coerência ventilatória).");
-      if(img.includes("hiperinsuflacao")) risks.push("Hiperinsuflação em imagem (fenótipo obstrutivo como hipótese).");
-      if(img.includes("intersticial_reticular")) risks.push("Padrão intersticial/reticular (restrição/ILD como hipótese).");
-
-      // Phenotypes
-      if(st.predominant_hypoxemia==="sim") priorities.push("Prioridade: rastrear mecanismos de hipoxemia e coerência com imagem (educacional).");
-      if(st.predominant_hypercapnia==="sim") priorities.push("Prioridade: rastrear mecanismos de hipercapnia (hipoventilação vs espaço morto vs interação).");
-
-      if(st.obstructive_pattern_suspected!=="nao" || st.known_copd==="sim"){
-        priorities.push("Prioridade: avaliar sinais de obstrução/tempo expiratório e risco de expiração incompleta (educacional).");
-      }
-      if(st.restrictive_pattern_suspected!=="nao" || st.known_or_suspected_restrictive_dz!=="nao"){
-        priorities.push("Prioridade: avaliar sinais compatíveis com restrição/baixa complacência e coerência com imagem (educacional).");
-      }
-      if(st.high_effort_suspected!=="nao" || st.major_asynchrony_suspected!=="nao"){
-        priorities.push("Prioridade: caracterizar esforço/assincronia por sinais observáveis e impacto em estabilidade ventilatória (educacional).");
-      }
-      if(st.neuro_critical==="sim"){
-        priorities.push("Prioridade: estabilidade ventilatória/CO₂ em cenário neurocrítico (educacional).");
-      }
-      if(st.support_type==="invasivo" && (st.airway_mechanical_impact!=="nao" || st.increased_resistance_suspected!=="nao")){
-        priorities.push("Prioridade: considerar contribuição da via aérea artificial para resistência/carga ventilatória (educacional).");
-      }
-
-      // PBW/VT note (educational)
-      const vtVal = computeVTperPBW();
-      if(st.support_type==="invasivo" && vtVal && st.vt_reliability!=="nao_disponivel"){
-        priorities.push("Prioridade: descrever VT normalizado por PBW como auditoria de coerência em cenários de risco pulmonar (educacional).");
-      }
-
-      // Confidence (heuristic)
-      let conf = "média";
-      const missingCore = (
-        st.support_type!=="o2_conv" &&
-        (!st.fio2 || (st.support_type==="invasivo" && !st.peep))
-      );
-      if(st.imaging_type==="nenhum" && st.ards_compatible!=="nao") conf = "baixa";
-      if(missingCore) conf = "baixa";
-      if(st.imaging_type!=="nenhum" && (st.ards_compatible==="sim" || st.sepsis_status==="sim")) conf = "média/alta";
-
-      pillConfidence.textContent = conf;
-
-      const out = [];
-      out.push("SYNCVENT — SÍNTESE COMPACTA (educacional)");
-      out.push("----------------------------------------");
-      out.push(parts.join(" | "));
-      if(cls.length) out.push("Classificações: " + cls.join(" • "));
-      if(st.support_type==="invasivo"){
-        out.push(`Via aérea: ${labelAirway(st.airway_device)}${(st.airway_device==="tet" ? ` | TET ${st.tube_id_mm || "?"} | rima ${st.tube_rima_cm || "?"} cm` : "")}`);
-        if(st.days_on_invasive_mv) out.push(`Tempo: ${st.days_on_invasive_mv} dias em VM invasiva`);
-      }
-      if(st.imaging_type!=="nenhum"){
-        out.push(`Imagem: ${st.imaging_type.toUpperCase()} | achados: ${img.length ? img.map(labelImg).join(", ") : "não informados"} | confiabilidade: ${st.imaging_reliability}`);
-      } else {
-        out.push("Imagem: não disponível");
-      }
-
-      out.push("");
-      out.push("Top prioridades (metas):");
-      const p = priorities.length ? priorities : ["Prioridade: completar dados mínimos para aumentar confiança (imagem/oxigenação/tempo)."];
-      p.slice(0,5).forEach((x,i)=> out.push(`${i+1}. ${x}`));
-
-      out.push("");
-      out.push("Riscos e pontos de atenção (educacional):");
-      const r = risks.length ? risks : ["Sem riscos adicionais inferidos a partir da imagem; depende dos módulos expandidos."];
-      r.slice(0,6).forEach((x,i)=> out.push(`- ${x}`));
-
-      out.push("");
-      out.push("Pendências críticas típicas:");
-      const pend = [];
-      if(st.support_type!=="o2_conv" && !st.fio2) pend.push("FiO₂ não informada.");
-      if(st.support_type==="invasivo" && !st.peep) pend.push("PEEP não informada.");
-      if(st.ards_compatible!=="nao" && st.imaging_type==="nenhum") pend.push("Imagem ausente para coerência em SARA.");
-      if(st.sepsis_status!=="nao") pend.push("Detalhamento por sistemas (SOFA) não documentado na compacta.");
-      if(pend.length===0) pend.push("Sem pendências críticas obrigatórias detectadas na compacta.");
-      pend.forEach(x=> out.push(`- ${x}`));
-
-      compactResult.textContent = out.join("\n");
-
-      // build modules based on state
-      buildModulesUI();
-    }
-
-    function labelIntubCause(v){
-      const map = {
-        hipoxemia:"Hipoxemia",
-        hipercapnia:"Hipercapnia",
-        protecao_via_aerea:"Proteção de via aérea",
-        choque:"Choque",
-        pcr:"PCR",
-        trauma:"Trauma",
-        procedimento:"Procedimento",
-        falha_niv_hfno:"Falha NIV/HFNO",
-        outra:"Outra"
-      };
-      return map[v] || v;
-    }
-    function labelAirway(v){
-      return v==="tet" ? "TET" : (v==="traqueostomia" ? "Traqueostomia" : v);
-    }
-    function labelImg(v){
-      const map = {
-        bilateral_difuso:"bilateral difuso",
-        unilateral_predominante:"unilateral",
-        consolidacao_focal:"consolidação focal",
-        atelectasia:"atelectasia",
-        derrame_pleural:"derrame pleural",
-        pneumotorax:"pneumotórax",
-        intersticial_reticular:"intersticial/reticular",
-        hiperinsuflacao:"hiperinsuflação",
-        incerto:"incerto"
-      };
-      return map[v] || v;
-    }
-
-    /* ======== Expanded synthesis ======== */
-    function summarizeExpanded(){
       const st = getState();
-      if(st.adult_18_plus !== "sim"){
-        pillExpandedConfidence.textContent = "bloqueado";
-        expandedResult.textContent = "Instrumento aplicável apenas a pacientes adultos (≥ 18 anos).";
+      const compact = getCompactState();
+      const points = buildPoints(compact, ards, seps);
+
+      const lines=[];
+      lines.push("SYNCVENT — SAÍDA EDUCACIONAL");
+      lines.push("--------------------------------");
+      lines.push(`SARA (Berlin): ${ards_result.value || "—"}`);
+      lines.push(`Sepse: ${sepsis_result.value || "—"}`);
+      lines.push(`Choque séptico: ${shock_result.value || "—"}`);
+      lines.push("");
+
+      // Vent audit descriptors (if present)
+      const vtkg = num(vt_mlkg.value);
+      const dp = num(dp_auto.value);
+      const hasVT = (vtkg!=null && vt_reliability.value!=="nao");
+      const hasDP = (pplat.value && peep.value);
+      lines.push("Descritores (auditoria educacional):");
+      lines.push(`- VT/PBW: ${hasVT ? vt_mlkg.value + " mL/kg (conf.: " + vt_reliability.value + ")" : "não disponível"}`);
+      lines.push(`- ΔP: ${hasDP ? dp_auto.value : "não disponível"}`);
+      lines.push("");
+
+      lines.push("PONTOS DE ATENÇÃO (por cenário) + evidência robusta:");
+      points.forEach((p, i)=>{
+        lines.push("");
+        lines.push(`${i+1}) ${p.title}`);
+        p.why.forEach(w=>lines.push(`- ${w}`));
+        lines.push("Evidência:");
+        p.evidence.forEach(k=>{
+          const e=EVID[k];
+          lines.push(`• [${e.tag}] ${e.label}`);
+          lines.push(`  ${e.url}`);
+        });
+      });
+
+      lines.push("");
+      lines.push("Próximo passo: abrir 'Mecânica & Assincronia' e marcar sinais observáveis para justificar hipóteses (educacional).");
+
+      outCompact.textContent = lines.join("\n");
+
+      // Modules refresh
+      buildModules();
+
+      // PEEP highlight
+      updatePeepHighlight();
+
+      // Weaning box
+      updateWeaningBox();
+
+      saveState();
+    }
+
+    function updateWeaningBox(){
+      const w = classifyWeaning();
+      let html = `<b>${w.label}</b><br/>`;
+      if(w.notes.length){
+        html += w.notes.map(n=>`• ${n}`).join("<br/>") + "<br/>";
+      }
+      html += `<div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>${renderRefs(["AARC_SBT_2024","PROLONGED_WEAN_2024","COCHRANE_PROTOCOL_WEAN","COCHRANE_SBT_PSV_TTUBE"])}</div>`;
+      weanResultBox.innerHTML = html;
+    }
+
+    function updatePeepHighlight(){
+      const v = num(peep_fio2_input.value);
+      highlightForFiO2(tblLower, v);
+      highlightForFiO2(tblHigher, v);
+      // show only chosen strategy highlighted? We'll highlight both but user can focus.
+      if(peep_strategy.value==="lower"){
+        tblLower.closest("details").open = true;
+      } else {
+        tblHigher.closest("details").open = true;
+      }
+    }
+
+    // Expanded compute
+    function computeExpanded(){
+      if(adult_18_plus.value!=="sim"){
+        pillExpConf.textContent="bloqueado";
+        outExpanded.textContent="";
         return;
       }
+      const st = getCompactState();
+      const ards = defineARDS();
+      const seps = defineSepsis();
 
-      const eligible = getEligibleModules(st);
-      let lines = [];
+      const mods = eligibleModules(st);
+      let any=false;
+      let missing=0;
+
+      const lines=[];
       lines.push("SYNCVENT — JUSTIFICATIVA EXPANDIDA (educacional)");
       lines.push("------------------------------------------------");
-      let any = false;
-      let missingSignals = 0;
-
-      eligible.forEach(mod=>{
-        const sel = selectedSignalsForModule(mod);
-        if(sel.size===0){
-          missingSignals += 1;
-          return;
-        }
-        any = true;
+      mods.forEach(mod=>{
+        const sel = selectedSignals(mod);
+        if(sel.size===0){ missing++; return; }
+        any=true;
         lines.push("");
         lines.push(`• ${mod.title}`);
-        lines.push(`Sinais selecionados: ${Array.from(sel).map(id=> mod.signals.find(s=>s.id===id)?.label || id).join("; ")}`);
-        const txt = mod.inferText(sel);
-        if(txt) lines.push(txt);
+        lines.push("Sinais selecionados:");
+        sel.forEach(id=>{
+          const label = mod.signals.find(s=>s.id===id)?.label || id;
+          lines.push(`- ${label}`);
+        });
+        lines.push(mod.infer(sel));
+        lines.push("Evidência (âncoras):");
+        mod.evidence.forEach(k=>{
+          const e=EVID[k];
+          lines.push(`• [${e.tag}] ${e.label}`);
+          lines.push(`  ${e.url}`);
+        });
       });
 
       if(!any){
         lines.push("");
-        lines.push("Nenhum módulo gerou justificativa (selecione ao menos 1 sinal observável em um módulo elegível).");
+        lines.push("Nenhum módulo gerou justificativa: marque ≥1 sinal observável em pelo menos 1 módulo elegível.");
       }
 
-      let conf = "média";
-      if(missingSignals > 0 && any) conf = "média";
-      if(!any) conf = "baixa";
-      if(any && missingSignals===0) conf = "média/alta";
-      pillExpandedConfidence.textContent = conf;
+      let conf="média";
+      if(!any) conf="baixa";
+      if(any && missing===0) conf="média/alta";
+      pillExpConf.textContent=conf;
 
-      expandedResult.textContent = lines.join("\n");
+      // Tie-back impact
+      lines.push("");
+      lines.push("Impacto educacional nos pontos de atenção:");
+      if(ards.status.startsWith("SARA: sim")) lines.push("- Em SARA, sinais de mecânica/assincronia reforçam vigilância de estabilidade e coerência de suporte.");
+      if(seps.seps.startsWith("Sepse: sim")) lines.push("- Em sepse/choque, esforço/assincronia podem aumentar variabilidade e demandam rastreabilidade.");
+      if(st.copd==="sim" || st.obs!=="nao") lines.push("- Em obstrução/DPOC, expiração incompleta e assincronia frequentemente dominam a leitura do caso.");
+      if(st.res!=="nao") lines.push("- Em restrição, coerência com imagem e carga mecânica (educacional) ganham prioridade.");
+      if(st.neuro==="sim") lines.push("- Em neurocrítico, estabilidade de ventilação/CO₂ é central como objetivo educacional.");
+
+      outExpanded.textContent = lines.join("\n");
+      saveState();
     }
 
-    /* ======== Buttons ======== */
-    E("btnRunCompact").onclick = ()=>{ computePBW(); computeDP(); autoVTForCalc(); computeVTperPBW(); summarizeCompact(); };
-    E("btnRunExpanded").onclick = ()=> summarizeExpanded();
+    // Button wiring
+    $("btnRun").onclick=()=>computeCompact();
+    $("btnRunExpanded").onclick=()=>computeExpanded();
+    $("btnGoExpanded").onclick=()=>{ setTab("expanded"); buildModules(); };
+    $("btnSave").onclick=()=>saveState();
+    $("btnReset").onclick=()=>resetAll();
 
-    E("btnGoExpanded").onclick = ()=>{ setTab("expanded"); buildModulesUI(); };
-    E("btnSave").onclick = ()=> saveState();
-    E("btnReset").onclick = ()=> resetState();
+    // PEEP tab events
+    peep_fio2_input.addEventListener("input", ()=>{ updatePeepHighlight(); saveState(); });
+    peep_strategy.addEventListener("change", ()=>{ updatePeepHighlight(); saveState(); });
 
-    /* ======== Events ======== */
-    support_type.addEventListener("change", ()=>{
-      refreshUI();
-      autoVTForCalc();
-      computePBW();
-      computeVTperPBW();
-      buildModulesUI();
-    });
-    airway_device.addEventListener("change", refreshUI);
-
-    [pbw_sex, height_cm, vt_for_calc, vt_exhaled_ml].forEach(el=>{
-      el.addEventListener("input", ()=>{
-        computePBW();
-        autoVTForCalc();
-        computeVTperPBW();
-      });
-      el.addEventListener("change", ()=>{
-        computePBW();
-        autoVTForCalc();
-        computeVTperPBW();
-      });
-    });
-    [pplat, peep].forEach(el=>{
-      el.addEventListener("input", computeDP);
-      el.addEventListener("change", computeDP);
-    });
-
-    // Save on changes
+    // Change events
     document.addEventListener("change", ()=>{
       refreshUI();
-      saveState();
+      computeCompact();
     });
+    document.addEventListener("input", ()=>{
+      // keep calculated fields responsive without full rebuild
+      calcDP(); calcPF(); defineARDS(); defineSepsis(); calcPBW(); calcVTmlkg();
+    });
+    support_type.addEventListener("change", refreshUI);
 
-    /* ======== Init ======== */
+    // Init
     (function init(){
-      const saved = localStorage.getItem(LS_KEY);
+      // restore
+      const saved = localStorage.getItem(LS);
       if(saved){
-        try{ setState(JSON.parse(saved)); } catch(e){ /* ignore */ }
-      } else {
-        refreshUI();
-        computePBW();
-        computeDP();
-        autoVTForCalc();
-        computeVTperPBW();
+        try{ setState(JSON.parse(saved)); }catch(e){}
       }
-      summarizeCompact();
-      buildModulesUI();
+      refreshUI();
+      populateStaticEvidence();
+      computeCompact();
+      buildModules();
+      updatePeepHighlight();
+      updateWeaningBox();
     })();
   </script>
 </body>
