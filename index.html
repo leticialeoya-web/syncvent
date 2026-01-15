@@ -1,1584 +1,1834 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SyncVent</title>
-  <meta name="description" content="SyncVent — Plataforma educacional (adulto) para raciocínio clínico em ventilação mecânica, SARA e sepse." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SyncVent — Ventilação Mecânica (educacional)</title>
 
   <style>
     :root{
-      --bg:#0b0f17; --panel:#0f1624; --panel2:#0c1320;
-      --text:#eaf0ff; --muted:#a9b6d6; --line:rgba(180,200,255,.16);
-      --blue:#2d7dff; --blue2:#5aa0ff; --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --bg:#0b1220;
+      --panel:#0f1a30;
+      --panel2:#0b1730;
+      --text:#eef2ff;
+      --muted:#b9c2d3;
+      --line:#243455;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --chip:#142244;
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
       --radius:16px;
-      --ok: rgba(60, 255, 160, .16);
-      --warn: rgba(255, 200, 80, .14);
-      --bad: rgba(255, 80, 80, .14);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    *{ box-sizing:border-box; }
+    /* Tema claro (inversão de cores) */
+    body.light{
+      --bg:#f6f8ff;
+      --panel:#ffffff;
+      --panel2:#f2f5ff;
+      --text:#0b1220;
+      --muted:#41516b;
+      --line:#d9e2f3;
+      --chip:#eef3ff;
+      --shadow: 0 18px 45px rgba(18,36,80,.12);
+    }
+
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(45,125,255,.25), transparent 55%),
-                  radial-gradient(900px 500px at 80% 20%, rgba(90,160,255,.18), transparent 55%),
-                  linear-gradient(180deg, #070a10 0%, #0b0f17 100%);
-      color:var(--text);
-      overflow-x:hidden;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
     }
-    a{ color:var(--blue2); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
 
     /* Splash */
     #splash{
-      position:fixed; inset:0; z-index:9999; padding:24px;
-      background: linear-gradient(180deg, #000 0%, #070a10 45%, #0b0f17 100%);
-      display:flex; align-items:center; justify-content:center;
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(800px 500px at 20% 10%, rgba(37,99,235,.30), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(37,99,235,.18), transparent 55%),
+                  var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      transition: opacity .35s ease;
     }
+    #splash.hide{ opacity:0; pointer-events:none; }
     .splashCard{
-      width:min(960px, 100%);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:24px;
-      background: rgba(15,22,36,.55);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      padding:28px;
-    }
-    .brandRow{ display:flex; align-items:center; gap:14px; margin-bottom:10px; }
-    .logo{
-      width:48px; height:48px; border-radius:14px;
-      background: linear-gradient(135deg, rgba(45,125,255,1) 0%, rgba(90,160,255,1) 55%, rgba(255,255,255,.9) 130%);
-      box-shadow: 0 10px 30px rgba(45,125,255,.35);
-      position:relative;
-    }
-    .logo:after{
-      content:""; position:absolute; inset:10px; border-radius:10px;
-      background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.22);
-    }
-    .brandTitle h1{ margin:0; font-size:28px; letter-spacing:.4px; }
-    .brandTitle .sub{ margin:2px 0 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
-
-    .splashBody{ margin-top:14px; display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; }
-    @media (max-width:860px){ .splashBody{ grid-template-columns:1fr; } }
-    .splashBox{
+      width:min(860px, 92vw);
       border:1px solid var(--line);
-      border-radius:18px;
-      background: rgba(12,19,32,.55);
-      padding:14px;
+      border-radius: calc(var(--radius) + 10px);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
     }
-    .splashBox h2{ margin:0 0 8px 0; font-size:14px; color:#dce6ff; letter-spacing:.2px; }
-    .splashBox p{ margin:0; color:var(--muted); line-height:1.5; font-size:13px; }
-
-    .btnRow{ display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
+    .splashTop{
+      display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.35));
+      box-shadow: 0 10px 22px rgba(37,99,235,.25);
+    }
+    .brand h1{ margin:0; font-size:22px; letter-spacing:.2px; }
+    .brand .tag{ margin-top:2px; color: var(--muted); font-size:13px; }
+    .splashBtns{ display:flex; gap:10px; flex-wrap:wrap; }
     .btn{
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:14px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 700;
       cursor:pointer;
-      font-weight:900;
-      letter-spacing:.2px;
+      transition: transform .05s ease, background .15s ease, border .15s ease;
+      user-select:none;
     }
-    .btnPrimary{
-      border-color: rgba(45,125,255,.55);
-      background: linear-gradient(135deg, rgba(45,125,255,.95) 0%, rgba(90,160,255,.95) 100%);
-      box-shadow: 0 12px 26px rgba(45,125,255,.22);
-      color:#081022;
+    .btn:hover{ border-color: rgba(37,99,235,.55); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      border-color: rgba(37,99,235,.65);
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: var(--line);
+    }
+    .splashBody{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    .splashBody p{ margin:0; color: var(--muted); line-height:1.5; font-size:14px; }
+    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:flex-start; }
+    .pill{
+      background: rgba(37,99,235,.14);
+      border:1px solid rgba(37,99,235,.35);
+      color: var(--text);
+      font-size:12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .pill.neutral{
+      background: var(--chip);
+      border-color: var(--line);
+      color: var(--muted);
+      font-weight: 700;
+    }
+    @media (max-width: 860px){
+      .splashBody{ grid-template-columns: 1fr; }
+      .pillRow{ justify-content:flex-start; }
     }
 
+    /* Layout principal */
     header{
-      position:sticky; top:0; z-index:50;
-      border-bottom:1px solid var(--line);
-      background: rgba(7,10,16,.55);
+      position: sticky;
+      top:0;
+      z-index: 50;
       backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      border-bottom: 1px solid var(--line);
     }
-    .wrap{ width:min(1260px, 100%); margin:0 auto; padding:16px 16px; }
-    .topRow{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
-    .topLeft{ display:flex; align-items:center; gap:12px; min-width:240px; }
+    .wrap{ width:min(1180px, 94vw); margin: 0 auto; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 10px 0;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .leftTop{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
     .miniLogo{
-      width:34px; height:34px; border-radius:12px;
-      background: linear-gradient(135deg, rgba(45,125,255,1) 0%, rgba(90,160,255,1) 55%, rgba(255,255,255,.9) 130%);
-      border:1px solid rgba(255,255,255,.12);
+      width:28px; height:28px; border-radius:10px;
+      background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.25));
+      box-shadow: 0 8px 18px rgba(37,99,235,.22);
     }
-    .appName strong{ font-size:15px; letter-spacing:.2px; }
-    .appName span{ font-size:12px; color:var(--muted); }
-
-    nav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .titleBlock{ display:flex; flex-direction:column; line-height:1.1; }
+    .titleBlock b{ font-size: 14px; letter-spacing:.2px;}
+    .titleBlock span{ font-size: 12px; color: var(--muted); margin-top:3px;}
+    nav{
+      display:flex; gap: 8px; flex-wrap:wrap; align-items:center;
+    }
     .tab{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      padding:9px 12px;
-      border-radius:999px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
       cursor:pointer;
-      font-weight:900;
-      font-size:13px;
+      font-size: 13px;
     }
     .tab.active{
-      border-color: rgba(45,125,255,.55);
-      background: rgba(45,125,255,.16);
-      box-shadow: inset 0 0 0 1px rgba(45,125,255,.10);
+      background: rgba(37,99,235,.16);
+      border-color: rgba(37,99,235,.55);
+    }
+    .rightTop{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .toggle{
+      border:1px solid var(--line);
+      background: var(--panel);
+      border-radius: 999px;
+      padding: 7px 10px;
+      cursor:pointer;
+      font-weight: 800;
+      color: var(--text);
+      font-size: 13px;
     }
 
-    main{ padding:18px 0 28px; }
-    .grid{ display:grid; grid-template-columns: 1.12fr .88fr; gap:14px; }
-    @media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
+    main{ padding: 16px 0 28px; }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
 
     .card{
       border:1px solid var(--line);
+      background: var(--panel);
       border-radius: var(--radius);
-      background: rgba(15,22,36,.55);
-      backdrop-filter: blur(8px);
       box-shadow: var(--shadow);
-      padding:14px;
+      padding: 14px;
     }
     .card h2{
-      margin:0 0 10px 0;
-      font-size:14px;
+      margin:0;
+      font-size: 16px;
       letter-spacing:.2px;
-      color:#dce6ff;
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
     }
-    .hint{ color:var(--muted); font-size:12px; line-height:1.5; margin:0 0 12px 0; }
+    .sub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .hr{ height:1px; background: var(--line); margin:12px 0; }
 
-    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    @media (max-width:720px){ .row{ grid-template-columns:1fr; } }
-    label{ display:block; font-size:12px; color:#cfe0ff; margin-bottom:6px; font-weight:900; letter-spacing:.15px; }
-    select, input, textarea{
+    label{
+      display:block;
+      font-weight: 900;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom:6px;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+    }
+    input, select, textarea{
       width:100%;
-      padding:10px 11px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.22);
-      color:var(--text);
-      outline:none;
+      box-sizing:border-box;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      padding: 10px 10px;
+      outline: none;
+      font-weight: 700;
+      font-size: 14px;
     }
-    select:focus, input:focus, textarea:focus{
-      border-color: rgba(90,160,255,.75);
-      box-shadow: 0 0 0 3px rgba(90,160,255,.16);
+    textarea{ min-height: 90px; resize: vertical; font-family: var(--sans); }
+    .small{ font-size: 12px; color: var(--muted); margin-top:6px; line-height:1.4; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
     }
-    textarea{ min-height:92px; resize:vertical; }
+    .chip b{ color: var(--text); }
+    .badge{
+      display:inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      border:1px solid var(--line);
+      background: var(--chip);
+      color: var(--text);
+    }
+    .badge.good{ border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.12); }
+    .badge.warn{ border-color: rgba(245,158,11,.40); background: rgba(245,158,11,.12); }
+    .badge.bad{ border-color: rgba(239,68,68,.40); background: rgba(239,68,68,.12); }
 
     details{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 16px;
-      background: rgba(0,0,0,.18);
-      padding:10px 12px;
-      margin-top:12px;
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
     }
-    details summary{
+    summary{
       cursor:pointer;
-      font-weight:900;
-      letter-spacing:.2px;
-      color:#dce6ff;
-      font-size:13px;
+      font-weight: 900;
       list-style:none;
     }
-    details summary::-webkit-details-marker{ display:none; }
-
-    .pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      color:#dce6ff;
-      font-size:12px;
-      font-weight:900;
-    }
-    .pill.ok{ background: var(--ok); }
-    .pill.warn{ background: var(--warn); }
-    .pill.bad{ background: var(--bad); }
-
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; margin-top:12px; }
-    .btnSmall{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      padding:9px 12px;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:900;
-      font-size:13px;
-    }
-    .btnSmall.primary{
-      border-color: rgba(45,125,255,.55);
-      background: rgba(45,125,255,.18);
-    }
-    .btnSmall.danger{ background: rgba(255,80,80,.12); }
-
-    .resultBox{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      border-radius: 16px;
-      padding:12px;
-      min-height: 240px;
-      white-space: pre-wrap;
-      line-height: 1.55;
-      font-size: 13px;
-      color:#eaf0ff;
-    }
-
-    .subgrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    @media (max-width:860px){ .subgrid{ grid-template-columns:1fr; } }
-
-    .sigList{
-      margin:10px 0 0 0; padding:0; list-style:none;
-      display:grid; grid-template-columns: 1fr 1fr; gap:8px;
-    }
-    @media (max-width:720px){ .sigList{ grid-template-columns:1fr; } }
-    .sigItem{
-      display:flex; align-items:flex-start; gap:10px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;
-      padding:10px;
-      background: rgba(255,255,255,.03);
-    }
-    .sigItem input{ width:auto; margin-top:2px; }
-
-    .tableWrap{
-      overflow:auto;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      background: rgba(0,0,0,.18);
-    }
-    table{ border-collapse:collapse; width:100%; min-width:720px; font-size:12px; }
-    th, td{
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      text-align:left;
-      vertical-align:top;
-      color:#eaf0ff;
-    }
-    th{ color:#dce6ff; letter-spacing:.2px; background: rgba(255,255,255,.03); }
-    .hl{ background: rgba(45,125,255,.12); outline: 1px solid rgba(45,125,255,.35); }
-
-    .refs{
-      margin-top:8px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;
-      background: rgba(0,0,0,.14);
-      padding:10px;
-      font-size:12px;
-      color:var(--muted);
+    summary::-webkit-details-marker{ display:none; }
+    .klist{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color: var(--muted);
       line-height:1.5;
+      font-size: 13px;
     }
-    .refs b{ color:#dce6ff; }
-    .tag{
-      display:inline-block;
-      margin-right:8px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:#dce6ff;
-      font-size:11px;
-      font-weight:900;
+    .klist li{ margin: 6px 0; }
+    .klist b{ color: var(--text); }
+    a{ color: var(--text); text-decoration: none; border-bottom: 1px dashed rgba(37,99,235,.45); }
+    a:hover{ border-bottom-color: rgba(37,99,235,.85); }
+
+    .footer{
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.45;
     }
 
-    .imgGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-    @media (max-width:980px){ .imgGrid{ grid-template-columns:1fr; } }
-    .imgCard{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      border-radius: 18px;
-      padding:12px;
-    }
-    .imgCard h3{ margin:0 0 8px 0; font-size:13px; color:#dce6ff; }
-    .imgCard img{ width:100%; height:auto; border-radius: 14px; border:1px solid rgba(255,255,255,.10); background:#000; display:block; }
+    .mono{ font-family: var(--mono); }
 
-    footer{
-      border-top:1px solid var(--line);
-      margin-top:20px;
-      padding:14px 0 24px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.55;
+    .hide{ display:none !important; }
+
+    /* Checklists */
+    .checks{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
+    @media (max-width: 780px){
+      .checks{ grid-template-columns: 1fr; }
+    }
+    .checkGroup{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .checkGroup h3{
+      margin:0 0 8px;
+      font-size: 13px;
+      letter-spacing:.2px;
+    }
+    .opt{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 6px 0;
+      border-top: 1px dashed color-mix(in srgb, var(--line) 70%, transparent);
+    }
+    .opt:first-of-type{ border-top: none; }
+    .opt input{ width:auto; margin-top: 3px; }
+    .opt div{ flex:1; }
+    .opt b{ display:block; font-size: 13px; }
+    .opt span{ display:block; color: var(--muted); font-size: 12px; line-height:1.35; margin-top:2px; }
+
+    .outBox{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--panel2) 80%, transparent);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .outBox h3{ margin:0 0 8px; font-size: 13px; }
+    .outBox .txt{ color: var(--muted); font-size: 13px; line-height:1.5; white-space:pre-wrap; }
+    .outBox .txt b{ color: var(--text); }
+
+    /* PEEP table */
+    table{ width:100%; border-collapse: collapse; overflow:hidden; border-radius: 14px; }
+    th,td{
+      border-bottom: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 13px;
+    }
+    th{ color: var(--muted); text-transform: uppercase; font-size: 12px; letter-spacing:.2px; }
+    tr:last-child td{ border-bottom: none; }
+    .tableWrap{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+
+    .note{
+      border-left: 4px solid rgba(37,99,235,.65);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(37,99,235,.08);
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
+    .note b{ color: var(--text); }
   </style>
 </head>
 
-<body>
-  <!-- Splash -->
-  <div id="splash" aria-hidden="false">
+<body class="dark">
+
+  <!-- SPLASH -->
+  <div id="splash">
     <div class="splashCard">
-      <div class="brandRow">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="brandTitle">
-          <h1>SyncVent</h1>
-          <p class="sub">Adulto • Definidores (SARA/sepse) • Mecânica e assincronia • Pontos de atenção com evidência (Guideline/Cochrane/PubMed)</p>
+      <div class="splashTop">
+        <div class="brand">
+          <div class="logo"></div>
+          <div>
+            <h1>SyncVent</h1>
+            <div class="tag">Ventilação Mecânica — app educacional (não-prescritor)</div>
+          </div>
+        </div>
+        <div class="splashBtns">
+          <button class="btn ghost" onclick="toggleTheme()">Alternar tema</button>
+          <button class="btn primary" onclick="enterApp()">Entrar</button>
         </div>
       </div>
 
       <div class="splashBody">
-        <div class="splashBox">
-          <h2>Uso e limites</h2>
-          <p>Instrumento exclusivamente educacional. Não orienta ajustes ventilatórios nem condutas terapêuticas. Use para estudo e discussão multiprofissional.</p>
+        <p>
+          Ferramenta educacional para organizar raciocínio em ventilação mecânica por cenários clínicos e por leitura de curvas.
+          Não substitui protocolos, diretrizes institucionais, treinamento formal ou julgamento clínico.
+        </p>
+        <div class="pillRow">
+          <span class="pill">SARA / Sepse / Choque séptico</span>
+          <span class="pill">DPOC / Obesidade</span>
+          <span class="pill">Neurocrítico / Trauma</span>
+          <span class="pill">Assincronias</span>
+          <span class="pill">Mecânica pelas curvas</span>
+          <span class="pill neutral">Evidências linkadas</span>
         </div>
-        <div class="splashBox">
-          <h2>Autoria e direitos</h2>
-          <p>© 2026 Leticia Moreira. Todos os direitos reservados. Proibida reprodução, distribuição, adaptação ou uso comercial sem autorização expressa e por escrito.</p>
-        </div>
-      </div>
-
-      <div class="btnRow">
-        <button class="btn" type="button" id="btnSplashTerms">Termos</button>
-        <button class="btn btnPrimary" type="button" id="btnEnter">Entrar</button>
       </div>
     </div>
   </div>
 
+  <!-- HEADER -->
   <header>
     <div class="wrap">
-      <div class="topRow">
-        <div class="topLeft">
-          <div class="miniLogo" aria-hidden="true"></div>
-          <div class="appName">
-            <strong>SyncVent</strong><br/>
-            <span>Adulto • Pontos de atenção por cenário</span>
+      <div class="topbar">
+        <div class="leftTop">
+          <div class="miniLogo"></div>
+          <div class="titleBlock">
+            <b>SyncVent</b>
+            <span>Organizador educacional — ventilação por cenários + motor por curvas</span>
           </div>
         </div>
 
-        <nav aria-label="Navegação principal">
-          <button class="tab active" id="tabCompact" type="button">Checklist & Definidores</button>
-          <button class="tab" id="tabExpanded" type="button">Mecânica & Assincronia</button>
-          <button class="tab" id="tabPeepWean" type="button">PEEP & Desmame</button>
-          <button class="tab" id="tabNormals" type="button">Curvas normais</button>
-          <button class="tab" id="tabAbout" type="button">Sobre & Termos</button>
+        <nav>
+          <button class="tab active" id="tabCasos" onclick="showTab('casos')">Casos</button>
+          <button class="tab" id="tabAssin" onclick="showTab('assin')">Assincronias</button>
+          <button class="tab" id="tabMec" onclick="showTab('mec')">Mecânica</button>
+          <button class="tab" id="tabRefs" onclick="showTab('refs')">Evidências</button>
+          <button class="tab" id="tabSobre" onclick="showTab('sobre')">Sobre</button>
         </nav>
+
+        <div class="rightTop">
+          <button class="toggle" onclick="toggleTheme()">Tema</button>
+          <button class="toggle" onclick="openAllDetails()">Expandir</button>
+          <button class="toggle" onclick="closeAllDetails()">Recolher</button>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <!-- =================== Compact =================== -->
-    <section id="secCompact">
-      <div class="grid">
-        <div class="card">
-          <h2>Checklist & Definidores <span class="pill" id="pillAdultOnly">Adulto-only</span></h2>
-          <p class="hint">Preencha os definidores. A saída entrega pontos de atenção em VM por cenário, cada um com evidência robusta (Guideline/Cochrane/PubMed).</p>
 
-          <div class="row">
-            <div>
-              <label>Adulto (≥ 18 anos)</label>
-              <select id="adult_18_plus">
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-              </select>
-            </div>
-            <div>
-              <label>Tipo de suporte</label>
-              <select id="support_type">
-                <option value="invasivo">Invasivo</option>
-                <option value="niv">NIV</option>
-                <option value="hfno">HFNO</option>
-                <option value="o2_conv">O₂ convencional</option>
-              </select>
-            </div>
-          </div>
-
-          <details open>
-            <summary>Painel ventilatório atual (dados)</summary>
-            <div class="row" id="panelInvasive" style="margin-top:10px;">
-              <div><label>FiO₂ (fração)</label><input id="fio2" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
-              <div><label>PEEP (cmH₂O)</label><input id="peep" type="number" step="1" min="0" max="30" placeholder="Ex.: 8" /></div>
-              <div><label>VT exalado (mL)</label><input id="vt_exhaled_ml" type="number" step="1" min="0" max="1200" placeholder="Ex.: 420" /></div>
-              <div><label>Pplat (cmH₂O)</label><input id="pplat" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" /></div>
-              <div><label>ΔP (auto)</label><input id="dp_auto" type="text" readonly /></div>
-              <div><label>FR total (rpm)</label><input id="rr_total" type="number" step="1" min="0" max="80" placeholder="Ex.: 22" /></div>
-            </div>
-
-            <div class="row" id="panelNIV" style="display:none; margin-top:10px;">
-              <div><label>FiO₂ (fração)</label><input id="fio2_niv" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
-              <div><label>EPAP/CPAP (cmH₂O)</label><input id="epap" type="number" step="1" min="0" max="30" placeholder="Ex.: 10" /></div>
-              <div><label>FR total (rpm)</label><input id="rr_total_niv" type="number" step="1" min="0" max="80" placeholder="Ex.: 28" /></div>
-              <div><label>VT (se disponível)</label><input id="vt_niv" type="number" step="1" min="0" max="1200" placeholder="Ex.: 380" /></div>
-            </div>
-
-            <div class="row" id="panelHFNO" style="display:none; margin-top:10px;">
-              <div><label>Fluxo (L/min)</label><input id="hfno_flow" type="number" step="1" min="0" max="80" placeholder="Ex.: 50" /></div>
-              <div><label>FiO₂ (fração)</label><input id="fio2_hfno" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.60" /></div>
-              <div><label>FR total (rpm)</label><input id="rr_total_hfno" type="number" step="1" min="0" max="80" placeholder="Ex.: 30" /></div>
-              <div></div>
-            </div>
-          </details>
-
-          <details open>
-            <summary>PBW + VT normalizado (ferramenta)</summary>
-            <div class="row" style="margin-top:10px;">
-              <div>
-                <label>Sexo para PBW</label>
-                <select id="pbw_sex">
-                  <option value="nao">Não disponível</option>
-                  <option value="m">Masculino</option>
-                  <option value="f">Feminino</option>
-                </select>
-              </div>
-              <div><label>Altura (cm)</label><input id="height_cm" type="number" step="0.1" min="120" max="220" placeholder="Ex.: 168" /></div>
-              <div><label>PBW (kg) (auto)</label><input id="pbw_kg" type="text" readonly /></div>
-              <div><label>VT (mL) para cálculo</label><input id="vt_for_calc" type="number" step="1" min="0" max="1200" placeholder="Pode copiar do VT exalado" /></div>
-              <div><label>VT (mL/kg PBW) (auto)</label><input id="vt_mlkg" type="text" readonly /></div>
-              <div>
-                <label>Confiabilidade do VT</label>
-                <select id="vt_reliability">
-                  <option value="nao">Não disponível</option>
-                  <option value="alta">Alta</option>
-                  <option value="media">Média</option>
-                  <option value="baixa">Baixa</option>
-                </select>
-              </div>
-            </div>
-          </details>
-
-          <details open>
-            <summary>Definidor de SARA (Berlin) + P/F</summary>
-            <div class="row" style="margin-top:10px;">
-              <div>
-                <label>Início ≤ 7 dias</label>
-                <select id="ards_onset_7d">
-                  <option value="sim">Sim</option>
-                  <option value="nao">Não</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div>
-                <label>Opacidades bilaterais</label>
-                <select id="ards_bilateral_imaging">
-                  <option value="sim">Sim</option>
-                  <option value="nao">Não</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div>
-                <label>Edema cardiogênico dominante?</label>
-                <select id="ards_cardiogenic_dominant">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div><label>PaO₂ (mmHg)</label><input id="pao2" type="number" step="1" min="0" max="600" placeholder="Ex.: 80" /></div>
-              <div><label>FiO₂ (fração) (para P/F)</label><input id="fio2_pf" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.50" /></div>
-              <div><label>PEEP/CPAP (cmH₂O) (Berlin usa ≥5)</label><input id="peep_pf" type="number" step="1" min="0" max="30" placeholder="Ex.: 8" /></div>
-              <div><label>P/F (auto)</label><input id="pf_ratio" type="text" readonly /></div>
-              <div><label>SARA (auto)</label><input id="ards_result" type="text" readonly /></div>
-            </div>
-          </details>
-
-          <details open>
-            <summary>Definidor de Sepse/Choque (Sepsis-3 operacional)</summary>
-            <div class="row" style="margin-top:10px;">
-              <div>
-                <label>Infecção suspeita/confirmada</label>
-                <select id="infection_suspected">
-                  <option value="sim">Sim</option>
-                  <option value="nao">Não</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div><label>ΔSOFA (numérico)</label><input id="sofa_delta" type="number" step="1" min="0" max="24" placeholder="Ex.: 3" /></div>
-              <div>
-                <label>Vasopressor para PAM ≥65</label>
-                <select id="vasopressor_pam65">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                  <option value="incerto">Incerto</option>
-                </select>
-              </div>
-              <div><label>Lactato (mmol/L)</label><input id="lactate" type="number" step="0.1" min="0" max="30" placeholder="Ex.: 3.2" /></div>
-              <div><label>Sepse (auto)</label><input id="sepsis_result" type="text" readonly /></div>
-              <div><label>Choque séptico (auto)</label><input id="shock_result" type="text" readonly /></div>
-            </div>
-          </details>
-
-          <details open>
-            <summary>Gatilhos: mecânica, assincronia e cenários</summary>
-            <div class="row" style="margin-top:10px;">
-              <div><label>Fenótipo obstrutivo (suspeita)</label>
-                <select id="obstructive_suspected"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
-              </div>
-              <div><label>Fenótipo restritivo (suspeita)</label>
-                <select id="restrictive_suspected"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
-              </div>
-              <div><label>Alto esforço (suspeita)</label>
-                <select id="high_effort"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
-              </div>
-              <div><label>Assincronia relevante (suspeita)</label>
-                <select id="major_async"><option value="nao">Não</option><option value="sim">Sim</option><option value="incerto">Incerto</option></select>
-              </div>
-              <div><label>DPOC conhecida</label>
-                <select id="copd_known"><option value="nao">Não</option><option value="sim">Sim</option></select>
-              </div>
-              <div><label>Doença neuromuscular</label>
-                <select id="neuromuscular"><option value="nao">Não</option><option value="sim">Sim</option></select>
-              </div>
-              <div><label>Neurocrítico</label>
-                <select id="neuro_critical"><option value="nao">Não</option><option value="sim">Sim</option></select>
-              </div>
-              <div><label>Unilateral grave</label>
-                <select id="unilateral_severe"><option value="nao">Não</option><option value="sim">Sim</option></select>
-              </div>
-            </div>
-          </details>
-
-          <div class="actions">
-            <button class="btnSmall danger" type="button" id="btnReset">Limpar</button>
-            <button class="btnSmall" type="button" id="btnSave">Salvar</button>
-            <button class="btnSmall primary" type="button" id="btnRun">Gerar análise</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Saída (pontos de atenção + evidência) <span class="pill" id="pillConfidence">confiança</span></h2>
-          <p class="hint">A saída é educacional: prioriza o que observar e como organizar raciocínio, sem prescrever ajustes.</p>
-          <div class="resultBox" id="outCompact"></div>
-          <div class="actions" style="justify-content:flex-start;">
-            <button class="btnSmall primary" type="button" id="btnGoExpanded">Abrir Mecânica & Assincronia</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================== Expanded =================== -->
-    <section id="secExpanded" style="display:none;">
-      <div class="grid">
-        <div class="card">
-          <h2>Mecânica & Assincronia (módulos) <span class="pill" id="pillModules">módulos</span></h2>
-          <p class="hint">Marque ≥1 sinal observável por módulo. Isso gera justificativa e melhora a confiança do raciocínio.</p>
-          <div class="subgrid" id="modulesContainer"></div>
-          <div class="actions">
-            <button class="btnSmall primary" type="button" id="btnRunExpanded">Gerar justificativa expandida</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Justificativa expandida (gerada) <span class="pill" id="pillExpConf">confiança</span></h2>
-          <p class="hint">Foco: assincronia e mecânica (sinais → inferências educacionais → impacto nos pontos de atenção).</p>
-          <div class="resultBox" id="outExpanded"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================== PEEP & Weaning =================== -->
-    <section id="secPeepWean" style="display:none;">
-      <div class="grid">
-        <div class="card">
-          <h2>PEEP/FiO₂ tables (referência) + evidência</h2>
-          <p class="hint">Tabelas refletem estratégias usadas em ensaios. O destaque por FiO₂ é educacional. Não prescreve ajuste.</p>
-
-          <div class="row">
-            <div><label>FiO₂ atual (fração)</label><input id="peep_fio2_input" type="number" step="0.01" min="0.21" max="1" placeholder="Ex.: 0.60" /></div>
-            <div>
-              <label>Estratégia (para destaque)</label>
-              <select id="peep_strategy">
-                <option value="lower">Lower PEEP / Higher FiO₂ (ARDSNet)</option>
-                <option value="higher">Higher PEEP / Lower FiO₂ (referência)</option>
-              </select>
-            </div>
-          </div>
-
-          <details open>
-            <summary>Lower PEEP / Higher FiO₂ (ARDSNet – referência)</summary>
-            <div class="tableWrap" style="margin-top:10px;">
-              <table id="tblLower">
-                <thead><tr><th>Faixa FiO₂</th><th>PEEP na tabela (cmH₂O)</th></tr></thead>
-                <tbody>
-                  <tr data-min="0.30" data-max="0.40"><td>0.30–0.40</td><td>5</td></tr>
-                  <tr data-min="0.40" data-max="0.50"><td>0.40–0.50</td><td>5–8</td></tr>
-                  <tr data-min="0.50" data-max="0.60"><td>0.50–0.60</td><td>8–10</td></tr>
-                  <tr data-min="0.60" data-max="0.70"><td>0.60–0.70</td><td>8–10</td></tr>
-                  <tr data-min="0.70" data-max="0.80"><td>0.70–0.80</td><td>10–14</td></tr>
-                  <tr data-min="0.80" data-max="0.90"><td>0.80–0.90</td><td>14</td></tr>
-                  <tr data-min="0.90" data-max="1.00"><td>0.90–1.00</td><td>14–18</td></tr>
-                  <tr data-min="1.00" data-max="1.01"><td>1.00</td><td>18–24</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
-
-          <details>
-            <summary>Higher PEEP / Lower FiO₂ (referência)</summary>
-            <div class="tableWrap" style="margin-top:10px;">
-              <table id="tblHigher">
-                <thead><tr><th>Faixa FiO₂</th><th>PEEP na tabela (cmH₂O)</th></tr></thead>
-                <tbody>
-                  <tr data-min="0.30" data-max="0.40"><td>0.30–0.40</td><td>5–14</td></tr>
-                  <tr data-min="0.40" data-max="0.50"><td>0.40–0.50</td><td>14–16</td></tr>
-                  <tr data-min="0.50" data-max="0.51"><td>0.50</td><td>16–18</td></tr>
-                  <tr data-min="0.50" data-max="0.80"><td>0.50–0.80</td><td>18–20</td></tr>
-                  <tr data-min="0.80" data-max="1.00"><td>0.80–1.00</td><td>22</td></tr>
-                  <tr data-min="1.00" data-max="1.01"><td>1.00</td><td>24</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
-
-          <details open>
-            <summary>Recrutamento, titulação e PEEP — síntese + evidência robusta</summary>
-            <div class="refs" id="peepEvidenceBox"></div>
-          </details>
-        </div>
-
-        <div class="card">
-          <h2>Desmame difícil/prolongado + IMT (educacional)</h2>
-          <p class="hint">Definidor e pontos de atenção com evidência (Cochrane/PubMed/guidelines), sem prescrição.</p>
-
-          <details open>
-            <summary>Definidor (estrutura educacional)</summary>
-            <div class="row" style="margin-top:10px;">
-              <div>
-                <label>SBT já iniciado?</label>
-                <select id="wean_sbt_started">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-              <div><label>Nº tentativas de SBT</label><input id="wean_sbt_attempts" type="number" step="1" min="0" max="10" value="0" /></div>
-              <div><label>Dias desde 1º SBT</label><input id="wean_days_since_first_sbt" type="number" step="1" min="0" max="30" value="0" /></div>
-              <div>
-                <label>Traqueostomia</label>
-                <select id="wean_trach">
-                  <option value="nao">Não</option>
-                  <option value="sim">Sim</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="refs" style="margin-top:10px;" id="weanResultBox"></div>
-          </details>
-
-          <details open>
-            <summary>Treino muscular inspiratório (IMT) — síntese + evidência</summary>
-            <div class="refs" id="imtEvidenceBox"></div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================== Normals =================== -->
-    <section id="secNormals" style="display:none;">
+    <!-- ===================== CASOS ===================== -->
+    <section id="secCasos">
       <div class="card">
-        <h2>Curvas normais – PCV e VCV</h2>
-        <p class="hint">Arquivos esperados na raiz do repositório: <b>pcv_normal.png</b> e <b>vcv_normal.png</b>.</p>
-        <div class="imgGrid">
-          <div class="imgCard">
-            <h3>PCV – curvas normais</h3>
-            <img src="pcv_normal.png" alt="Curvas normais PCV" />
+        <h2>Selecione o cenário clínico</h2>
+        <p class="sub">
+          O app abre blocos com: (1) definidores/estratificação, (2) parâmetros ventilatórios que costumam ser acompanhados, (3) pontos de atenção nas curvas,
+          (4) links para evidências/diretrizes.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <div style="flex:1; min-width:240px;">
+            <label>Cenário</label>
+            <select id="caseSel" onchange="renderCase()">
+              <option value="">Selecione…</option>
+              <option value="sara">SARA (ARDS)</option>
+              <option value="sepse">Sepse / Choque séptico</option>
+              <option value="dpoc">DPOC (asma/COPD-like)</option>
+              <option value="restritiva">Doença restritiva (fibrose, baixa complacência)</option>
+              <option value="cardiaca">Edema pulmonar cardiogênico / cardiopatia</option>
+              <option value="obeso">Obeso / OHS</option>
+              <option value="neuro">Neuromuscular</option>
+              <option value="neurocrit">Neurocrítico (TCE, tumor, ABI)</option>
+              <option value="trauma">Trauma (politrauma/torácico)</option>
+            </select>
+            <div class="small">
+              Uso sugerido: escolha o cenário → complete definidores (quando houver) → use “Pontos de atenção” para revisão rápida por curvas e por métricas.
+            </div>
           </div>
-          <div class="imgCard">
-            <h3>VCV – curvas normais</h3>
-            <img src="vcv_normal.png" alt="Curvas normais VCV" />
+
+          <div style="flex:1; min-width:240px;">
+            <label>Atalhos de cálculo</label>
+            <div class="row">
+              <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
+              <span class="chip">Driving Pressure (ΔP) <b class="mono" id="dpQuick">—</b></span>
+              <span class="chip">SARA (Berlin) <b class="mono" id="ardsQuick">—</b></span>
+            </div>
+            <div class="small">
+              Preencha os campos em “SARA” para atualizar estes atalhos.
+            </div>
           </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div id="caseArea"></div>
+
+        <div class="footer">
+          <b>Nota de escopo:</b> o SyncVent é educacional, organiza evidências e pontos de atenção.
+          Não é prescritivo, não substitui protocolos locais, nem avaliação clínica completa.
         </div>
       </div>
     </section>
 
-    <!-- =================== About =================== -->
-    <section id="secAbout" style="display:none;">
+    <!-- ===================== ASSINCRONIAS ===================== -->
+    <section id="secAssin" class="hide">
       <div class="card">
-        <h2>Sobre & Termos</h2>
+        <h2>Assincronias — motor por achados nas curvas</h2>
+        <p class="sub">
+          Selecione achados observáveis (separados por curva e por fase do ciclo). O motor retorna hipóteses de assincronia, explicação fisiológica e limitações.
+          Não gera “ordem de ajuste”; organiza raciocínio.
+        </p>
 
-        <div class="card" style="background:rgba(0,0,0,.18); box-shadow:none;">
-          <h2>Uso educacional</h2>
-          <p class="hint" style="margin:0;">
-            SyncVent não fornece prescrição, ajuste ventilatório ou decisão terapêutica. É um organizador de raciocínio e estudo.
-          </p>
+        <div class="hr"></div>
+
+        <div class="row">
+          <div style="flex:1; min-width:240px;">
+            <label>Contexto (opcional)</label>
+            <select id="assinContext">
+              <option value="">Sem contexto</option>
+              <option value="control">Modo controlado / mandatória</option>
+              <option value="assist">Assistido (A/C, PSV, etc.)</option>
+              <option value="wean">Desmame / suporte baixo</option>
+              <option value="obstruct">Obstrutivo (DPOC/asma)</option>
+              <option value="lowC">Baixa complacência (SARA/restritiva)</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:240px;">
+            <label>Ação</label>
+            <div class="row">
+              <button class="btn primary" onclick="runAssinMotor()">Rodar motor</button>
+              <button class="btn ghost" onclick="resetChecks('assin')">Limpar seleção</button>
+            </div>
+          </div>
         </div>
 
-        <div class="card" style="margin-top:12px; background:rgba(0,0,0,.18); box-shadow:none;">
-          <h2>Direitos autorais</h2>
-          <p class="hint" style="margin:0;">
-            © 2026 Leticia Moreira. Todos os direitos reservados. Proibida reprodução, distribuição, adaptação, disponibilização pública
-            ou uso comercial do conteúdo, estrutura, textos, lógica e interface sem autorização expressa e por escrito.
-          </p>
+        <div class="hr"></div>
+
+        <div class="checks">
+          <div class="checkGroup">
+            <h3>Pressão × tempo — disparo / início da inspiração</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="pt_trigger_delay" />
+              <div>
+                <b>Atraso de disparo (concavidade/“scoop” inicial)</b>
+                <span>Esforço inicial visível antes do ciclo entregar fluxo/pressão.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="pt_negative_deflection" />
+              <div>
+                <b>Deflexão negativa marcada</b>
+                <span>Queda de pressão no início sugerindo esforço significativo para disparar.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="pt_double_trigger" />
+              <div>
+                <b>Dois ciclos muito próximos (duplo disparo)</b>
+                <span>Dois ciclos quase colados, sem expiração completa entre eles.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Fluxo × tempo — inspiração / ciclagem</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_flow_starvation" />
+              <div>
+                <b>“Flow starvation” (fluxo insuficiente)</b>
+                <span>Concavidade do fluxo inspiratório / demanda maior do paciente.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_excess_flow" />
+              <div>
+                <b>Fluxo excessivo (pico alto, desconforto)</b>
+                <span>Entrega muito rápida/alta comparada ao padrão de demanda.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_early_cycle" />
+              <div>
+                <b>Ciclagem precoce</b>
+                <span>Paciente mantém esforço após o ventilador ciclar para expiração.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_late_cycle" />
+              <div>
+                <b>Ciclagem tardia</b>
+                <span>Ventilador mantém inspiração quando paciente já quer expirar.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Fluxo × tempo — expiração</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_exp_incomplete" />
+              <div>
+                <b>Expiração incompleta / fluxo não zera</b>
+                <span>Sugere air-trapping/auto-PEEP, tempo expiratório insuficiente ou obstrução.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_ineffective_effort" />
+              <div>
+                <b>Esforço inefetivo (deflexões sem disparo)</b>
+                <span>Pequenas deflexões/“notches” em expiração sem iniciar ciclo.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="ft_auto_trigger" />
+              <div>
+                <b>Auto-disparo (ciclos sem esforço evidente)</b>
+                <span>Disparos frequentes sem padrão de esforço; avaliar artefatos e sensibilidade.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Volume × tempo — padrão de empilhamento</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="vt_breath_stacking" />
+              <div>
+                <b>Empilhamento de volume (breath stacking)</b>
+                <span>Volume não retorna ao baseline antes de novo ciclo (sobretudo em duplo disparo).</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="assin" value="vt_leak_suspicion" />
+              <div>
+                <b>Suspeita de vazamento (discrepância inspiração/expiração)</b>
+                <span>Volume expirado muito menor que inspirado / padrão compatível com leak.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="outBox">
+          <h3>Saída do motor (Assincronias)</h3>
+          <div class="txt" id="assinOut">Selecione achados e clique em “Rodar motor”.</div>
+        </div>
+
+        <div class="footer">
+          Este módulo descreve hipóteses e fisiologia. Não substitui supervisão, protocolos ou decisão clínica.
         </div>
       </div>
     </section>
 
-    <footer>
-      <strong>SyncVent</strong> — © 2026 <strong>Leticia Moreira</strong>. Todos os direitos reservados.<br/>
-      Uso educacional. Não constitui orientação clínica. Proibida reprodução e uso comercial sem autorização expressa.
-    </footer>
+    <!-- ===================== MECÂNICA ===================== -->
+    <section id="secMec" class="hide">
+      <div class="card">
+        <h2>Mecânica ventilatória — motor por achados nas curvas</h2>
+        <p class="sub">
+          Selecione achados em pressão/fluxo/volume e obtenha hipóteses de mecânica (complacência, resistência, auto-PEEP, esforço, vazamento) com limitações.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <div style="flex:1; min-width:240px;">
+            <label>Contexto (opcional)</label>
+            <select id="mecContext">
+              <option value="">Sem contexto</option>
+              <option value="lowC">Baixa complacência (SARA/restritiva)</option>
+              <option value="highR">Alta resistência (DPOC/asma/broncoespasmo)</option>
+              <option value="wean">Desmame / esforço aumentado</option>
+              <option value="obeso">Obesidade / parede torácica</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:240px;">
+            <label>Ação</label>
+            <div class="row">
+              <button class="btn primary" onclick="runMecMotor()">Rodar motor</button>
+              <button class="btn ghost" onclick="resetChecks('mec')">Limpar seleção</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="checks">
+          <div class="checkGroup">
+            <h3>Pressão × tempo</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="pt_high_plateau" />
+              <div>
+                <b>Platô elevado (Pplat alta)</b>
+                <span>Compatível com baixa complacência do sistema respiratório (pulmão/parede torácica).</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="pt_high_peak_normal_plateau" />
+              <div>
+                <b>Pico alto com platô relativamente menor</b>
+                <span>Sugere componente resistivo (via aérea/tubo/obstrução) mais proeminente.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="pt_sawtooth" />
+              <div>
+                <b>“Dente de serra” / serrilhado</b>
+                <span>Vibração/oscilações; pode sugerir secreção, condensado, turbulência, artefato.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Fluxo × tempo</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="ft_exp_not_zero" />
+              <div>
+                <b>Fluxo expiratório não zera</b>
+                <span>Air-trapping/auto-PEEP/tempo expiratório insuficiente/obstrução.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="ft_insp_decel_steep" />
+              <div>
+                <b>Fluxo inspiratório desacelera muito rápido</b>
+                <span>Pode refletir baixa complacência (enchimento rápido e limitado) dependendo do modo.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="ft_insp_decel_slow" />
+              <div>
+                <b>Fluxo inspiratório desacelera lentamente</b>
+                <span>Pode refletir resistência aumentada/tempo constante alto (interpretação depende do modo).</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Volume × tempo</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="vt_slow_fill" />
+              <div>
+                <b>Enchimento lento (subida lenta do volume)</b>
+                <span>Pode sugerir limitação de fluxo/resistência, ou restrições de modo/limites.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="vt_incomplete_empty" />
+              <div>
+                <b>Esvaziamento incompleto (baseline não retorna)</b>
+                <span>Compatível com aprisionamento aéreo/auto-PEEP ou expiração curta.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="vt_leak" />
+              <div>
+                <b>Discrepância importante entre volumes insp/exp</b>
+                <span>Sugere vazamento/circuito, cuff, interface, ou medição inconsistente.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkGroup">
+            <h3>Integração (métricas)</h3>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="met_dp_high" />
+              <div>
+                <b>Driving pressure (ΔP) elevada</b>
+                <span>ΔP = Pplat − PEEP (em VC) ou Pinsp − PEEP (em PC); “ponto de atenção” em ventilação protetora.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="met_rr_high" />
+              <div>
+                <b>FR alta com sinais de esforço</b>
+                <span>Avaliar demanda ventilatória, conforto, sincronia, carga resistiva/complacência.</span>
+              </div>
+            </div>
+
+            <div class="opt">
+              <input type="checkbox" class="mec" value="met_asynchrony_suspect" />
+              <div>
+                <b>Padrão sugere assincronia coexistente</b>
+                <span>Considere usar também o módulo “Assincronias”.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="outBox">
+          <h3>Saída do motor (Mecânica)</h3>
+          <div class="txt" id="mecOut">Selecione achados e clique em “Rodar motor”.</div>
+        </div>
+
+        <div class="footer">
+          Este módulo organiza hipóteses. Interpretação depende de modo ventilatório, calibração, sedação/esforço, hemodinâmica e contexto.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== REFS ===================== -->
+    <section id="secRefs" class="hide">
+      <div class="card">
+        <h2>Evidências e diretrizes (links)</h2>
+        <p class="sub">
+          Links para documentos principais. Use o cenário clínico para ver onde cada evidência é citada no app.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="grid2">
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>SARA / Ventilação protetora</h2>
+            <ul class="klist">
+              <li><b>Berlin Definition (2012)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/22797452/" target="_blank">22797452</a></li>
+              <li><b>ARDSNet (2000)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/10793162/" target="_blank">10793162</a></li>
+              <li><b>Driving Pressure (Amato 2015)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/25693014/" target="_blank">25693014</a></li>
+              <li><b>Global definition update (ATS workshop 2024)</b> — PDF: <a href="https://www.atsjournals.org/doi/pdf/10.1164/rccm.202303-0558WS?download=true" target="_blank">ATS 2024</a></li>
+            </ul>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Sepse / Choque séptico</h2>
+            <ul class="klist">
+              <li><b>Surviving Sepsis Campaign 2021</b> — SCCM: <a href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021" target="_blank">página</a></li>
+              <li><b>SSC 2021 PDF</b> — (arquivo aberto): <a href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf" target="_blank">PDF</a></li>
+              <li><b>Sepsis-3 (Singer 2016)</b> — PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4968574/" target="_blank">texto</a></li>
+            </ul>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>DPOC / Obstrutivo</h2>
+            <ul class="klist">
+              <li><b>GOLD 2025 (PDF)</b> — <a href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf" target="_blank">download</a></li>
+              <li><b>GOLD 2025 (site)</b> — <a href="https://goldcopd.org/2025-gold-report/" target="_blank">página</a></li>
+              <li><b>Pocket Guide 2025</b> — <a href="https://goldcopd.org/wp-content/uploads/2024/11/Pocket-Guide-2025-v1.0-New-Format-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
+            </ul>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Neurocrítico</h2>
+            <ul class="klist">
+              <li><b>Mechanical ventilation in acute brain injury (Robba 2020)</b> — PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7655906/" target="_blank">texto</a></li>
+              <li><b>ENLS TBI Protocol</b> — PDF: <a href="https://www.neurocriticalcare.org/Portals/0/Docs/ENLS/ENLS_V_4_0_Protocol_TBI_FINAL.pdf" target="_blank">download</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          <b>Como usar as evidências no app:</b> em cada cenário, os “Pontos de atenção” destacam métricas/curvas a acompanhar e mostram links diretos para diretrizes/estudos.
+          Se você quiser que o app traga uma lista “Top 5” de evidências por cenário (com ano e tipo: guideline/RCT/meta-análise), isso pode ser colocado na próxima revisão do HTML.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SOBRE ===================== -->
+    <section id="secSobre" class="hide">
+      <div class="card">
+        <h2>Sobre</h2>
+        <p class="sub">
+          SyncVent é um app educacional para apoiar o raciocínio do profissional em ventilação mecânica por cenários clínicos e interpretação de curvas.
+        </p>
+
+        <div class="hr"></div>
+
+        <details open>
+          <summary>Declaração de uso e limites</summary>
+          <ul class="klist">
+            <li><b>Não-prescritor:</b> não fornece “ordens” de ajuste, nem substitui protocolos locais.</li>
+            <li><b>Decisão profissional:</b> a responsabilidade é do profissional assistente e da equipe.</li>
+            <li><b>Educação:</b> organiza achados observáveis, hipóteses fisiológicas e links para evidências.</li>
+          </ul>
+        </details>
+
+        <div style="height:10px;"></div>
+
+        <details>
+          <summary>Autoria e proteção</summary>
+          <ul class="klist">
+            <li><b>SyncVent</b> — Conteúdo e estrutura educacional: autoria do projeto (preencha conforme necessário).</li>
+            <li>Uso comercial/redistribuição: definir licença e termos de uso conforme estratégia do projeto.</li>
+          </ul>
+        </details>
+
+        <div class="footer">
+          Recomenda-se validação editorial e revisão por pares internos (fisioterapia, medicina intensiva, RT, enfermagem) antes de uso educacional institucional.
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script>
-    "use strict";
+    // ===================== Splash =====================
+    function enterApp(){
+      const el = document.getElementById("splash");
+      el.classList.add("hide");
+      setTimeout(()=>{ el.style.display="none"; }, 420);
+    }
 
-    // UX barriers (não é proteção técnica real; reduz cópia casual)
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
-    document.addEventListener("dragstart", (e) => e.preventDefault());
+    // ===================== Tabs =====================
+    function showTab(which){
+      const secCasos = document.getElementById("secCasos");
+      const secAssin = document.getElementById("secAssin");
+      const secMec = document.getElementById("secMec");
+      const secRefs = document.getElementById("secRefs");
+      const secSobre = document.getElementById("secSobre");
 
-    const $ = (id)=>document.getElementById(id);
+      secCasos.classList.toggle("hide", which!=="casos");
+      secAssin.classList.toggle("hide", which!=="assin");
+      secMec.classList.toggle("hide", which!=="mec");
+      secRefs.classList.toggle("hide", which!=="refs");
+      secSobre.classList.toggle("hide", which!=="sobre");
 
-    // Tabs
-    const tabCompact=$("tabCompact"), tabExpanded=$("tabExpanded"), tabPeepWean=$("tabPeepWean"), tabNormals=$("tabNormals"), tabAbout=$("tabAbout");
-    const secCompact=$("secCompact"), secExpanded=$("secExpanded"), secPeepWean=$("secPeepWean"), secNormals=$("secNormals"), secAbout=$("secAbout");
+      document.getElementById("tabCasos").classList.toggle("active", which==="casos");
+      document.getElementById("tabAssin").classList.toggle("active", which==="assin");
+      document.getElementById("tabMec").classList.toggle("active", which==="mec");
+      document.getElementById("tabRefs").classList.toggle("active", which==="refs");
+      document.getElementById("tabSobre").classList.toggle("active", which==="sobre");
 
-    function setTab(which){
-      const tabs=[
-        {b:tabCompact,s:secCompact,k:"compact"},
-        {b:tabExpanded,s:secExpanded,k:"expanded"},
-        {b:tabPeepWean,s:secPeepWean,k:"peepwean"},
-        {b:tabNormals,s:secNormals,k:"normals"},
-        {b:tabAbout,s:secAbout,k:"about"},
-      ];
-      tabs.forEach(t=>{
-        const on=t.k===which;
-        t.b.classList.toggle("active",on);
-        t.s.style.display=on?"block":"none";
-      });
       window.scrollTo({top:0, behavior:"smooth"});
     }
-    tabCompact.onclick=()=>setTab("compact");
-    tabExpanded.onclick=()=>setTab("expanded");
-    tabPeepWean.onclick=()=>setTab("peepwean");
-    tabNormals.onclick=()=>setTab("normals");
-    tabAbout.onclick=()=>setTab("about");
 
-    // Splash
-    const splash=$("splash");
-    $("btnEnter").onclick=()=>{ splash.style.display="none"; splash.setAttribute("aria-hidden","true"); };
-    $("btnSplashTerms").onclick=()=>{ splash.style.display="none"; splash.setAttribute("aria-hidden","true"); setTab("about"); };
-
-    // Inputs
-    const adult_18_plus=$("adult_18_plus");
-    const support_type=$("support_type");
-    const panelInvasive=$("panelInvasive"), panelNIV=$("panelNIV"), panelHFNO=$("panelHFNO");
-
-    const fio2=$("fio2"), peep=$("peep"), vt_exhaled_ml=$("vt_exhaled_ml"), pplat=$("pplat"), dp_auto=$("dp_auto");
-    const pbw_sex=$("pbw_sex"), height_cm=$("height_cm"), pbw_kg=$("pbw_kg"), vt_for_calc=$("vt_for_calc"), vt_mlkg=$("vt_mlkg"), vt_reliability=$("vt_reliability");
-
-    const ards_onset_7d=$("ards_onset_7d"), ards_bilateral_imaging=$("ards_bilateral_imaging"), ards_cardiogenic_dominant=$("ards_cardiogenic_dominant");
-    const pao2=$("pao2"), fio2_pf=$("fio2_pf"), peep_pf=$("peep_pf"), pf_ratio=$("pf_ratio"), ards_result=$("ards_result");
-
-    const infection_suspected=$("infection_suspected"), sofa_delta=$("sofa_delta"), vasopressor_pam65=$("vasopressor_pam65"), lactate=$("lactate");
-    const sepsis_result=$("sepsis_result"), shock_result=$("shock_result");
-
-    const obstructive_suspected=$("obstructive_suspected"), restrictive_suspected=$("restrictive_suspected"), high_effort=$("high_effort"), major_async=$("major_async");
-    const copd_known=$("copd_known"), neuromuscular=$("neuromuscular"), neuro_critical=$("neuro_critical"), unilateral_severe=$("unilateral_severe");
-
-    const outCompact=$("outCompact"), outExpanded=$("outExpanded");
-    const pillConfidence=$("pillConfidence"), pillExpConf=$("pillExpConf"), pillModules=$("pillModules");
-    const modulesContainer=$("modulesContainer");
-
-    // PEEP tab
-    const peep_fio2_input=$("peep_fio2_input");
-    const peep_strategy=$("peep_strategy");
-    const tblLower=$("tblLower");
-    const tblHigher=$("tblHigher");
-    const peepEvidenceBox=$("peepEvidenceBox");
-
-    // Weaning/IMT tab
-    const wean_sbt_started=$("wean_sbt_started");
-    const wean_sbt_attempts=$("wean_sbt_attempts");
-    const wean_days_since_first_sbt=$("wean_days_since_first_sbt");
-    const wean_trach=$("wean_trach");
-    const weanResultBox=$("weanResultBox");
-    const imtEvidenceBox=$("imtEvidenceBox");
-
-    // Storage
-    const LS="syncvent_html_final_v1";
-
-    function num(x){ const v=parseFloat(x); return Number.isFinite(v)?v:null; }
-
-    function saveState(){ localStorage.setItem(LS, JSON.stringify(getState())); }
-    function resetAll(){ localStorage.removeItem(LS); location.reload(); }
-
-    function getState(){
-      return {
-        adult: adult_18_plus.value,
-        support: support_type.value,
-        fio2: fio2.value, peep: peep.value, vt: vt_exhaled_ml.value, pplat: pplat.value,
-
-        pbwSex: pbw_sex.value, h: height_cm.value, vtCalc: vt_for_calc.value, vtRel: vt_reliability.value,
-
-        ards_onset: ards_onset_7d.value,
-        ards_bilat: ards_bilateral_imaging.value,
-        ards_card: ards_cardiogenic_dominant.value,
-        pao2: pao2.value, fio2pf: fio2_pf.value, peeppf: peep_pf.value,
-
-        inf: infection_suspected.value,
-        sofa: sofa_delta.value,
-        vaso: vasopressor_pam65.value,
-        lact: lactate.value,
-
-        obs: obstructive_suspected.value,
-        res: restrictive_suspected.value,
-        effort: high_effort.value,
-        async: major_async.value,
-        copd: copd_known.value,
-        nm: neuromuscular.value,
-        neuro: neuro_critical.value,
-        uni: unilateral_severe.value,
-
-        peepFio2: peep_fio2_input.value,
-        peepStrat: peep_strategy.value,
-
-        weanStarted: wean_sbt_started.value,
-        weanAttempts: wean_sbt_attempts.value,
-        weanDays: wean_days_since_first_sbt.value,
-        weanTrach: wean_trach.value
-      };
+    function openAllDetails(){
+      document.querySelectorAll("details").forEach(d=> d.open = true);
+    }
+    function closeAllDetails(){
+      document.querySelectorAll("details").forEach(d=> d.open = false);
     }
 
-    function setState(st){
-      if(!st) return;
-
-      adult_18_plus.value = st.adult ?? "sim";
-      support_type.value = st.support ?? "invasivo";
-
-      fio2.value = st.fio2 ?? "";
-      peep.value = st.peep ?? "";
-      vt_exhaled_ml.value = st.vt ?? "";
-      pplat.value = st.pplat ?? "";
-
-      pbw_sex.value = st.pbwSex ?? "nao";
-      height_cm.value = st.h ?? "";
-      vt_for_calc.value = st.vtCalc ?? "";
-      vt_reliability.value = st.vtRel ?? "nao";
-
-      ards_onset_7d.value = st.ards_onset ?? "sim";
-      ards_bilateral_imaging.value = st.ards_bilat ?? "incerto";
-      ards_cardiogenic_dominant.value = st.ards_card ?? "incerto";
-      pao2.value = st.pao2 ?? "";
-      fio2_pf.value = st.fio2pf ?? "";
-      peep_pf.value = st.peeppf ?? "";
-
-      infection_suspected.value = st.inf ?? "incerto";
-      sofa_delta.value = st.sofa ?? "";
-      vasopressor_pam65.value = st.vaso ?? "incerto";
-      lactate.value = st.lact ?? "";
-
-      obstructive_suspected.value = st.obs ?? "nao";
-      restrictive_suspected.value = st.res ?? "nao";
-      high_effort.value = st.effort ?? "nao";
-      major_async.value = st.async ?? "nao";
-      copd_known.value = st.copd ?? "nao";
-      neuromuscular.value = st.nm ?? "nao";
-      neuro_critical.value = st.neuro ?? "nao";
-      unilateral_severe.value = st.uni ?? "nao";
-
-      peep_fio2_input.value = st.peepFio2 ?? "";
-      peep_strategy.value = st.peepStrat ?? "lower";
-
-      wean_sbt_started.value = st.weanStarted ?? "nao";
-      wean_sbt_attempts.value = st.weanAttempts ?? "0";
-      wean_days_since_first_sbt.value = st.weanDays ?? "0";
-      wean_trach.value = st.weanTrach ?? "nao";
-    }
-
-    function refreshUI(){
-      const inv = support_type.value==="invasivo";
-      panelInvasive.style.display = inv ? "grid" : "none";
-      panelNIV.style.display = (support_type.value==="niv") ? "grid" : "none";
-      panelHFNO.style.display = (support_type.value==="hfno") ? "grid" : "none";
-
-      if(adult_18_plus.value!=="sim"){
-        outCompact.textContent="Instrumento aplicável apenas a pacientes adultos (≥18 anos).";
-        outExpanded.textContent="";
-        modulesContainer.innerHTML="";
-        pillConfidence.textContent="bloqueado";
-        pillExpConf.textContent="bloqueado";
-        pillModules.textContent="bloqueado";
+    // ===================== Theme =====================
+    function toggleTheme(){
+      const b = document.body;
+      const light = b.classList.contains("light");
+      if(light){
+        b.classList.remove("light");
+        b.classList.add("dark");
+      }else{
+        b.classList.add("light");
+        b.classList.remove("dark");
       }
     }
 
-    // --- Calculations ---
-    function calcDP(){
-      const Pplat=num(pplat.value), PEEP=num(peep.value);
-      if(Pplat!=null && PEEP!=null){
-        const dp=Pplat-PEEP;
-        dp_auto.value = dp.toFixed(1)+" cmH₂O";
-        return dp;
-      }
-      dp_auto.value="";
-      return null;
+    // ===================== Helpers =====================
+    function num(v){
+      if(v===null || v===undefined) return NaN;
+      const s = String(v).replace(",", ".").trim();
+      const n = Number(s);
+      return Number.isFinite(n) ? n : NaN;
     }
+    function clamp(x,min,max){ return Math.max(min, Math.min(max, x)); }
+    function badge(txt, cls){ return `<span class="badge ${cls||""}">${txt}</span>`; }
 
-    function calcPBW(){
-      const sex=pbw_sex.value;
-      const h=num(height_cm.value);
-      if(!(sex==="m"||sex==="f") || h==null){ pbw_kg.value=""; return null; }
-      const base=(sex==="m")?50:45.5;
-      const pbw=base + 0.91*(h-152.4);
-      const v=Math.round(pbw*10)/10;
-      pbw_kg.value=String(v);
-      return v;
-    }
+    // ===================== CASE DATA =====================
+    const CASES = {
+      sara: {
+        title: "SARA (ARDS) — definidores, estratificação e pontos de atenção",
+        lead: "Inclui: cálculo P/F, classificação Berlin, tabela PEEP/FiO₂ e destaque de métricas associadas à ventilação protetora (educacional).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definição e estratificação (Berlin)</h2>
+              <p class="sub">Critérios resumidos: início em até 1 semana, opacidades bilaterais, edema não totalmente explicado por causa cardíaca/volume, e hipoxemia por P/F com PEEP/CPAP ≥ 5.</p>
 
-    function calcVTmlkg(){
-      const pbw=calcPBW();
-      const vt = num(vt_for_calc.value) ?? num(vt_exhaled_ml.value);
-      if(pbw!=null && vt!=null && pbw>0){
-        const val=vt/pbw;
-        vt_mlkg.value=val.toFixed(2);
-        return val;
+              <div class="hr"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>PaO₂ (mmHg)</label>
+                  <input id="pao2" placeholder="ex.: 80" oninput="updateArdsCalc()"/>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>FiO₂ (fração)</label>
+                  <input id="fio2" placeholder="ex.: 0,60" oninput="updateArdsCalc()"/>
+                  <div class="small">Digite como fração (0,21–1,00).</div>
+                </div>
+              </div>
+
+              <div style="height:10px;"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>PEEP/CPAP (cmH₂O)</label>
+                  <input id="peep" placeholder="ex.: 10" oninput="updateArdsCalc()"/>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>Plató (Pplat) (cmH₂O) — opcional</label>
+                  <input id="pplat" placeholder="ex.: 28" oninput="updateArdsCalc()"/>
+                </div>
+              </div>
+
+              <div style="height:10px;"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>Pressão inspiratória (Pinsp) (cmH₂O) — opcional</label>
+                  <input id="pinsp" placeholder="ex.: 22 (PC)" oninput="updateArdsCalc()"/>
+                  <div class="small">Se modo pressórico, Pinsp é a pressão acima da PEEP (pressão de controle).</div>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>PBW (kg) — opcional</label>
+                  <input id="pbw" placeholder="ex.: 60" oninput="updateArdsCalc()"/>
+                  <div class="small">Se preenchido, o app calcula VT “por kg PBW” (educacional).</div>
+                </div>
+              </div>
+
+              <div style="height:10px;"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>VT atual (mL) — opcional</label>
+                  <input id="vt" placeholder="ex.: 360" oninput="updateArdsCalc()"/>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>Resultado</label>
+                  <div class="outBox">
+                    <div class="txt" id="ardsOut">Preencha PaO₂, FiO₂ e PEEP para classificar.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Ventilação protetora:</b> destaque para VT por PBW, pressão de platô e ΔP (driving pressure). (ARDSNet 2000; Amato 2015)</li>
+                  <li><b>ΔP</b> (ΔP = Pplat − PEEP em VC; ou Pinsp em PC): usada como “sinal de alerta” em estratégia protetora; frequentemente se cita limiar ~15 cmH₂O como ponto de atenção.</li>
+                  <li><b>Curvas:</b> procurar sinais de “flow starvation”, assincronias e expiração incompleta (especialmente se FR alta).</li>
+                  <li><b>Oxygenação:</b> usar P/F para estratificar gravidade e discutir necessidade de estratégias avançadas conforme protocolo local.</li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Tabela PEEP/FiO₂ (educacional)</h2>
+              <p class="sub">Tabela no estilo ARDSNet “low PEEP/FiO₂” para consulta didática (não substitui protocolo institucional).</p>
+
+              <div class="hr"></div>
+
+              <div class="tableWrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>FiO₂</th>
+                      <th>PEEP (cmH₂O)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>0,30</td><td>5</td></tr>
+                    <tr><td>0,40</td><td>5–8</td></tr>
+                    <tr><td>0,50</td><td>8–10</td></tr>
+                    <tr><td>0,60</td><td>10</td></tr>
+                    <tr><td>0,70</td><td>10–12</td></tr>
+                    <tr><td>0,80</td><td>12–14</td></tr>
+                    <tr><td>0,90</td><td>14</td></tr>
+                    <tr><td>1,00</td><td>14–18</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Evidências (links)</summary>
+                <ul class="klist">
+                  <li>Berlin Definition (2012): <a href="https://pubmed.ncbi.nlm.nih.gov/22797452/" target="_blank">PubMed 22797452</a></li>
+                  <li>ARDSNet (2000): <a href="https://pubmed.ncbi.nlm.nih.gov/10793162/" target="_blank">PubMed 10793162</a></li>
+                  <li>Driving Pressure (2015): <a href="https://pubmed.ncbi.nlm.nih.gov/25693014/" target="_blank">PubMed 25693014</a></li>
+                </ul>
+              </details>
+
+              <div style="height:10px;"></div>
+
+              <div class="note">
+                <b>Leitura por curvas (checklist rápido):</b>
+                Pressão: Pplat/ΔP; Fluxo: expiração zera? sinais de esforço; Volume: empilhamento/retorno ao baseline.
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      sepse: {
+        title: "Sepse / Choque séptico — definidores e ventilação (pontos de atenção)",
+        lead: "Inclui definidores (Sepsis-3 / SSC), e checklist ventilatório focado em segurança hemodinâmica + interação VM–circulação.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definidores (educacional)</h2>
+              <p class="sub">Sepse-3: disfunção orgânica ameaçadora à vida por resposta desregulada à infecção. Choque séptico: vasopressor para MAP ≥ 65 e lactato > 2 mmol/L na ausência de hipovolemia.</p>
+
+              <div class="hr"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>MAP (mmHg)</label>
+                  <input id="map" placeholder="ex.: 62" oninput="updateSepsisCalc()"/>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>Lactato (mmol/L)</label>
+                  <input id="lac" placeholder="ex.: 3,2" oninput="updateSepsisCalc()"/>
+                </div>
+              </div>
+
+              <div style="height:10px;"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:200px;">
+                  <label>Vasopressor em uso?</label>
+                  <select id="vaso" onchange="updateSepsisCalc()">
+                    <option value="">Selecione…</option>
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                  </select>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                  <label>Resultado</label>
+                  <div class="outBox">
+                    <div class="txt" id="sepseOut">Preencha MAP, lactato e vasopressor.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção ventilatória (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Interação VM–hemodinâmica:</b> pressões intratorácicas podem impactar retorno venoso e débito cardíaco — monitorar resposta clínica ao longo do tempo.</li>
+                  <li><b>Oxigenação e perfusão:</b> focar em metas de oxigenação conforme contexto; evitar extremos e reavaliar frequentemente.</li>
+                  <li><b>Se houver SARA concomitante:</b> considerar “pontos de atenção” de ventilação protetora (VT PBW, Pplat, ΔP).</li>
+                  <li><b>Curvas:</b> procurar assincronias por esforço aumentado (demanda ventilatória alta) e expiração incompleta se FR elevada.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Evidências (links)</summary>
+                <ul class="klist">
+                  <li>Surviving Sepsis Campaign 2021 (SCCM): <a href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021" target="_blank">página</a></li>
+                  <li>SSC 2021 PDF: <a href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf" target="_blank">PDF</a></li>
+                  <li>Sepsis-3 (Singer 2016): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4968574/" target="_blank">PMC</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist ventilatório (para revisão rápida)</h2>
+              <p class="sub">Use como “lista de verificação” ao avaliar ventilação em sepse/choque (educacional).</p>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Monitorar parâmetros e sinais</summary>
+                <ul class="klist">
+                  <li><b>Pressões:</b> PEEP, Pplat, ΔP; tendência ao longo do tempo.</li>
+                  <li><b>Ventilação/minuto:</b> FR, VT, EtCO₂/PaCO₂ conforme disponível.</li>
+                  <li><b>Oxigenação:</b> SpO₂/PaO₂, FiO₂; considerar P/F se hipoxemia.</li>
+                  <li><b>Curvas:</b> esforço elevado, auto-PEEP, assincronias (use o módulo dedicado).</li>
+                  <li><b>Hemodinâmica:</b> sinais de hipoperfusão e resposta após mudanças ventilatórias.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Padrões comuns de curva (situações frequentes)</summary>
+                <ul class="klist">
+                  <li><b>Demanda ventilatória alta:</b> pode aparecer como “flow starvation”, FR alta, assincronias por esforço.</li>
+                  <li><b>Hipoperfusão/acidose:</b> pode aumentar drive respiratório e piorar sincronia — reavaliar contexto.</li>
+                  <li><b>Obstrução concomitante:</b> atenção a expiração incompleta (fluxo não zera).</li>
+                </ul>
+              </details>
+            </div>
+          </div>
+        `
+      },
+
+      dpoc: {
+        title: "DPOC (obstrutivo) — pontos de atenção por curvas e mecânica",
+        lead: "Foco educacional em: tempo expiratório, auto-PEEP, aprisionamento aéreo e assincronias típicas.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Expiração incompleta / auto-PEEP:</b> checar se o fluxo expiratório zera antes do próximo ciclo.</li>
+                <li><b>Aprisionamento aéreo:</b> atenção a baseline de volume e empilhamento.</li>
+                <li><b>Componente resistivo:</b> pico alto com platô relativamente menor pode sugerir resistência aumentada.</li>
+                <li><b>Assincronias frequentes:</b> esforços inefetivos (auto-PEEP), ciclagem inadequada no PSV, auto-disparo por vazamento/condensado.</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Leitura rápida por curvas</summary>
+                <ul class="klist">
+                  <li><b>Fluxo:</b> expiração zera? tempo expiratório suficiente? sinais de esforço inefetivo em expiração?</li>
+                  <li><b>Pressão:</b> pico vs platô; serrilhado (“dente de serra”) por secreção/artefato.</li>
+                  <li><b>Volume:</b> retorno ao baseline; discrepâncias (leak).</li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Evidências (links)</h2>
+              <ul class="klist">
+                <li><b>GOLD 2025</b> — relatório completo: <a href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
+                <li><b>GOLD 2025 (site)</b>: <a href="https://goldcopd.org/2025-gold-report/" target="_blank">página</a></li>
+                <li><b>Pocket Guide 2025</b>: <a href="https://goldcopd.org/wp-content/uploads/2024/11/Pocket-Guide-2025-v1.0-New-Format-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <div class="note">
+                <b>Recomendação de uso no app:</b> para hipóteses e mecanismos, use os módulos “Assincronias” e “Mecânica” com os achados do traçado.
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      restritiva: {
+        title: "Doença restritiva — baixa complacência",
+        lead: "Foco educacional em sinais de baixa complacência, pressões e integração com ventilação protetora quando aplicável.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Baixa complacência:</b> Pplat e ΔP tendem a subir para volumes equivalentes; interpretar com contexto.</li>
+                <li><b>Curvas:</b> fluxo inspiratório pode desacelerar rapidamente em modos com desaceleração; considerar modo.</li>
+                <li><b>Integração:</b> se hipoxemia e critérios compatíveis, avaliar SARA (use o bloco SARA).</li>
+                <li><b>Assincronias:</b> esforço aumentado pode coexistir; usar motor dedicado.</li>
+              </ul>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas</h2>
+              <ul class="klist">
+                <li><b>Pressão:</b> Pplat/ΔP e tendência.</li>
+                <li><b>Fluxo:</b> sinais de demanda (“flow starvation”) em assistidos.</li>
+                <li><b>Volume:</b> empilhamento e retorno ao baseline.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      cardiaca: {
+        title: "Cardíaca — edema pulmonar cardiogênico / cardiopatia",
+        lead: "Foco educacional em oxigenação, interação com hemodinâmica e leitura por curvas.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Interação VM–hemodinâmica:</b> pressões intratorácicas podem alterar pré/pós-carga; reavaliar após mudanças.</li>
+                <li><b>Oxigenação:</b> monitorar resposta a suporte ventilatório; considerar causas mistas (cardíaca + SARA).</li>
+                <li><b>Curvas:</b> verificar esforço, assincronias por desconforto, e expiração completa.</li>
+              </ul>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Como o app ajuda</h2>
+              <ul class="klist">
+                <li>Use “Assincronias” para diferenciar desconforto/drive alto de problemas de ciclagem/disparo.</li>
+                <li>Use “Mecânica” para interpretar pico vs platô e suspeitas de resistência/complacência.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      obeso: {
+        title: "Obeso / OHS — parede torácica e mecânica",
+        lead: "Foco educacional em complacência do sistema respiratório, pressão transpulmonar (conceitual), e risco de atelectasia.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Complacência do sistema:</b> parede torácica pode contribuir para pressões mais altas sem representar o mesmo estresse pulmonar.</li>
+                <li><b>Curvas:</b> observar sinais de colapso/atelectasia (dependente do modo) e assincronias se esforço alto.</li>
+                <li><b>Oxigenação:</b> considerar posição e fatores extra-pulmonares no raciocínio.</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Evidência (link)</summary>
+                <ul class="klist">
+                  <li>Mechanical Ventilation in the Obese Patient (2021, PMC): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7924569/" target="_blank">texto</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas</h2>
+              <ul class="klist">
+                <li><b>Pressão:</b> Pplat/ΔP e tendência; interpretar junto de mecânica (pulmão vs parede).</li>
+                <li><b>Fluxo:</b> expiração completa e sinais de auto-PEEP se obstrução coexistente.</li>
+                <li><b>Volume:</b> empilhamento / baseline.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      neuro: {
+        title: "Neuromuscular — fraqueza muscular e dependência ventilatória",
+        lead: "Foco educacional em sinais de esforço, falha de gatilho/ciclagem e avaliação por curvas.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Esforço inefetivo:</b> comum quando há fraqueza + auto-PEEP + limiares de disparo.</li>
+                <li><b>Assincronias:</b> atrasos de disparo, ciclagem inadequada e esforços sem disparo podem predominar.</li>
+                <li><b>Curvas:</b> rastrear padrão de esforço e fadiga (tendência).</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Diretriz de NIV em insuficiência respiratória aguda (link)</summary>
+                <ul class="klist">
+                  <li>ERS/ATS NIV guideline (2017, PDF): <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Como o app ajuda</h2>
+              <ul class="klist">
+                <li>Use “Assincronias” para mapear esforço inefetivo, atraso de disparo e ciclagem.</li>
+                <li>Use “Mecânica” para diferenciar limitação resistiva vs baixa complacência vs vazamento.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      neurocrit: {
+        title: "Neurocrítico (TCE, tumor, ABI) — ventilação e CO₂ (educacional)",
+        lead: "Foco em pontos de atenção relacionados a PaCO₂/oxigenação e evitar práticas profiláticas não recomendadas; depende de ICP/condição neurológica.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Alvos de PaCO₂ dependem do contexto:</b> revisões sugerem faixa 35–45 mmHg quando não há hipertensão intracraniana clinicamente significativa; hiperventilação como medida temporária em situações específicas.</li>
+                <li><b>Evitar hiperventilação profilática prolongada</b> (educacional; seguir protocolo neurocrítico local).</li>
+                <li><b>Curvas:</b> evitar assincronias importantes que gerem oscilação de CO₂/pressões; monitorar esforço.</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Evidências (links)</summary>
+                <ul class="klist">
+                  <li>Robba 2020 (PMC): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7655906/" target="_blank">texto</a></li>
+                  <li>ENLS TBI Protocol (PDF): <a href="https://www.neurocriticalcare.org/Portals/0/Docs/ENLS/ENLS_V_4_0_Protocol_TBI_FINAL.pdf" target="_blank">download</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas</h2>
+              <ul class="klist">
+                <li><b>Pressão:</b> estabilidade e variações; evitar picos/oscilações com esforço intenso.</li>
+                <li><b>Fluxo:</b> detectar assincronias que aumentem trabalho respiratório.</li>
+                <li><b>Volume:</b> empilhamento/retorno ao baseline.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      trauma: {
+        title: "Trauma — torácico/politrauma (educacional)",
+        lead: "Foco em integração: risco de contusão, dor, obstrução, e coexistência de SARA/choque; avaliação sistemática por curvas e métricas.",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Coexistência de fenótipos:</b> trauma pode combinar hipovolemia/choque + contusão + obstrução + SARA.</li>
+                <li><b>Curvas:</b> verificar expiração completa, resistência elevada, e assincronias por dor/drive alto.</li>
+                <li><b>Se critérios de SARA:</b> usar bloco SARA (P/F, Berlin, ΔP).</li>
+              </ul>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Como o app ajuda</h2>
+              <ul class="klist">
+                <li>Use “Casos” para estruturar hipóteses e checar definidores (SARA/choque).</li>
+                <li>Use “Assincronias” e “Mecânica” para interpretar traçados em tempo real (educacional).</li>
+              </ul>
+            </div>
+          </div>
+        `
       }
-      vt_mlkg.value="";
-      return null;
-    }
-
-    function calcPF(){
-      const PaO2=num(pao2.value), FiO2=num(fio2_pf.value);
-      if(PaO2!=null && FiO2!=null && FiO2>0){
-        const pf=PaO2/FiO2;
-        pf_ratio.value=String(Math.round(pf));
-        return pf;
-      }
-      pf_ratio.value="";
-      return null;
-    }
-
-    function defineARDS(){
-      const onset=ards_onset_7d.value;
-      const bilat=ards_bilateral_imaging.value;
-      const cardi=ards_cardiogenic_dominant.value;
-      const pf=calcPF();
-      const PEEP=num(peep_pf.value);
-
-      let status="SARA: indefinida (dados incompletos)";
-      let sev="";
-
-      const coreOk = (onset==="sim" && bilat==="sim" && cardi!=="sim");
-      const coreNo = (onset==="nao" || bilat==="nao" || cardi==="sim");
-
-      if(coreNo){
-        status="SARA: não (critério essencial ausente)";
-      } else if(coreOk && pf!=null && PEEP!=null && PEEP>=5 && pf<=300){
-        status="SARA: sim (Berlin)";
-        if(pf<=100) sev="Grave (P/F ≤100)";
-        else if(pf<=200) sev="Moderada (P/F 101–200)";
-        else sev="Leve (P/F 201–300)";
-      } else if(coreOk){
-        status="SARA: provável (faltam P/F e/ou PEEP/CPAP ≥5 ou P/F ≤300)";
-      }
-
-      ards_result.value = sev ? `${status} — ${sev}` : status;
-      return {status, severity: sev, pf, peep: PEEP};
-    }
-
-    function defineSepsis(){
-      const inf=infection_suspected.value;
-      const sofa=num(sofa_delta.value);
-      const vaso=vasopressor_pam65.value;
-      const lact=num(lactate.value);
-
-      let seps="Sepse: indefinida (dados incompletos)";
-      if(inf==="nao") seps="Sepse: não (infecção ausente)";
-      else if(inf==="sim" && sofa!=null){
-        seps = (sofa>=2) ? "Sepse: sim (operacional)" : "Sepse: não (ΔSOFA < 2)";
-      } else if(inf!=="nao"){
-        seps="Sepse: provável (faltam dados)";
-      }
-
-      let shock="Choque séptico: não aplicável";
-      const lactHigh = (lact!=null && lact>2);
-
-      if(seps.startsWith("Sepse: sim")){
-        if(vaso==="sim" && lact!=null){
-          shock = lactHigh ? "Choque séptico: provável (vasopressor + lactato elevado)" : "Choque séptico: não sugerido (lactato não elevado)";
-        } else if(vaso==="sim" && lact==null){
-          shock = "Choque séptico: possível (vasopressor; lactato ausente)";
-        } else {
-          shock = "Choque séptico: não sugerido (sem vasopressor)";
-        }
-      } else if(seps.includes("provável")){
-        shock = (vaso==="sim") ? "Choque séptico: possível (sepse provável + vasopressor)" : "Choque séptico: não sugerido";
-      }
-
-      sepsis_result.value=seps;
-      shock_result.value=shock;
-      return {seps, shock, sofa, lact, vaso, inf};
-    }
-
-    // --- Evidence library (anchors) ---
-    // URLs are inside code (as requested). They are links, not citations.
-    const EVID = {
-      // ARDS
-      ESICM_2023: {tag:"Guideline", label:"ESICM ARDS Guidelines 2023 (PMC)", url:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/"},
-      ATS_2024: {tag:"Guideline", label:"ATS ARDS Update 2024 (AJRCCM)", url:"https://www.atsjournals.org/doi/10.1164/rccm.202311-2011ST"},
-      COCHRANE_PEEP_2021: {tag:"Cochrane", label:"Cochrane 2021 — Higher vs lower PEEP in ARDS", url:"https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD009098.pub3/full"},
-      COCHRANE_RECRUIT_2021: {tag:"Cochrane", label:"Cochrane 2021 — Recruitment maneuvers strategies", url:"https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD006667.pub4/full"},
-      ARDSNET_ARMA_2000: {tag:"PubMed/RCT", label:"ARDSNet ARMA (NEJM 2000) low VT trial (PDF)", url:"https://www.nejm.org/doi/pdf/10.1056/NEJM200005043421801"},
-      ALVEOLI_2004: {tag:"PubMed/RCT", label:"ALVEOLI Trial (NEJM 2004) PEEP strategy (PDF mirror)", url:"https://medschool.cuanschutz.edu/docs/librariesprovider60/education-docs/heartbeat-im-res/suggested-read/alveoli-peep-in-ards-nejm-2004.pdf"},
-      RECRUITMENT_ART_HARM: {tag:"PubMed/RCT", label:"ART trial-related analysis (recruitment + PEEP titration) — potential harm (PDF mirror)", url:"https://www.hcor.com.br/wp-content/uploads/2022/09/BJA-2019-epub-HTE-in-ART.pdf"},
-      BERLIN_2012: {tag:"Definition", label:"Berlin Definition of ARDS (PubMed)", url:"https://pubmed.ncbi.nlm.nih.gov/22797452/"},
-
-      // Sepsis
-      SEPSIS3_2016: {tag:"Definition", label:"Sepsis-3 definitions (JAMA 2016)", url:"https://jamanetwork.com/journals/jama/fullarticle/2492881"},
-      SSC_2021: {tag:"Guideline", label:"Surviving Sepsis Campaign 2021 (landing)", url:"https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-campaign-guidelines-2021"},
-
-      // Weaning/SBT
-      AARC_SBT_2024: {tag:"Guideline", label:"AARC CPG 2024 — Spontaneous Breathing Trial (PDF)", url:"https://www.aarc.org/wp-content/uploads/2023/11/CPG2024SpontaneousBreathingTrial.pdf"},
-      PROLONGED_WEAN_2024: {tag:"Review", label:"Review 2024 — Prolonged weaning (PMC)", url:"https://pmc.ncbi.nlm.nih.gov/articles/PMC11629167/"},
-      COCHRANE_PROTOCOL_WEAN: {tag:"Cochrane", label:"Cochrane — Protocolized weaning (search landing)", url:"https://www.cochranelibrary.com/search?searchBy=1&searchText=protocolized%20weaning%20mechanical%20ventilation"},
-      COCHRANE_SBT_PSV_TTUBE: {tag:"Cochrane", label:"Cochrane — PSV vs T-tube SBT (search landing)", url:"https://www.cochranelibrary.com/search?searchBy=1&searchText=pressure%20support%20versus%20T-tube%20spontaneous%20breathing%20trial"},
-
-      // IMT
-      IMT_PUBMED_SR_2025: {tag:"PubMed/SR", label:"IMT systematic review 2025 (PubMed)", url:"https://pubmed.ncbi.nlm.nih.gov/40566408/"},
-      IMT_EINSTEIN_2023: {tag:"SR", label:"IMT systematic review 2023 (einstein)", url:"https://journal.einstein.br/article/effects-of-inspiratory-muscle-training-on-weaning-from-mechanical-ventilation-and-other-aspects-a-systematic-review/"}
     };
 
-    function refLines(keys){
-      return keys.map(k=>{
-        const e=EVID[k];
-        return `• [${e.tag}] ${e.label}\n  ${e.url}`;
-      }).join("\n");
+    function renderCase(){
+      const v = document.getElementById("caseSel").value;
+      const area = document.getElementById("caseArea");
+      if(!v){
+        area.innerHTML = "";
+        return;
+      }
+      const c = CASES[v];
+      area.innerHTML = `
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <div class="row" style="justify-content:space-between;">
+            <div>
+              <h2>${c.title}</h2>
+              <p class="sub">${c.lead}</p>
+            </div>
+            <div class="row">
+              <span class="badge good">educacional</span>
+              <span class="badge warn">não-prescritor</span>
+            </div>
+          </div>
+          <div class="hr"></div>
+          ${c.render()}
+        </div>
+      `;
+
+      // Se mudou para SARA, tenta atualizar atalhos
+      if(v==="sara"){
+        setTimeout(updateArdsCalc, 0);
+      }else{
+        // limpa atalhos se não for SARA
+        document.getElementById("pfQuick").textContent = "—";
+        document.getElementById("dpQuick").textContent = "—";
+        document.getElementById("ardsQuick").textContent = "—";
+      }
     }
 
-    // --- Points of attention generator (each point with robust evidence anchors) ---
-    function buildPoints(st, ards, seps){
-      const points = [];
+    // ===================== ARDS calc =====================
+    function updateArdsCalc(){
+      const pao2 = num(document.getElementById("pao2")?.value);
+      const fio2 = num(document.getElementById("fio2")?.value);
+      const peep = num(document.getElementById("peep")?.value);
+      const pplat = num(document.getElementById("pplat")?.value);
+      const pinsp = num(document.getElementById("pinsp")?.value);
+      const pbw = num(document.getElementById("pbw")?.value);
+      const vt = num(document.getElementById("vt")?.value);
 
-      // Universal VM (auditability)
-      points.push({
-        title:"Sempre: coerência e rastreabilidade do suporte",
-        why:[
-          "Organizar o raciocínio com tendência (oxigenação, ventilação, mecânica, esforço) antes de concluir mecanismos.",
-          "Priorizar assincronia/mecânica quando houver instabilidade ou desconforto."
-        ],
-        evidence:["ARDSNET_ARMA_2000"]
-      });
+      const out = document.getElementById("ardsOut");
+      if(!out) return;
 
-      // ARDS
-      if(ards.status.startsWith("SARA: sim") || ards.status.startsWith("SARA: provável")){
-        points.push({
-          title:"SARA: definição e severidade (Berlin) + proteção pulmonar como auditoria",
-          why:[
-            "Usar critérios Berlin para consistência diagnóstica e para comunicar gravidade (P/F com PEEP/CPAP ≥5).",
-            "Descrever VT/PBW e ΔP como métricas de auditoria (sem prescrever ajuste)."
-          ],
-          evidence:["BERLIN_2012","ARDSNET_ARMA_2000","ESICM_2023"]
-        });
-
-        points.push({
-          title:"SARA: PEEP (alto vs baixo) — evidência é contextual",
-          why:[
-            "High vs low PEEP tem efeito pequeno/incerto em mortalidade global; o contexto e a gravidade importam.",
-            "Diretrizes recentes discutem PEEP mais alto em ARDS moderada-grave sem recrutamento de rotina."
-          ],
-          evidence:["COCHRANE_PEEP_2021","ATS_2024","ESICM_2023","ALVEOLI_2004"]
-        });
-
-        points.push({
-          title:"SARA: recrutamento e titulação — evitar rotinização de manobras agressivas",
-          why:[
-            "Manobras de recrutamento prolongadas/alta pressão não são recomendadas de rotina.",
-            "Há dados de potencial dano em estratégias de recrutamento+titulação em certos perfis."
-          ],
-          evidence:["ESICM_2023","ATS_2024","COCHRANE_RECRUIT_2021","RECRUITMENT_ART_HARM"]
-        });
+      let lines = [];
+      let pf = NaN;
+      if(Number.isFinite(pao2) && Number.isFinite(fio2) && fio2>0){
+        pf = pao2 / fio2;
+        lines.push(`P/F = ${pf.toFixed(0)} mmHg`);
+        document.getElementById("pfQuick").textContent = pf.toFixed(0);
+      }else{
+        document.getElementById("pfQuick").textContent = "—";
       }
 
-      // Sepsis
-      if(seps.seps.startsWith("Sepse: sim") || seps.seps.includes("provável")){
-        points.push({
-          title:"Sepse/choque: definição operacional e integração hemodinâmica–ventilatória",
-          why:[
-            "Definir sepse por infecção + disfunção orgânica (ΔSOFA) e choque por vasopressor + hiperlactatemia (quando disponível).",
-            "Em sepse/choque, a instabilidade circulatória pode alterar a leitura de oxigenação, mecânica e tolerância ao suporte."
-          ],
-          evidence:["SEPSIS3_2016","SSC_2021"]
-        });
+      let ardsClass = "—";
+      if(Number.isFinite(pf) && Number.isFinite(peep) && peep >= 5){
+        if(pf <= 100) ardsClass = "SARA grave (Berlin)";
+        else if(pf <= 200) ardsClass = "SARA moderada (Berlin)";
+        else if(pf <= 300) ardsClass = "SARA leve (Berlin)";
+        else ardsClass = "Não classifica SARA por P/F (Berlin)";
+        lines.push(`Berlin: ${ardsClass} (PEEP ≥ 5)`);
+        document.getElementById("ardsQuick").textContent = ardsClass.replace(" (Berlin)","");
+      }else{
+        if(Number.isFinite(peep) && peep < 5){
+          lines.push(`Observação: PEEP < 5 (Berlin usa PEEP/CPAP ≥ 5).`);
+        }
+        document.getElementById("ardsQuick").textContent = "—";
       }
 
-      // Obstructive / COPD
-      if(st.copd==="sim" || st.obs!=="nao"){
-        points.push({
-          title:"Fenótipo obstrutivo/DPOC: expiração incompleta, aprisionamento e assincronia",
-          why:[
-            "Atenção a sinais de expiração incompleta/hiperinsuflação dinâmica (curvas) e seu impacto em disparo e conforto.",
-            "Assincronia pode dominar o quadro de esforço e instabilidade."
-          ],
-          evidence:["ESICM_2023"]
-        });
+      // Driving pressure
+      let dp = NaN;
+      if(Number.isFinite(pplat) && Number.isFinite(peep)){
+        dp = pplat - peep;
+        lines.push(`ΔP (Pplat−PEEP) = ${dp.toFixed(1)} cmH₂O`);
+      }else if(Number.isFinite(pinsp) && Number.isFinite(peep)){
+        // Em PC, Pinsp é pressão acima da PEEP; ΔP ≈ Pinsp (educacional)
+        dp = pinsp;
+        lines.push(`ΔP (aprox. em PC) ≈ Pinsp = ${dp.toFixed(1)} cmH₂O`);
       }
 
-      // Restrictive
-      if(st.res!=="nao"){
-        points.push({
-          title:"Fenótipo restritivo: baixa complacência como hipótese e coerência com imagem",
-          why:[
-            "Baixa complacência sugere maior risco de carga mecânica; reforça necessidade de coerência entre imagem, oxigenação e mecânica.",
-            "Oscilações de esforço e assincronia podem amplificar instabilidade."
-          ],
-          evidence:["ESICM_2023","ATS_2024"]
-        });
+      if(Number.isFinite(dp)){
+        document.getElementById("dpQuick").textContent = dp.toFixed(1);
+        if(dp <= 15) lines.push(`ΔP: ponto de atenção geralmente citado ~15 cmH₂O (ok neste valor).`);
+        else lines.push(`ΔP: acima de ~15 cmH₂O (ponto de atenção em ventilação protetora).`);
+      }else{
+        document.getElementById("dpQuick").textContent = "—";
       }
 
-      // Neuro
-      if(st.neuro==="sim"){
-        points.push({
-          title:"Neurocrítico: estabilidade ventilatória/PaCO₂ como objetivo educacional",
-          why:[
-            "Oscilações ventilatórias (especialmente de CO₂) podem ser relevantes em neurocríticos; o foco é estabilidade, não um número fixo.",
-            "Esforço/assincronia podem aumentar variação ventilatória."
-          ],
-          evidence:["ATS_2024"]
-        });
+      // VT por PBW
+      if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
+        const vtkg = vt / pbw;
+        lines.push(`VT/PBW = ${vtkg.toFixed(1)} mL/kg (educacional; ARDSNet usou ~6 mL/kg PBW).`);
       }
 
-      // Neuromuscular / prolonged MV (proxy by neuromuscular flag or SBT tab values)
-      const daysSbt = num(wean_days_since_first_sbt?.value);
-      const sbtStarted = wean_sbt_started?.value === "sim";
-      if(st.nm==="sim" || sbtStarted || (daysSbt!=null && daysSbt>=7)){
-        points.push({
-          title:"VM prolongada / desmame difícil: rastreabilidade e reabilitação respiratória (IMT como módulo)",
-          why:[
-            "Classificar padrão de desmame melhora comunicação e rastreabilidade (educacional).",
-            "IMT tem evidência de melhora de força; impacto em desfechos de desmame é variável (heterogeneidade)."
-          ],
-          evidence:["PROLONGED_WEAN_2024","AARC_SBT_2024","IMT_PUBMED_SR_2025","IMT_EINSTEIN_2023"]
-        });
-      }
+      if(lines.length===0){
+        out.textContent = "Preencha PaO₂, FiO₂ e PEEP para classificar.";
+      }else{
+        // badges
+        let tags = [];
+        if(ardsClass.includes("grave")) tags.push(badge("grave","bad"));
+        else if(ardsClass.includes("moderada")) tags.push(badge("moderada","warn"));
+        else if(ardsClass.includes("leve")) tags.push(badge("leve","good"));
 
-      // Unilateral/seletiva (conceito)
-      if(st.uni==="sim"){
-        points.push({
-          title:"Doença unilateral grave: heterogeneidade e risco regional (conceito)",
-          why:[
-            "Assimetria pode gerar risco de lesão regional; reforça coerência com imagem e observação cuidadosa de curvas.",
-            "Discussão de ventilação diferencial é avançada e depende de contexto; aqui é apenas reconhecimento do cenário."
-          ],
-          evidence:["ESICM_2023"]
-        });
+        out.innerHTML = `${tags.join(" ")}\n${lines.join("\n")}\n\nLinks: Berlin (2012), ARDSNet (2000), Amato (2015) em “Evidências”.`;
       }
-
-      return points;
     }
 
-    // --- Expanded modules (focus: mechanics + asynchrony) ---
-    const MODULES = [
+    // ===================== Sepsis/Septic shock calc =====================
+    function updateSepsisCalc(){
+      const map = num(document.getElementById("map")?.value);
+      const lac = num(document.getElementById("lac")?.value);
+      const vaso = document.getElementById("vaso")?.value || "";
+      const out = document.getElementById("sepseOut");
+      if(!out) return;
+
+      let lines = [];
+      if(Number.isFinite(map)) lines.push(`MAP informado: ${map.toFixed(0)} mmHg`);
+      if(Number.isFinite(lac)) lines.push(`Lactato informado: ${lac.toFixed(1)} mmol/L`);
+      if(vaso) lines.push(`Vasopressor: ${vaso.toUpperCase()}`);
+
+      let verdict = "—";
+      if(vaso==="sim" && Number.isFinite(map) && Number.isFinite(lac)){
+        // Sepsis-3: vasopressor to maintain MAP ≥65 AND lactate >2 (absence of hypovolemia)
+        if(map < 65 || lac > 2){
+          verdict = "Compatível com critérios clínicos de choque séptico (Sepsis-3) — verificar hipovolemia.";
+        }else{
+          verdict = "Vasopressor + MAP≥65 e lactato≤2: não preenche critério clássico de choque séptico (Sepsis-3).";
+        }
+      }else if(vaso==="nao" && Number.isFinite(map) && Number.isFinite(lac)){
+        if(map < 65 && lac > 2){
+          verdict = "Hipoperfusão provável; choque séptico requer vasopressor (Sepsis-3).";
+        }else{
+          verdict = "Sem vasopressor: avaliar sepse/disfunção orgânica e perfusão global (educacional).";
+        }
+      }else{
+        verdict = "Preencha MAP, lactato e vasopressor para o definidor educacional.";
+      }
+
+      out.textContent = (lines.length? (lines.join("\n") + "\n\n") : "") + verdict;
+    }
+
+    // ===================== Motors: Assincronias =====================
+    const ASSIN_RULES = [
       {
-        id:"M_ASYNC",
-        title:"Assincronia — disparo/fluxo/ciclagem/expiração",
-        elig:(st)=> st.async!=="nao" || st.effort!=="nao" || st.copd==="sim",
-        signals:[
-          {id:"trigger_issue", label:"Compatível com problema de disparo"},
-          {id:"flow_mismatch", label:"Compatível com mismatch de fluxo"},
-          {id:"cycling_issue", label:"Compatível com ciclagem precoce/tardia (conceito)"},
-          {id:"exp_incomplete", label:"Compatível com expiração incompleta (conceito)"}
+        id:"ineffort",
+        when:["ft_ineffective_effort"],
+        title:"Esforço inefetivo",
+        conf:"Alta",
+        phys:"Há esforço neural/muscular sem gatilho do ventilador. Em obstrutivos, auto-PEEP eleva o limiar de disparo; em fraqueza, o esforço não atinge o limiar.",
+        hypos:[
+          "Auto-PEEP/air-trapping elevando limiar de disparo",
+          "Sensibilidade de disparo inadequada ou atraso de trigger",
+          "Fraqueza neuromuscular/fadiga",
+          "Sedação/nível de consciência interferindo na coordenação"
         ],
-        infer:(sel)=>[
-          "Inferência educacional: assincronia pode explicar desconforto, variação ventilatória e esforço elevado.",
-          "Impacto: priorizar identificação do padrão dominante e coerência com mecânica/tempo expiratório."
-        ].join("\n"),
-        evidence:["ESICM_2023"]
+        limits:"Precisa correlacionar com modo ventilatório, ajustes de trigger, esforço clínico e contexto (DPOC/neuromuscular)."
       },
       {
-        id:"M_OBSTRUCTION",
-        title:"Mecânica (obstrução) — tempo expiratório/hiperinsuflação dinâmica",
-        elig:(st)=> st.obs!=="nao" || st.copd==="sim",
-        signals:[
-          {id:"exp_flow_not_zero", label:"Fluxo expiratório não zera"},
-          {id:"long_exp_tail", label:"Cauda expiratória prolongada"},
-          {id:"volume_stacking", label:"Empilhamento em volume×tempo"},
-          {id:"cycle_trapping", label:"Aprisionamento por repetição ciclo a ciclo"}
+        id:"doubletrigger",
+        when:["pt_double_trigger","vt_breath_stacking"],
+        title:"Duplo disparo / empilhamento",
+        conf:"Alta",
+        phys:"Ocorre quando a demanda inspiratória do paciente excede o tempo/volume do ciclo ventilatório, gerando um segundo disparo antes de expiração completa.",
+        hypos:[
+          "Tempo inspiratório curto para a demanda do paciente",
+          "Esforço intenso / drive elevado",
+          "Ciclagem precoce em modos assistidos"
         ],
-        infer:(sel)=>{
-          const dyn = sel.has("exp_flow_not_zero") && sel.has("volume_stacking");
-          return [
-            "Inferência educacional: sinais sustentam limitação ao fluxo/expiração incompleta.",
-            dyn ? "Combinação sugere hiperinsuflação dinâmica provável (educacional)." : "Risco de aprisionamento deve ser considerado como hipótese educacional."
-          ].join("\n");
-        },
-        evidence:["ESICM_2023"]
+        limits:"Confirmar padrão em pressão, fluxo e volume; excluir artefatos e auto-disparo."
       },
       {
-        id:"M_RESTRICTION",
-        title:"Mecânica (restrição) — baixa complacência como hipótese",
-        elig:(st)=> st.res!=="nao",
-        signals:[
-          {id:"small_vt_large_p", label:"Pequeno VT para grande variação de pressão (conceito)"},
-          {id:"pv_loop_narrow", label:"Loop P–V estreito (conceito)"},
-          {id:"hysteresis_low", label:"Histerese reduzida (conceito)"},
-          {id:"no_obstr_dominant", label:"Ausência de padrão obstrutivo predominante"}
+        id:"flowstarvation",
+        when:["ft_flow_starvation"],
+        title:"Fluxo insuficiente (“flow starvation”)",
+        conf:"Média–Alta",
+        phys:"A concavidade do fluxo/pressão sugere que a demanda do paciente excede a entrega do ventilador naquele momento do ciclo.",
+        hypos:[
+          "Drive elevado (acidose/dor/ansiedade) com demanda aumentada",
+          "Ajustes de forma de fluxo e/ou limite de suporte insuficientes (dependente do modo)",
+          "Sincronia inadequada de ciclagem"
         ],
-        infer:(sel)=>{
-          const lowComp = sel.has("pv_loop_narrow") || sel.has("small_vt_large_p");
-          return [
-            "Inferência educacional: fenótipo restritivo/baixa complacência como hipótese.",
-            lowComp ? "Baixa complacência provável (educacional)." : "Restrição provável com necessidade de coerência clínica."
-          ].join("\n");
-        },
-        evidence:["ESICM_2023","ATS_2024"]
+        limits:"Interpretação depende do modo (VC/PC/PSV) e do padrão de fluxo programado."
       },
       {
-        id:"M_EFFORT",
-        title:"Esforço/drive — sinais e impacto ventilatório (educacional)",
-        elig:(st)=> st.effort!=="nao" || st.neuro==="sim",
-        signals:[
-          {id:"pressure_notches", label:"Entalhes/deflexões sugerindo esforço"},
-          {id:"double_trigger", label:"Dupla ativação/empilhamento sugeridos"},
-          {id:"irregular_timing", label:"Irregularidade consistente do timing"},
-          {id:"pressure_osc", label:"Oscilações de pressão durante o ciclo"}
+        id:"latecycle",
+        when:["ft_late_cycle"],
+        title:"Ciclagem tardia",
+        conf:"Média",
+        phys:"O ventilador mantém inspiração quando o paciente já está iniciando expiração, gerando desconforto e possível aumento de pressão.",
+        hypos:[
+          "Critério de ciclagem inadequado (especialmente em PSV)",
+          "Drive expiratório precoce / tempo inspiratório excessivo"
         ],
-        infer:(sel)=>[
-          "Inferência educacional: esforço/drive elevado pode aumentar instabilidade e interagir com assincronia e mecânica.",
-          "Impacto: reforçar rastreabilidade do padrão e coerência com oxigenação/CO₂."
-        ].join("\n"),
-        evidence:["ESICM_2023","ATS_2024"]
+        limits:"Requer avaliação do modo e do critério de ciclagem; correlacionar com esforço em pressão."
+      },
+      {
+        id:"earlycycle",
+        when:["ft_early_cycle"],
+        title:"Ciclagem precoce",
+        conf:"Média",
+        phys:"O ventilador encerra inspiração antes do término do esforço inspiratório do paciente, mantendo esforço após ciclar para expiração.",
+        hypos:[
+          "Critério de ciclagem encerra cedo (PSV)",
+          "Tempo inspiratório muito curto (dependente do modo)",
+          "Drive elevado sustentado"
+        ],
+        limits:"Checar presença de esforço pós-ciclagem em pressão/fluxo."
+      },
+      {
+        id:"autotrigger",
+        when:["ft_auto_trigger"],
+        title:"Auto-disparo",
+        conf:"Média",
+        phys:"Ciclos ocorrem sem esforço evidente, por sensibilidade excessiva ou artefatos (vazamento, oscilação, condensado).",
+        hypos:[
+          "Vazamento no circuito/interface/cuff",
+          "Condensado/turbulência",
+          "Sensibilidade de trigger muito alta"
+        ],
+        limits:"Confirmar em múltiplos ciclos e correlacionar com o paciente; excluir movimentos/artefatos."
+      },
+      {
+        id:"expincomplete",
+        when:["ft_exp_incomplete"],
+        title:"Expiração incompleta / air-trapping",
+        conf:"Média–Alta",
+        phys:"Fluxo expiratório não retorna a zero antes do próximo ciclo, sugerindo tempo expiratório insuficiente, obstrução ou elevada constante de tempo.",
+        hypos:[
+          "Obstrução (DPOC/asma, tubo) ou secreção",
+          "FR alta com tempo expiratório curto",
+          "PEEP/pressões e demanda aumentando aprisionamento (contextual)"
+        ],
+        limits:"Medidas formais de auto-PEEP e correlação com volumes/pressões aumentam a confiabilidade."
       }
     ];
 
-    function eligibleModules(st){
-      return MODULES.filter(m=>m.elig(st));
-    }
+    function runAssinMotor(){
+      const ctx = document.getElementById("assinContext").value;
+      const picked = [...document.querySelectorAll("input.assin:checked")].map(x=>x.value);
 
-    function buildModules(){
-      const st = getCompactState();
-      modulesContainer.innerHTML="";
-      if(st.adult!=="sim"){ pillModules.textContent="bloqueado"; return; }
-
-      const mods=eligibleModules(st);
-      pillModules.textContent = mods.length + " módulos";
-
-      mods.forEach(mod=>{
-        const box=document.createElement("div");
-        box.className="card";
-        box.style.background="rgba(0,0,0,.18)";
-        box.style.boxShadow="none";
-
-        const h=document.createElement("h2");
-        h.textContent=mod.title;
-
-        const det=document.createElement("details");
-        det.open=true;
-
-        const sum=document.createElement("summary");
-        sum.textContent="Sinais observáveis (marque ≥1)";
-        det.appendChild(sum);
-
-        const ul=document.createElement("ul");
-        ul.className="sigList";
-
-        mod.signals.forEach(sig=>{
-          const li=document.createElement("li");
-          li.className="sigItem";
-
-          const cb=document.createElement("input");
-          cb.type="checkbox";
-          cb.id=`sig_${mod.id}_${sig.id}`;
-
-          const sp=document.createElement("span");
-          sp.textContent=sig.label;
-
-          li.appendChild(cb); li.appendChild(sp);
-          ul.appendChild(li);
-        });
-
-        det.appendChild(ul);
-
-        const ev=document.createElement("div");
-        ev.className="refs";
-        ev.innerHTML = `<b>Evidência (âncoras):</b><br/>` + renderRefs(mod.evidence);
-
-        box.appendChild(h);
-        box.appendChild(det);
-        box.appendChild(ev);
-
-        modulesContainer.appendChild(box);
-      });
-    }
-
-    function selectedSignals(mod){
-      const s=new Set();
-      mod.signals.forEach(sig=>{
-        const cb=document.getElementById(`sig_${mod.id}_${sig.id}`);
-        if(cb && cb.checked) s.add(sig.id);
-      });
-      return s;
-    }
-
-    function renderRefs(keys){
-      return keys.map(k=>{
-        const e=EVID[k];
-        return `<span class="tag">${e.tag}</span> <a href="${e.url}" target="_blank" rel="noopener">${e.label}</a>`;
-      }).join("<br/>");
-    }
-
-    // compact state (subset for decision)
-    function getCompactState(){
-      return {
-        adult: adult_18_plus.value,
-        support: support_type.value,
-        obs: obstructive_suspected.value,
-        res: restrictive_suspected.value,
-        effort: high_effort.value,
-        async: major_async.value,
-        copd: copd_known.value,
-        nm: neuromuscular.value,
-        neuro: neuro_critical.value,
-        uni: unilateral_severe.value
-      };
-    }
-
-    // PEEP table highlighting
-    function clearHL(tbl){
-      Array.from(tbl.querySelectorAll("tbody tr")).forEach(tr=>tr.classList.remove("hl"));
-    }
-    function highlightForFiO2(tbl, fio2){
-      clearHL(tbl);
-      if(fio2==null) return;
-      const rows=Array.from(tbl.querySelectorAll("tbody tr"));
-      for(const tr of rows){
-        const mn=parseFloat(tr.getAttribute("data-min"));
-        const mx=parseFloat(tr.getAttribute("data-max"));
-        if(fio2>=mn && fio2<=mx){
-          tr.classList.add("hl");
-          return;
-        }
-      }
-      // If FiO2=1.0 sometimes doesn't match due to 1.01 max
-      if(Math.abs(fio2-1.0)<0.0001){
-        const last=rows[rows.length-1];
-        if(last) last.classList.add("hl");
-      }
-    }
-
-    // Weaning definidor (educational categories)
-    function classifyWeaning(){
-      const started = wean_sbt_started.value === "sim";
-      const attempts = num(wean_sbt_attempts.value) ?? 0;
-      const days = num(wean_days_since_first_sbt.value) ?? 0;
-      const trach = wean_trach.value === "sim";
-
-      let label="Desmame: não iniciado";
-      let notes=[];
-
-      if(!started){
-        label="Desmame: não iniciado (SBT não iniciado)";
-      } else {
-        // Simplified educational mapping: simple vs difficult vs prolonged (conceptual)
-        if(attempts<=1 && days<=1){
-          label="Desmame: simples (educacional)";
-        } else if(attempts>=2 && attempts<=3 && days<7){
-          label="Desmame: difícil (educacional)";
-        } else if(attempts>=3 || days>=7){
-          label="Desmame: prolongado (educacional)";
-        } else {
-          label="Desmame: indeterminado (dados incompletos)";
-        }
-      }
-
-      if(trach){
-        notes.push("Traqueostomia presente: pode alterar trajetória e métricas clássicas; manter rastreabilidade educacional.");
-      }
-
-      return {label, notes};
-    }
-
-    // Populate evidence boxes (static)
-    function populateStaticEvidence(){
-      // PEEP evidence box
-      peepEvidenceBox.innerHTML =
-        `<b>Síntese educacional:</b><br/>
-         • PEEP alto vs baixo: efeito em mortalidade global é pequeno/incerto; depende de contexto e gravidade.<br/>
-         • Diretrizes recentes discutem PEEP mais alto em ARDS moderada-grave sem recrutamento rotineiro.<br/>
-         • Recrutamento prolongado/alta pressão não é recomendado de rotina; há dados de potencial dano em estratégias específicas.<br/>
-         <div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>
-         ${renderRefs(["COCHRANE_PEEP_2021","ATS_2024","ESICM_2023","ALVEOLI_2004","COCHRANE_RECRUIT_2021","RECRUITMENT_ART_HARM"])}</div>`;
-
-      // IMT evidence box
-      imtEvidenceBox.innerHTML =
-        `<b>Síntese educacional:</b><br/>
-         • IMT tende a melhorar força inspiratória; efeitos em sucesso/tempo de desmame variam conforme populações e protocolos.<br/>
-         • Tratar como módulo de reabilitação em VM prolongada/desmame difícil, com monitorização multiprofissional (conceito).<br/>
-         <div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>
-         ${renderRefs(["IMT_PUBMED_SR_2025","IMT_EINSTEIN_2023"])}</div>`;
-    }
-
-    // Main compact compute
-    function computeCompact(){
-      refreshUI();
-      if(adult_18_plus.value!=="sim") return;
-
-      calcDP();
-      calcVTmlkg();
-      const ards=defineARDS();
-      const seps=defineSepsis();
-
-      // Confidence heuristic
-      let conf="média";
-      const pf = num(pf_ratio.value);
-      if(ards.status.includes("provável") && !pf) conf="baixa";
-      if(seps.seps.includes("provável") && (num(sofa_delta.value)==null)) conf="baixa";
-      if(ards.status.startsWith("SARA: sim") || seps.seps.startsWith("Sepse: sim")) conf="média/alta";
-      pillConfidence.textContent=conf;
-
-      const st = getState();
-      const compact = getCompactState();
-      const points = buildPoints(compact, ards, seps);
-
-      const lines=[];
-      lines.push("SYNCVENT — SAÍDA EDUCACIONAL");
-      lines.push("--------------------------------");
-      lines.push(`SARA (Berlin): ${ards_result.value || "—"}`);
-      lines.push(`Sepse: ${sepsis_result.value || "—"}`);
-      lines.push(`Choque séptico: ${shock_result.value || "—"}`);
-      lines.push("");
-
-      // Vent audit descriptors (if present)
-      const vtkg = num(vt_mlkg.value);
-      const dp = num(dp_auto.value);
-      const hasVT = (vtkg!=null && vt_reliability.value!=="nao");
-      const hasDP = (pplat.value && peep.value);
-      lines.push("Descritores (auditoria educacional):");
-      lines.push(`- VT/PBW: ${hasVT ? vt_mlkg.value + " mL/kg (conf.: " + vt_reliability.value + ")" : "não disponível"}`);
-      lines.push(`- ΔP: ${hasDP ? dp_auto.value : "não disponível"}`);
-      lines.push("");
-
-      lines.push("PONTOS DE ATENÇÃO (por cenário) + evidência robusta:");
-      points.forEach((p, i)=>{
-        lines.push("");
-        lines.push(`${i+1}) ${p.title}`);
-        p.why.forEach(w=>lines.push(`- ${w}`));
-        lines.push("Evidência:");
-        p.evidence.forEach(k=>{
-          const e=EVID[k];
-          lines.push(`• [${e.tag}] ${e.label}`);
-          lines.push(`  ${e.url}`);
-        });
-      });
-
-      lines.push("");
-      lines.push("Próximo passo: abrir 'Mecânica & Assincronia' e marcar sinais observáveis para justificar hipóteses (educacional).");
-
-      outCompact.textContent = lines.join("\n");
-
-      // Modules refresh
-      buildModules();
-
-      // PEEP highlight
-      updatePeepHighlight();
-
-      // Weaning box
-      updateWeaningBox();
-
-      saveState();
-    }
-
-    function updateWeaningBox(){
-      const w = classifyWeaning();
-      let html = `<b>${w.label}</b><br/>`;
-      if(w.notes.length){
-        html += w.notes.map(n=>`• ${n}`).join("<br/>") + "<br/>";
-      }
-      html += `<div style="margin-top:8px;"><b>Evidência (robusta):</b><br/>${renderRefs(["AARC_SBT_2024","PROLONGED_WEAN_2024","COCHRANE_PROTOCOL_WEAN","COCHRANE_SBT_PSV_TTUBE"])}</div>`;
-      weanResultBox.innerHTML = html;
-    }
-
-    function updatePeepHighlight(){
-      const v = num(peep_fio2_input.value);
-      highlightForFiO2(tblLower, v);
-      highlightForFiO2(tblHigher, v);
-      // show only chosen strategy highlighted? We'll highlight both but user can focus.
-      if(peep_strategy.value==="lower"){
-        tblLower.closest("details").open = true;
-      } else {
-        tblHigher.closest("details").open = true;
-      }
-    }
-
-    // Expanded compute
-    function computeExpanded(){
-      if(adult_18_plus.value!=="sim"){
-        pillExpConf.textContent="bloqueado";
-        outExpanded.textContent="";
+      if(picked.length===0){
+        document.getElementById("assinOut").textContent = "Selecione ao menos 1 achado e rode novamente.";
         return;
       }
-      const st = getCompactState();
-      const ards = defineARDS();
-      const seps = defineSepsis();
 
-      const mods = eligibleModules(st);
-      let any=false;
-      let missing=0;
+      let hits = ASSIN_RULES.filter(r => r.when.every(w => picked.includes(w)));
+      // fallback: regras parciais (qualquer match)
+      if(hits.length===0){
+        hits = ASSIN_RULES.filter(r => r.when.some(w => picked.includes(w)));
+      }
 
-      const lines=[];
-      lines.push("SYNCVENT — JUSTIFICATIVA EXPANDIDA (educacional)");
-      lines.push("------------------------------------------------");
-      mods.forEach(mod=>{
-        const sel = selectedSignals(mod);
-        if(sel.size===0){ missing++; return; }
-        any=true;
+      let lines = [];
+      lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
+      lines.push(`Achados selecionados: ${picked.join(", ")}`);
+      lines.push("");
+
+      // prioriza regras com mais condições satisfeitas
+      hits.sort((a,b)=> b.when.filter(w=>picked.includes(w)).length - a.when.filter(w=>picked.includes(w)).length);
+
+      hits.slice(0,5).forEach((r, idx) => {
+        lines.push(`(${idx+1}) ${r.title} — Confiança: ${r.conf}`);
+        lines.push(`Fisiologia: ${r.phys}`);
+        lines.push(`Hipóteses: ${r.hypos.map(x=>"- "+x).join("\n")}`);
+        lines.push(`Limites: ${r.limits}`);
         lines.push("");
-        lines.push(`• ${mod.title}`);
-        lines.push("Sinais selecionados:");
-        sel.forEach(id=>{
-          const label = mod.signals.find(s=>s.id===id)?.label || id;
-          lines.push(`- ${label}`);
-        });
-        lines.push(mod.infer(sel));
-        lines.push("Evidência (âncoras):");
-        mod.evidence.forEach(k=>{
-          const e=EVID[k];
-          lines.push(`• [${e.tag}] ${e.label}`);
-          lines.push(`  ${e.url}`);
-        });
       });
 
-      if(!any){
-        lines.push("");
-        lines.push("Nenhum módulo gerou justificativa: marque ≥1 sinal observável em pelo menos 1 módulo elegível.");
+      // heurística de destaque
+      if(picked.includes("pt_negative_deflection") || picked.includes("pt_trigger_delay")){
+        lines.push("Observação: deflexão negativa/atraso de disparo reforçam hipótese de carga para trigger (esforço alto, auto-PEEP, sensibilidade).");
       }
 
-      let conf="média";
-      if(!any) conf="baixa";
-      if(any && missing===0) conf="média/alta";
-      pillExpConf.textContent=conf;
-
-      // Tie-back impact
-      lines.push("");
-      lines.push("Impacto educacional nos pontos de atenção:");
-      if(ards.status.startsWith("SARA: sim")) lines.push("- Em SARA, sinais de mecânica/assincronia reforçam vigilância de estabilidade e coerência de suporte.");
-      if(seps.seps.startsWith("Sepse: sim")) lines.push("- Em sepse/choque, esforço/assincronia podem aumentar variabilidade e demandam rastreabilidade.");
-      if(st.copd==="sim" || st.obs!=="nao") lines.push("- Em obstrução/DPOC, expiração incompleta e assincronia frequentemente dominam a leitura do caso.");
-      if(st.res!=="nao") lines.push("- Em restrição, coerência com imagem e carga mecânica (educacional) ganham prioridade.");
-      if(st.neuro==="sim") lines.push("- Em neurocrítico, estabilidade de ventilação/CO₂ é central como objetivo educacional.");
-
-      outExpanded.textContent = lines.join("\n");
-      saveState();
+      document.getElementById("assinOut").textContent = lines.join("\n");
     }
 
-    // Button wiring
-    $("btnRun").onclick=()=>computeCompact();
-    $("btnRunExpanded").onclick=()=>computeExpanded();
-    $("btnGoExpanded").onclick=()=>{ setTab("expanded"); buildModules(); };
-    $("btnSave").onclick=()=>saveState();
-    $("btnReset").onclick=()=>resetAll();
-
-    // PEEP tab events
-    peep_fio2_input.addEventListener("input", ()=>{ updatePeepHighlight(); saveState(); });
-    peep_strategy.addEventListener("change", ()=>{ updatePeepHighlight(); saveState(); });
-
-    // Change events
-    document.addEventListener("change", ()=>{
-      refreshUI();
-      computeCompact();
-    });
-    document.addEventListener("input", ()=>{
-      // keep calculated fields responsive without full rebuild
-      calcDP(); calcPF(); defineARDS(); defineSepsis(); calcPBW(); calcVTmlkg();
-    });
-    support_type.addEventListener("change", refreshUI);
-
-    // Init
-    (function init(){
-      // restore
-      const saved = localStorage.getItem(LS);
-      if(saved){
-        try{ setState(JSON.parse(saved)); }catch(e){}
+    // ===================== Motors: Mecânica =====================
+    const MEC_RULES = [
+      {
+        id:"lowC",
+        whenAny:["pt_high_plateau","ft_insp_decel_steep"],
+        title:"Sugere baixa complacência (pulmão/parede torácica)",
+        conf:"Média",
+        phys:"Platô elevado e/ou padrão de enchimento compatível com sistema mais rígido. Em obesidade, parede torácica pode contribuir.",
+        hypos:[
+          "SARA / edema / atelectasia",
+          "Doença restritiva",
+          "Obesidade/parede torácica",
+          "Ascite/pressão abdominal elevada (contexto)"
+        ],
+        limits:"Diferença entre estresse pulmonar e pressão do sistema requer contexto; idealmente correlacionar com gasometria e imagem."
+      },
+      {
+        id:"highR",
+        whenAny:["pt_high_peak_normal_plateau","ft_insp_decel_slow","ft_exp_not_zero"],
+        title:"Sugere resistência aumentada / constante de tempo elevada",
+        conf:"Média–Alta",
+        phys:"Pico desproporcional e expiração prolongada favorecem componente resistivo (via aérea, tubo, broncoespasmo) e risco de aprisionamento.",
+        hypos:[
+          "DPOC/asma/broncoespasmo",
+          "Tubo/circuito (dobras, secreção)",
+          "Secreções/condensado"
+        ],
+        limits:"Necessita integrar com ausculta, secreção, calibres e resposta clínica."
+      },
+      {
+        id:"airtrap",
+        whenAny:["ft_exp_not_zero","vt_incomplete_empty"],
+        title:"Aprisionamento aéreo / auto-PEEP provável",
+        conf:"Alta",
+        phys:"Fluxo expiratório não zera e volume não retorna ao baseline sugerem expiração incompleta e PEEP intrínseca.",
+        hypos:[
+          "Obstrução + FR alta",
+          "Tempo expiratório insuficiente",
+          "Drive elevado com ciclos frequentes"
+        ],
+        limits:"Quantificação formal (auto-PEEP) melhora precisão; correlacionar com assincronias por esforço inefetivo."
+      },
+      {
+        id:"leak",
+        whenAny:["vt_leak","pt_sawtooth"],
+        title:"Suspeita de vazamento/artefato",
+        conf:"Baixa–Média",
+        phys:"Discrepância de volumes e/ou serrilhado pode ocorrer por leak, condensado, secreção ou turbulência.",
+        hypos:[
+          "Vazamento em cuff/circuito/interface",
+          "Condensado no circuito",
+          "Secreção e turbulência"
+        ],
+        limits:"Confirmar com alarmes, inspeção do circuito e consistência do traçado."
+      },
+      {
+        id:"dp",
+        whenAny:["met_dp_high"],
+        title:"ΔP elevada como ponto de atenção em estratégia protetora",
+        conf:"Média",
+        phys:"ΔP (driving pressure) se associa a desfechos em SARA em estudos observacionais/meta-análises de dados; usada como alerta educacional.",
+        hypos:[
+          "Baixa complacência",
+          "VT relativamente alto para PBW",
+          "PEEP/pressões elevadas com estresse do sistema"
+        ],
+        limits:"Interpretar em conjunto com Pplat, VT/PBW, complacência e fenótipo (pulmão vs parede)."
       }
-      refreshUI();
-      populateStaticEvidence();
-      computeCompact();
-      buildModules();
-      updatePeepHighlight();
-      updateWeaningBox();
-    })();
+    ];
+
+    function runMecMotor(){
+      const ctx = document.getElementById("mecContext").value;
+      const picked = [...document.querySelectorAll("input.mec:checked")].map(x=>x.value);
+
+      if(picked.length===0){
+        document.getElementById("mecOut").textContent = "Selecione ao menos 1 achado e rode novamente.";
+        return;
+      }
+
+      let hits = MEC_RULES.filter(r => r.whenAny.some(w => picked.includes(w)));
+      // prioriza pela quantidade de match
+      hits.sort((a,b)=>{
+        const am = a.whenAny.filter(w=>picked.includes(w)).length;
+        const bm = b.whenAny.filter(w=>picked.includes(w)).length;
+        return bm - am;
+      });
+
+      let lines = [];
+      lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
+      lines.push(`Achados selecionados: ${picked.join(", ")}`);
+      lines.push("");
+
+      hits.slice(0,5).forEach((r, idx) => {
+        lines.push(`(${idx+1}) ${r.title} — Confiança: ${r.conf}`);
+        lines.push(`Fisiologia: ${r.phys}`);
+        lines.push(`Hipóteses: ${r.hypos.map(x=>"- "+x).join("\n")}`);
+        lines.push(`Limites: ${r.limits}`);
+        lines.push("");
+      });
+
+      if(picked.includes("met_asynchrony_suspect")){
+        lines.push("Observação: padrão sugere componente de assincronia — usar o módulo “Assincronias” para refinar hipóteses.");
+      }
+
+      document.getElementById("mecOut").textContent = lines.join("\n");
+    }
+
+    // ===================== Reset checkboxes =====================
+    function resetChecks(which){
+      const cls = which === "assin" ? "assin" : "mec";
+      document.querySelectorAll(`input.${cls}`).forEach(x=> x.checked = false);
+      if(which==="assin") document.getElementById("assinOut").textContent = "Selecione achados e clique em “Rodar motor”.";
+      if(which==="mec") document.getElementById("mecOut").textContent = "Selecione achados e clique em “Rodar motor”.";
+    }
+
+    // ===================== Init =====================
+    // Default: render none
+    renderCase();
   </script>
 </body>
 </html>
