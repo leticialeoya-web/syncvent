@@ -298,6 +298,10 @@
       line-height:1.45;
     }
     .note b{ color: var(--text); }
+    /* garante clique no botão do splash */
+#splash { pointer-events: auto; }
+#splash .splashCard { pointer-events: auto; position: relative; z-index: 10000; }
+#btnEnterSplash { pointer-events: auto; position: relative; z-index: 10001; }
   </style>
 </head>
 
@@ -421,7 +425,7 @@
           <div style="flex:1; min-width:240px;">
             <label>Ação</label>
             <div class="row">
-              <button class="btn primary" id="btnAssinRun" type="button">Rodar análise</button>
+             <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
               <button class="btn" id="btnAssinClear" type="button">Limpar</button>
             </div>
           </div>
@@ -754,6 +758,8 @@
     b.onclick = enterApp;
     b.addEventListener("touchend", function(e){ e.preventDefault(); enterApp(); }, {passive:false});
   }
+  // garante que enterApp esteja disponível para onclick
+window.enterApp = enterApp;
 })();
     window.enterApp = enterApp;
 
