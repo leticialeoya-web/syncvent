@@ -47,7 +47,7 @@
     #splash.hide{ opacity:0; pointer-events:none; }
 
     .splashCard{
-      width:min(900px, 92vw);
+      width:min(980px, 92vw);
       border:1px solid var(--line);
       border-radius: calc(var(--radius) + 10px);
       background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,.78));
@@ -308,13 +308,6 @@
       line-height:1.45;
     }
     .note b{ color: var(--text); }
-
-    /* Tabela simples */
-    table{ width:100%; border-collapse: collapse; }
-    th,td{ border-bottom:1px solid var(--line); padding:8px 10px; text-align:left; font-size:13px; }
-    th{ color: var(--muted); text-transform:uppercase; font-size:12px; letter-spacing:.2px; }
-    tr:last-child td{ border-bottom:none; }
-    .tableWrap{ border:1px solid var(--line); background: var(--panel2); border-radius: 14px; overflow:hidden; }
   </style>
 </head>
 
@@ -338,11 +331,11 @@
 
       <div class="splashBody">
         <p>
-          Ferramenta educacional para organizar raciocínio por cenários clínicos e por leitura de curvas.
+          Ferramenta educacional para organizar raciocínio por cenários e por leitura de curvas.
           Não substitui protocolos institucionais nem julgamento clínico.
         </p>
         <div class="pillRow">
-          <span class="pill">Casos com definições + cálculos</span>
+          <span class="pill">Casos (definição + pontos de atenção)</span>
           <span class="pill">Assincronias (compacto → expandido)</span>
           <span class="pill">Mecânica (compacto → expandido)</span>
           <span class="pill neutral">Evidências por caso</span>
@@ -400,6 +393,11 @@
               <option value="neuro">Neuromuscular</option>
               <option value="neurocrit">Neurocrítico (TCE, tumor, etc.)</option>
               <option value="trauma">Trauma</option>
+
+              <option value="tb">Tuberculose (insuficiência respiratória / UTI)</option>
+              <option value="pneumo">Pneumotórax (em PPV/VM)</option>
+              <option value="desmame">Desmame / liberação da VM</option>
+              <option value="imt">Treinamento muscular inspiratório na VM (sem alterar trigger)</option>
             </select>
           </div>
         </div>
@@ -742,16 +740,16 @@
         <details open>
           <summary>SARA (ARDS)</summary>
           <ul class="klist">
-            <li><b>AMIB/SBPT 2024 — Orientações Práticas em VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf">PDF</a></li>
-            <li><b>ESICM ARDS Guidelines 2023 (open access)</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/">PMC</a></li>
-            <li><b>Global Definition of ARDS (RCCM workshop)</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/">PMC</a> | <a target="_blank" href="https://www.atsjournals.org/doi/pdf/10.1164/rccm.202303-0558WS?download=true">PDF</a></li>
+            <li><b>AMIB/SBPT 2024 — Orientações Práticas em VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/18120131/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-17.pdf">PDF</a></li>
+            <li><b>ESICM ARDS Guidelines 2023</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/">PMC</a></li>
+            <li><b>Global Definition of ARDS</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/">PMC</a></li>
           </ul>
         </details>
 
         <details>
           <summary>Sepse / Choque séptico</summary>
           <ul class="klist">
-            <li><b>Surviving Sepsis Campaign 2021 (página)</b>: <a target="_blank" href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021">SCCM</a></li>
+            <li><b>Surviving Sepsis Campaign 2021</b>: <a target="_blank" href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021">SCCM</a></li>
             <li><b>SSC 2021 (PDF)</b>: <a target="_blank" href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf">PDF</a></li>
           </ul>
         </details>
@@ -760,7 +758,7 @@
           <summary>DPOC (obstrutivo)</summary>
           <ul class="klist">
             <li><b>GOLD 2025 Report</b>: <a target="_blank" href="https://goldcopd.org/2025-gold-report/">Página</a> | <a target="_blank" href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf">PDF</a></li>
-            <li><b>AMIB/SBPT 2024 — VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf">PDF</a></li>
+            <li><b>AMIB/SBPT 2024 — VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/18120131/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-17.pdf">PDF</a></li>
           </ul>
         </details>
 
@@ -768,14 +766,14 @@
           <summary>Obesidade / OHS</summary>
           <ul class="klist">
             <li><b>ERS Review 2025 — Ventilation in the obese</b>: <a target="_blank" href="https://publications.ersnet.org/content/errev/34/176/240190">ERRev</a> | <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12076159/">PMC</a></li>
-            <li><b>Respiratory Care 2021 — Transpulmonary pressure-guided LPV in obesity</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/33879565/">PubMed</a></li>
+            <li><b>Respiratory Care 2021 — transpulmonary pressure-guided LPV</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/33879565/">PubMed</a></li>
           </ul>
         </details>
 
         <details>
           <summary>Cardíaca (edema cardiogênico)</summary>
           <ul class="klist">
-            <li><b>Cochrane 2019 — NPPV/CPAP no edema cardiogênico</b>: <a target="_blank" href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD005351.pub4/full">Cochrane</a></li>
+            <li><b>Cochrane 2019 — NPPV/CPAP em edema cardiogênico</b>: <a target="_blank" href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD005351.pub4/full">Cochrane</a></li>
             <li><b>ERS/ATS 2017 — NIV em insuficiência respiratória aguda</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/50/2/1602426">ERJ</a></li>
           </ul>
         </details>
@@ -783,27 +781,56 @@
         <details>
           <summary>Neuromuscular</summary>
           <ul class="klist">
-            <li><b>CHEST Guideline 2023 — Respiratory management in NMD</b>: <a target="_blank" href="https://journal.chestnet.org/article/S0012-3692%2823%2900353-7/fulltext">Full text</a></li>
-            <li><b>ERS/ATS 2017 — NIV em insuficiência respiratória aguda</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/50/2/1602426">ERJ</a></li>
+            <li><b>CHEST 2023 — Respiratory management in NMD</b>: <a target="_blank" href="https://journal.chestnet.org/article/S0012-3692%2823%2900353-7/fulltext">Full text</a></li>
+            <li><b>ERS/ATS 2017 — NIV</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/50/2/1602426">ERJ</a></li>
           </ul>
         </details>
 
         <details>
           <summary>Neurocrítico / TCE</summary>
           <ul class="klist">
-            <li><b>ACS TQP — Best Practices Guidelines TBI (PDF)</b>: <a target="_blank" href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf">PDF</a></li>
+            <li><b>ACS TQP — Best Practices Guidelines TBI</b>: <a target="_blank" href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf">PDF</a></li>
           </ul>
         </details>
 
         <details>
-          <summary>HFNC (geral, quando aplicável)</summary>
+          <summary>Tuberculose (UTI / insuficiência respiratória)</summary>
           <ul class="klist">
-            <li><b>ERS 2022 — HFNC em insuficiência respiratória aguda</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/59/4/2101574">ERJ</a></li>
+            <li><b>Review 2022 — Pulmonary tuberculosis in intensive care setting</b>: <a target="_blank" href="https://www.journalpulmonology.org/en-pulmonary-tuberculosis-in-intensive-care-articulo-S2531043722000289">Journal of Pulmonology</a></li>
+            <li><b>Managing severe TB (2019) — revisão</b>: <a target="_blank" href="https://www.scielo.br/j/jbpneu/a/yDqxHvjthQDqrwWwSS6PmTS/?format=pdf&lang=en">PDF</a></li>
           </ul>
         </details>
 
+        <details>
+          <summary>Pneumotórax (em PPV/VM)</summary>
+          <ul class="klist">
+            <li><b>EAST — Occult pneumothorax & PPV</b>: <a target="_blank" href="https://www.east.org/education-resources/practice-management-guidelines/details/hemothorax-and-occult-pneumothorax%2C-management-of">Guideline</a></li>
+            <li><b>JAMA Surgery 2022 — chest tube management (inclui PPV)</b>: <a target="_blank" href="https://jamanetwork.com/journals/jamasurgery/fullarticle/2788397">Artigo</a></li>
+            <li><b>BJA Education — Air leaks, pneumothorax, chest drains</b>: <a target="_blank" href="https://www.bjaed.org/article/S1743-1816%2817%2930454-7/fulltext">Full text</a></li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Desmame / liberação da VM</summary>
+          <ul class="klist">
+            <li><b>ATS/CHEST 2017 — Liberation from Mechanical Ventilation (PDF)</b>: <a target="_blank" href="https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf">PDF</a></li>
+            <li><b>PubMed 2017 — ATS/CHEST guideline</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/27762595/">PubMed</a></li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Treinamento muscular inspiratório na VM (sem alterar trigger)</summary>
+          <ul class="klist">
+            <li><b>Systematic review 2025 — IMT e desmame (até Jun/2023)</b>: <a target="_blank" href="https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2024.1503678/full">Frontiers</a></li>
+            <li><b>Systematic review & meta-analysis 2025 — pacientes críticos crônicos</b>: <a target="_blank" href="https://journal.einstein.br/article/inspiratory-muscle-training-for-chronic-critically-ill-patients-a-systematic-review-and-meta-analysis-of-randomized-controlled-trials/">Einstein</a></li>
+          </ul>
+          <div class="note" style="margin-top:10px;">
+            <b>Nota de escopo:</b> este caso aborda IMT como intervenção separada (dispositivo/carga inspiratória). Não inclui “treino por alteração de trigger”.
+          </div>
+        </details>
+
         <div class="footer">
-          Observação: as evidências são listadas como fontes para estudo. O app não fornece conduta.
+          Observação: as evidências são fontes para estudo. O app não fornece conduta.
         </div>
       </div>
     </section>
@@ -874,15 +901,15 @@
     const CASES = {
       sara: {
         title: "SARA (ARDS) — definição (Global) + ventilação protetora (educacional)",
-        lead: "Inclui triagem de hipoxemia pela Global Definition (P/F ≤300 ou S/F ≤315 com SpO₂≤97%; HFNO ≥30 L/min) + calculadoras de VT/PBW e ΔP.",
+        lead: "Triagem de hipoxemia compatível com SARA (Global) + calculadoras educacionais de VT/PBW e ΔP.",
         body: `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Definidores (educacional)</h2>
+              <h2>Definições (educacional)</h2>
               <ul class="klist">
-                <li><b>Hipoxemia compatível (Global Definition):</b> PaO₂/FiO₂ ≤ 300, ou SpO₂/FiO₂ ≤ 315 quando SpO₂ ≤ 97%.</li>
-                <li><b>HFNO:</b> considerado quando fluxo ≥ 30 L/min (para aplicação do critério Global).</li>
-                <li><b>Outros critérios (fora da calculadora):</b> início agudo e achados de imagem (opacidades bilaterais) conforme diretrizes/consensos.</li>
+                <li><b>Hipoxemia compatível (Global):</b> PaO₂/FiO₂ ≤ 300, ou SpO₂/FiO₂ ≤ 315 quando SpO₂ ≤ 97%.</li>
+                <li><b>HFNO:</b> considerado no critério Global quando fluxo ≥ 30 L/min.</li>
+                <li><b>Outros critérios:</b> início agudo e achados de imagem conforme diretrizes/consensos.</li>
               </ul>
 
               <div class="hr"></div>
@@ -934,7 +961,7 @@
 
               <div class="hr"></div>
 
-              <label>Atalhos (após preenchimento)</label>
+              <label>Atalhos</label>
               <div class="row">
                 <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
                 <span class="chip">S/F <b class="mono" id="sfQuick">—</b></span>
@@ -1002,41 +1029,21 @@
                 <h3>Resultado protetora</h3>
                 <div class="txt" id="protOut">Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).</div>
               </div>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Pontos de atenção (educacional)</summary>
-                <ul class="klist">
-                  <li><b>ΔP</b> é usado como “ponto de atenção” em ventilação protetora (exemplo de referência frequente: ~15 cmH₂O).</li>
-                  <li><b>Curvas:</b> olhar demanda &gt; entrega, ciclos colados, expiração incompleta, esforço sem disparo.</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Links (SARA)</summary>
-                <ul class="klist">
-                  <li><b>AMIB/SBPT 2024</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf">PDF</a></li>
-                  <li><b>ESICM 2023</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/">PMC</a></li>
-                  <li><b>Global Definition</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/">PMC</a></li>
-                </ul>
-              </details>
             </div>
           </div>
         `
       },
 
       sepse: {
-        title: "Sepse / Choque séptico — definições e pontos de atenção ventilatórios (educacional)",
-        lead: "Foco em interação VM–hemodinâmica, drive elevado e risco de SARA associado à sepse.",
+        title: "Sepse / Choque séptico — definição e pontos de atenção ventilatórios (educacional)",
+        lead: "Foco em drive elevado, interação VM–hemodinâmica e risco de SARA associado à sepse.",
         body: `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
               <h2>Definições (educacional)</h2>
               <ul class="klist">
-                <li><b>Sepse:</b> disfunção orgânica ameaçadora à vida em resposta desregulada à infecção (Sepsis-3).</li>
-                <li><b>Choque séptico:</b> necessidade de vasopressor para manter MAP ≥ 65 e lactato &gt; 2 mmol/L na ausência de hipovolemia (Sepsis-3).</li>
-                <li><b>Sepse-induced ARDS:</b> usar bloco SARA para triagem de hipoxemia (Global).</li>
+                <li><b>Sepse:</b> disfunção orgânica ameaçadora à vida em resposta desregulada à infecção.</li>
+                <li><b>Choque séptico:</b> vasopressor para MAP ≥ 65 e lactato &gt; 2 mmol/L na ausência de hipovolemia.</li>
               </ul>
 
               <div class="hr"></div>
@@ -1044,17 +1051,9 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Drive alto:</b> aumenta demanda, esforço e risco de assincronias.</li>
-                  <li><b>Curvas:</b> demanda &gt; entrega (concavidade), ciclos colados, expiração incompleta, esforço sem disparo.</li>
-                  <li><b>VM–hemodinâmica:</b> reavaliar resposta clínica a mudanças ventilatórias (tendência).</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>SSC 2021 (página)</b>: <a target="_blank" href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021">SCCM</a></li>
-                  <li><b>SSC 2021 (PDF)</b>: <a target="_blank" href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf">PDF</a></li>
+                  <li><b>Drive alto:</b> aumenta demanda e risco de assincronias (use Assincronias).</li>
+                  <li><b>Curvas:</b> concavidade (demanda &gt; entrega), ciclos colados, expiração incompleta, esforço sem disparo.</li>
+                  <li><b>Hemodinâmica:</b> reavaliar resposta clínica global após mudanças ventilatórias (tendência).</li>
                 </ul>
               </details>
             </div>
@@ -1063,7 +1062,7 @@
               <h2>Checklist por curvas</h2>
               <ul class="klist">
                 <li><b>Pressão:</b> oscilações por esforço, ciclos colados.</li>
-                <li><b>Fluxo:</b> concavidade (demanda &gt; entrega), expiração zera?</li>
+                <li><b>Fluxo:</b> concavidade, expiração zera?</li>
                 <li><b>Volume:</b> empilhamento / baseline não retorna.</li>
               </ul>
             </div>
@@ -1077,10 +1076,10 @@
         body: `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>O que define o problema (educacional)</h2>
+              <h2>Definição (educacional)</h2>
               <ul class="klist">
                 <li><b>Fenótipo obstrutivo:</b> constante de tempo elevada → esvaziamento lento → risco de air-trapping/auto-PEEP.</li>
-                <li><b>Interpretação por curvas:</b> principal “red flag” é fluxo expiratório não zerar.</li>
+                <li><b>Curvas:</b> principal achado é fluxo expiratório não zerar.</li>
               </ul>
 
               <div class="hr"></div>
@@ -1089,16 +1088,8 @@
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
                   <li><b>Expiração incompleta:</b> fluxo não zera antes do próximo ciclo.</li>
-                  <li><b>Esforço sem disparo:</b> deflexões em expiração sem iniciar ciclo (auto-PEEP + fraqueza).</li>
-                  <li><b>Resistência:</b> pico desproporcional (quando comparável) sugere componente resistivo.</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>GOLD 2025</b>: <a target="_blank" href="https://goldcopd.org/2025-gold-report/">Página</a> | <a target="_blank" href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf">PDF</a></li>
-                  <li><b>AMIB/SBPT 2024 — VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf">PDF</a></li>
+                  <li><b>Esforço sem disparo:</b> deflexões em expiração sem iniciar ciclo.</li>
+                  <li><b>Resistência:</b> pico desproporcional sugere componente resistivo (quando comparável).</li>
                 </ul>
               </details>
             </div>
@@ -1124,7 +1115,7 @@
               <h2>Definição (educacional)</h2>
               <ul class="klist">
                 <li><b>Restrição / baixa complacência:</b> para volumes equivalentes, maior pressão é necessária (contexto-dependente).</li>
-                <li><b>Interpretação por curvas:</b> pressão sustentada alta e “enchimento limitado” podem ocorrer (modo-dependente).</li>
+                <li><b>Curvas:</b> pressão sustentada alta pode ocorrer (modo-dependente).</li>
               </ul>
 
               <div class="hr"></div>
@@ -1132,16 +1123,8 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Baixa complacência:</b> integrar pressões, volumes e conforto.</li>
+                  <li><b>Integrar</b> pressões, volumes e conforto (modo, esforço e sedação influenciam).</li>
                   <li><b>Se hipoxemia aguda:</b> avaliar compatibilidade com SARA (usar bloco SARA).</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>ESICM ARDS 2023</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/">PMC</a></li>
-                  <li><b>AMIB/SBPT 2024 — VM</b>: <a target="_blank" href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf">PDF</a></li>
                 </ul>
               </details>
             </div>
@@ -1160,14 +1143,14 @@
 
       cardiaca: {
         title: "Cardíaca (edema cardiogênico) — definição e suporte ventilatório (educacional)",
-        lead: "Foco em VNI/CPAP como suporte em edema cardiogênico e integração hemodinâmica.",
+        lead: "Integração hemodinâmica e leitura de desconforto/sincronia por curvas.",
         body: `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
               <h2>Definição (educacional)</h2>
               <ul class="klist">
                 <li><b>Edema cardiogênico:</b> insuficiência respiratória por congestão/pressões de enchimento elevadas.</li>
-                <li><b>Curvas:</b> desconforto e assincronias podem coexistir; usar módulo de Assincronias para organizar hipóteses.</li>
+                <li><b>Curvas:</b> desconforto e assincronias podem coexistir; usar Assincronias para organizar hipóteses.</li>
               </ul>
 
               <div class="hr"></div>
@@ -1175,16 +1158,8 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Integração hemodinâmica:</b> reavaliar tendência clínica após mudanças de suporte.</li>
-                  <li><b>Curvas:</b> esforço e ciclos colados aumentam variabilidade e desconforto.</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>Cochrane 2019 — NPPV/CPAP em edema cardiogênico</b>: <a target="_blank" href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD005351.pub4/full">Cochrane</a></li>
-                  <li><b>ERS/ATS 2017 — NIV em insuficiência respiratória aguda</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/50/2/1602426">ERJ</a></li>
+                  <li><b>Hemodinâmica:</b> reavaliar tendência clínica global após mudanças de suporte.</li>
+                  <li><b>Curvas:</b> esforço e ciclos colados aumentam variabilidade.</li>
                 </ul>
               </details>
             </div>
@@ -1194,7 +1169,7 @@
               <ul class="klist">
                 <li><b>Fluxo:</b> demanda &gt; entrega? (concavidade)</li>
                 <li><b>Pressão:</b> oscilações por esforço / ciclos colados.</li>
-                <li><b>Volume:</b> empilhamento em caso de ciclos muito próximos.</li>
+                <li><b>Volume:</b> empilhamento em ciclos muito próximos.</li>
               </ul>
             </div>
           </div>
@@ -1218,16 +1193,8 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Curvas:</b> sinais de colapso/atelectasia (modo-dependente), esforço elevado, expiração incompleta se obstrução coexistente.</li>
+                  <li><b>Curvas:</b> sinais de colapso/atelectasia (modo-dependente), esforço elevado.</li>
                   <li><b>Mecânica:</b> usar contexto “obesidade” no motor de Mecânica para interpretação expandida.</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>ERS Review 2025 — Ventilation in the obese</b>: <a target="_blank" href="https://publications.ersnet.org/content/errev/34/176/240190">ERRev</a> | <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12076159/">PMC</a></li>
-                  <li><b>Respiratory Care 2021 — transpulmonary pressure-guided LPV</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/33879565/">PubMed</a></li>
                 </ul>
               </details>
             </div>
@@ -1265,14 +1232,6 @@
                   <li><b>Assincronias:</b> usar motor de Assincronias para hipóteses e diferenciais.</li>
                 </ul>
               </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>CHEST 2023 — Respiratory management in NMD</b>: <a target="_blank" href="https://journal.chestnet.org/article/S0012-3692%2823%2900353-7/fulltext">Full text</a></li>
-                  <li><b>ERS/ATS 2017 — NIV em insuficiência respiratória aguda</b>: <a target="_blank" href="https://publications.ersnet.org/content/erj/50/2/1602426">ERJ</a></li>
-                </ul>
-              </details>
             </div>
 
             <div class="card" style="box-shadow:none; background: var(--panel2);">
@@ -1288,7 +1247,7 @@
 
       neurocrit: {
         title: "Neurocrítico / TCE — estabilidade ventilatória (educacional)",
-        lead: "Evitar oscilações por assincronia; suporte depende do protocolo local e metas neurocríticas.",
+        lead: "Evitar oscilações por assincronia; metas dependem do protocolo local e metas neurocríticas.",
         body: `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
@@ -1305,13 +1264,6 @@
                 <ul class="klist">
                   <li><b>Assincronias:</b> identificar e reduzir variabilidade (módulo Assincronias).</li>
                   <li><b>Mecânica:</b> diferenciar resistência vs complacência vs artefato (módulo Mecânica).</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>ACS TQP — Best Practices Guidelines TBI</b>: <a target="_blank" href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf">PDF</a></li>
                 </ul>
               </details>
             </div>
@@ -1344,15 +1296,9 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Se hipoxemia aguda:</b> avaliar compatibilidade com SARA (usar bloco SARA).</li>
+                  <li><b>Se hipoxemia aguda:</b> avaliar compatibilidade com SARA (bloco SARA).</li>
                   <li><b>Se padrão obstrutivo:</b> usar bloco DPOC (expiração incompleta/auto-PEEP).</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li><b>ACS TQP — Best Practices Guidelines TBI</b> (quando TCE associado): <a target="_blank" href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf">PDF</a></li>
+                  <li><b>Se pneumotórax:</b> usar bloco Pneumotórax (PPV/VM).</li>
                 </ul>
               </details>
             </div>
@@ -1363,6 +1309,185 @@
                 <li><b>Fluxo:</b> expiração zera? concavidade?</li>
                 <li><b>Volume:</b> baseline retorna? empilhamento?</li>
                 <li><b>Assincronias:</b> usar motor por achados observáveis.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      tb: {
+        title: "Tuberculose — insuficiência respiratória / UTI (educacional)",
+        lead: "Foco em alta gravidade, risco de hipoxemia grave/ARDS, e pontos de atenção por curvas (demanda alta, assincronias, mecânica).",
+        body: `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definições (educacional)</h2>
+              <ul class="klist">
+                <li><b>TB na UTI:</b> geralmente associada a quadros graves (falência respiratória, sepse, complicações).</li>
+                <li><b>TB-ARDS:</b> pode ocorrer; se hipoxemia relevante, usar bloco SARA para triagem de hipoxemia compatível.</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção ventilatória (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Curvas:</b> demanda &gt; entrega, ciclos colados, expiração incompleta (se obstrução coexistir), esforço sem disparo.</li>
+                  <li><b>Integração:</b> variabilidade ventilatória pode refletir desconforto/dor/febre/acidose.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Links (TB/UTI)</summary>
+                <ul class="klist">
+                  <li><b>Review 2022 — TB em UTI</b>: <a target="_blank" href="https://www.journalpulmonology.org/en-pulmonary-tuberculosis-in-intensive-care-articulo-S2531043722000289">Journal of Pulmonology</a></li>
+                  <li><b>Review 2019 — severe TB</b>: <a target="_blank" href="https://www.scielo.br/j/jbpneu/a/yDqxHvjthQDqrwWwSS6PmTS/?format=pdf&lang=en">PDF</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas</h2>
+              <ul class="klist">
+                <li><b>Pressão:</b> oscilações por esforço.</li>
+                <li><b>Fluxo:</b> concavidade (demanda &gt; entrega), expiração zera?</li>
+                <li><b>Volume:</b> empilhamento e baseline não retorna (quando houver ciclos colados/expiração curta).</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      pneumo: {
+        title: "Pneumotórax (em PPV/VM) — leitura e pontos de atenção (educacional)",
+        lead: "Foco em risco de progressão sob pressão positiva, vigilância clínica e integração com diretrizes de trauma/chest tubes.",
+        body: `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definições (educacional)</h2>
+              <ul class="klist">
+                <li><b>Pneumotórax + PPV:</b> risco maior de piora/tensão; prioridade é reconhecimento precoce e manejo conforme equipe/protocolo.</li>
+                <li><b>Curvas:</b> alterações súbitas de mecânica podem aparecer como mudança abrupta de pressões/volumes (interpretar clinicamente).</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção por ventilação (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Mecânica:</b> mudança abrupta em pressão/volume/fluxo sugere alteração de complacência/resistência/air leak (contexto).</li>
+                  <li><b>Alarmes:</b> integração com alarmes e avaliação clínica é mandatória.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Links (guidelines/overview)</summary>
+                <ul class="klist">
+                  <li><b>EAST — occult pneumothorax & PPV</b>: <a target="_blank" href="https://www.east.org/education-resources/practice-management-guidelines/details/hemothorax-and-occult-pneumothorax%2C-management-of">Guideline</a></li>
+                  <li><b>JAMA Surgery 2022 — chest tube management</b>: <a target="_blank" href="https://jamanetwork.com/journals/jamasurgery/fullarticle/2788397">Artigo</a></li>
+                  <li><b>BJA Education — air leaks/pneumothorax/chest drains</b>: <a target="_blank" href="https://www.bjaed.org/article/S1743-1816%2817%2930454-7/fulltext">Full text</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas</h2>
+              <ul class="klist">
+                <li><b>Comparar tendências:</b> antes vs depois do evento.</li>
+                <li><b>Se houver serrilhado:</b> considerar air leak/artefato/condensado (contexto).</li>
+                <li><b>Usar Mecânica:</b> para hipóteses estruturadas (compacto e expandido).</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      desmame: {
+        title: "Desmame / liberação da VM — estrutura do processo (educacional)",
+        lead: "Foco em prontidão, testes espontâneos e padronização de processo (sem prescrever ajustes).",
+        body: `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definições (educacional)</h2>
+              <ul class="klist">
+                <li><b>Desmame/liberação:</b> processo de transição para reduzir e retirar suporte ventilatório, com critérios e avaliação seriada.</li>
+                <li><b>Curvas:</b> reconhecer esforço excessivo, assincronias e expiração incompleta durante tentativa de respiração espontânea/baixo suporte.</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Protocolos de liberação:</b> padronização pode reduzir tempo em VM (conforme diretriz).</li>
+                  <li><b>Interação com SAT/SBT:</b> quando aplicável no serviço, integrar avaliação neurológica e ventilatória.</li>
+                  <li><b>Assincronias:</b> durante baixo suporte, ciclo colado e esforço sem disparo são relevantes.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Links (weaning/liberação)</summary>
+                <ul class="klist">
+                  <li><b>ATS/CHEST 2017 — Liberation from Mechanical Ventilation (PDF)</b>: <a target="_blank" href="https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf">PDF</a></li>
+                  <li><b>PubMed 2017</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/27762595/">PubMed</a></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas no desmame</h2>
+              <ul class="klist">
+                <li><b>Pressão/fluxo:</b> concavidades e esforço persistente sugerem demanda alta.</li>
+                <li><b>Expiração:</b> fluxo zera? se não, pensar em air-trapping.</li>
+                <li><b>Assincronias:</b> usar motor para estruturar hipóteses e limites.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      imt: {
+        title: "Treinamento muscular inspiratório na VM (IMT) — sem alterar trigger (educacional)",
+        lead: "Foco em IMT como intervenção separada (carga inspiratória externa/dispositivo) e evidência por revisões; não inclui treinamento por alteração do trigger.",
+        body: `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Definição (educacional)</h2>
+              <ul class="klist">
+                <li><b>IMT na VM:</b> treino específico de musculatura inspiratória, geralmente por carga inspiratória controlada (dispositivo/estratégia dedicada).</li>
+                <li><b>Não inclui:</b> “treino por alteração de trigger” (excluído por escopo).</li>
+              </ul>
+
+              <div class="hr"></div>
+
+              <details open>
+                <summary>Pontos de atenção (educacional)</summary>
+                <ul class="klist">
+                  <li><b>Seleção:</b> integrar nível de consciência, cooperação, estabilidade e tolerância ao esforço (avaliado pela equipe).</li>
+                  <li><b>Curvas:</b> observar aumento de esforço, assincronias e sinais de fadiga durante o treino (interpretação clínica obrigatória).</li>
+                  <li><b>Desfechos:</b> literatura sugere melhora de força inspiratória; impacto em duração de VM/desmame varia e depende do contexto.</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Evidências (links)</summary>
+                <ul class="klist">
+                  <li><b>Systematic review 2025 — IMT e liberação/desmame</b>: <a target="_blank" href="https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2024.1503678/full">Frontiers</a></li>
+                  <li><b>Systematic review & meta-analysis 2025 — pacientes críticos crônicos</b>: <a target="_blank" href="https://journal.einstein.br/article/inspiratory-muscle-training-for-chronic-critically-ill-patients-a-systematic-review-and-meta-analysis-of-randomized-controlled-trials/">Einstein</a></li>
+                </ul>
+              </details>
+
+              <div class="note" style="margin-top:10px;">
+                <b>Nota:</b> este módulo é educacional e descreve IMT como conceito/interpretação por curvas. Não entrega protocolo prescritivo.
+              </div>
+            </div>
+
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Checklist por curvas durante IMT</h2>
+              <ul class="klist">
+                <li><b>Demanda &gt; entrega:</b> concavidade e aumento de esforço.</li>
+                <li><b>Ciclos colados:</b> podem indicar esforço elevado/tempo neural longo.</li>
+                <li><b>Esforço sem disparo:</b> pode ocorrer se limiar/auto-PEEP + fraqueza coexistirem.</li>
               </ul>
             </div>
           </div>
@@ -1428,7 +1553,6 @@
       if(support) lines.push(`Suporte: ${support.toUpperCase()}`);
       if(support==="hfno" && Number.isFinite(hfflow)) lines.push(`HFNO fluxo: ${hfflow.toFixed(0)} L/min`);
 
-      // critério hipoxemia (Global)
       let hypoxemia = false;
       let why = [];
 
@@ -1437,7 +1561,6 @@
         hypoxemia = true; why.push("S/F ≤ 315 com SpO₂ ≤ 97%");
       }
 
-      // HFNO: precisa >=30 para “entrar” no critério Global de suporte
       let supportOk = true;
       if(support==="hfno"){
         supportOk = (Number.isFinite(hfflow) && hfflow >= 30);
@@ -1484,7 +1607,6 @@
 
       let lines = [];
 
-      // VT/PBW
       if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
         const vtkg = vt / pbw;
         document.getElementById("vtkgQuick").textContent = vtkg.toFixed(1) + " mL/kg";
@@ -1493,7 +1615,6 @@
         document.getElementById("vtkgQuick").textContent = "—";
       }
 
-      // ΔP
       let dp = NaN;
       if(Number.isFinite(pplat) && Number.isFinite(peep)){
         dp = pplat - peep;
@@ -1527,7 +1648,7 @@
             "O paciente gera esforço, mas não atinge o limiar de trigger (por limiar + auto-PEEP + fraqueza).",
             "Em obstrutivo, parte do esforço é “gasto” para vencer PEEP intrínseca antes de gerar fluxo/pressão mensurável."
           ],
-          commonIn: ["DPOC/asma com expiração incompleta", "Neuromuscular/fadiga", "Suporte baixo com alta demanda"],
+          commonIn: ["DPOC/asma com expiração incompleta", "Neuromuscular/fadiga", "Baixo suporte com alta demanda"],
           pitfalls: ["Ruído/escala simulando deflexões", "Movimento/cardiogênico simulando ‘notches’", "Mandatórias confundidas com esforço"],
           howDifferent: [
             "Diferenciar de auto-disparo: no auto-disparo há ciclo sem esforço; aqui há esforço sem ciclo.",
@@ -1544,12 +1665,12 @@
         expanded: {
           why: [
             "Se o ventilador encerra a inspiração e o paciente mantém esforço, pode ocorrer novo disparo imediato.",
-            "Empilhamento de volume indica pouca/nenhuma expiração entre ciclos."
+            "Empilhamento indica pouca/nenhuma expiração entre ciclos."
           ],
           commonIn: ["SARA com drive alto", "Dor/ansiedade", "Assistidos com término precoce"],
           pitfalls: ["Auto-disparo por vazamento/condensado", "Trigger instável por artefatos"],
           howDifferent: [
-            "Confirmar em fluxo: ausência de expiração entre ciclos reforça duplo disparo/empilhamento.",
+            "Confirmar em fluxo: ausência de expiração entre ciclos reforça empilhamento.",
             "Confirmar em volume: baseline não retorna."
           ]
         }
@@ -1584,7 +1705,7 @@
             "Critério de término encerra a inspiração antes do tempo neural do paciente.",
             "Pode levar a esforço na expiração imediata e instabilidade do padrão."
           ],
-          commonIn: ["PSV com critério de ciclagem ‘alto’", "Drive elevado", "Ti neural prolongado"],
+          commonIn: ["PSV com término precoce", "Drive elevado", "Ti neural prolongado"],
           pitfalls: ["Pode coexistir com duplo disparo; não são sinônimos.", "Interpretação depende do modo"],
           howDifferent: [
             "Procurar esforço pós-ciclagem (início da expiração).",
@@ -1607,7 +1728,7 @@
           pitfalls: ["Confundir com fluxo insuficiente (momento é diferente)"],
           howDifferent: [
             "No término tardio, o conflito é no fim da inspiração.",
-            "No término precoce, o conflito aparece logo após ciclar para expiração."
+            "No término precoce, o conflito aparece logo após ciclar."
           ]
         }
       },
@@ -1623,7 +1744,7 @@
             "Condensado e vibração podem produzir disparos repetitivos."
           ],
           commonIn: ["NIV", "Circuito com condensado", "Leak em cuff/circuito"],
-          pitfalls: ["Confundir com drive alto: aqui pode não haver esforço clínico proporcional."],
+          pitfalls: ["Confundir com drive alto: aqui pode não haver esforço proporcional."],
           howDifferent: [
             "Ciclos muito regulares e desacoplados da clínica favorecem auto-disparo.",
             "Checar coexistência de discrepância de volumes (leak)."
@@ -1660,7 +1781,6 @@
       const ctx = document.getElementById("assinContext").value;
       const picked = [...document.querySelectorAll("input.assin:checked")].map(x=>x.value);
 
-      // Sempre reseta expandido
       document.getElementById("assinExpand").style.display = "none";
       document.getElementById("btnAssinExpand").style.display = "none";
       document.getElementById("assinExpandText").innerHTML = "";
@@ -1672,7 +1792,6 @@
 
       const hits = ASSIN_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
 
-      // Compacto
       let lines = [];
       lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
       lines.push(`Achados: ${picked.join(", ")}`);
@@ -1688,7 +1807,6 @@
 
       document.getElementById("assinOut").textContent = lines.join("\n");
 
-      // Expandido (habilita só depois da análise compacta)
       const expandedHTML = buildAssinExpandedHTML(ctx, picked, hits.slice(0,3));
       document.getElementById("assinExpandText").innerHTML = expandedHTML;
       document.getElementById("btnAssinExpand").style.display = "inline-block";
@@ -1722,7 +1840,7 @@
         html += `<div style="height:10px;"></div>`;
       });
 
-      html += `<div><b>Nota:</b> o expandido é aprofundamento didático do achado observado (não é conduta).</div>`;
+      html += `<div><b>Nota:</b> expandido = aprofundamento didático do achado (não é conduta).</div>`;
       return html;
     }
 
@@ -1744,12 +1862,8 @@
               "Pressões elevadas podem refletir parede torácica; separar ‘sistema’ de ‘pulmão’ exige contexto.",
               "Revisar sinais de colapso/atelectasia e esforço."
             ],
-            restritiva:[
-              "Padrões de baixa complacência podem ser persistentes; avaliar tendência e integração com demanda.",
-              "Interpretar sempre com modo ventilatório."
-            ],
             geral:[
-              "Sem platô, a leitura é menos específica. Integrar com fluxo e volume."
+              "Sem platô, a leitura é menos específica; integrar com fluxo e volume."
             ]
           },
           pitfalls:[
@@ -1855,7 +1969,6 @@
       const ctx = document.getElementById("mecContext").value;
       const picked = [...document.querySelectorAll("input.mec:checked")].map(x=>x.value);
 
-      // Sempre reseta expandido
       document.getElementById("mecExpand").style.display = "none";
       document.getElementById("btnMecExpand").style.display = "none";
       document.getElementById("mecExpandText").innerHTML = "";
@@ -1867,7 +1980,6 @@
 
       const hits = MEC_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
 
-      // Compacto
       let lines = [];
       lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
       lines.push(`Achados: ${picked.join(", ")}`);
@@ -1887,7 +1999,6 @@
 
       document.getElementById("mecOut").textContent = lines.join("\n");
 
-      // Expandido (habilita só depois da análise compacta)
       const expandedHTML = buildMecExpandedHTML(ctx, picked, hits.slice(0,3));
       document.getElementById("mecExpandText").innerHTML = expandedHTML;
       document.getElementById("btnMecExpand").style.display = "inline-block";
@@ -1929,7 +2040,7 @@
         html += `<div style="height:10px;"></div>`;
       });
 
-      html += `<div><b>Nota:</b> o expandido é aprofundamento didático (não é conduta).</div>`;
+      html += `<div><b>Nota:</b> expandido = aprofundamento didático (não é conduta).</div>`;
       return html;
     }
 
