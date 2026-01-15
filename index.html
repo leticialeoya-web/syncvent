@@ -7,25 +7,6 @@
 
   <style>
     :root{
-      --bg:#0b1220;
-      --panel:#0f1a30;
-      --panel2:#0b1730;
-      --text:#eef2ff;
-      --muted:#b9c2d3;
-      --line:#243455;
-      --blue:#2563eb;
-      --blue2:#1d4ed8;
-      --good:#16a34a;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --chip:#142244;
-      --shadow: 0 18px 45px rgba(0,0,0,.35);
-      --radius:16px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    /* Tema claro (inversão de cores) */
-    body.light{
       --bg:#f6f8ff;
       --panel:#ffffff;
       --panel2:#f2f5ff;
@@ -33,7 +14,15 @@
       --muted:#41516b;
       --line:#d9e2f3;
       --chip:#eef3ff;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
       --shadow: 0 18px 45px rgba(18,36,80,.12);
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
     html,body{ height:100%; }
@@ -48,8 +37,8 @@
     #splash{
       position: fixed;
       inset: 0;
-      background: radial-gradient(800px 500px at 20% 10%, rgba(37,99,235,.30), transparent 60%),
-                  radial-gradient(900px 600px at 85% 20%, rgba(37,99,235,.18), transparent 55%),
+      background: radial-gradient(800px 500px at 20% 10%, rgba(37,99,235,.20), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(37,99,235,.12), transparent 55%),
                   var(--bg);
       display:flex;
       align-items:center;
@@ -58,35 +47,34 @@
       transition: opacity .35s ease;
     }
     #splash.hide{ opacity:0; pointer-events:none; }
+
     .splashCard{
       width:min(860px, 92vw);
       border:1px solid var(--line);
       border-radius: calc(var(--radius) + 10px);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,.70));
       box-shadow: var(--shadow);
       padding: 26px 22px;
     }
     .splashTop{
       display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
     }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-    }
+    .brand{ display:flex; gap:12px; align-items:center; }
     .logo{
       width:42px; height:42px; border-radius:12px;
       background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.35));
-      box-shadow: 0 10px 22px rgba(37,99,235,.25);
+      box-shadow: 0 10px 22px rgba(37,99,235,.18);
     }
     .brand h1{ margin:0; font-size:22px; letter-spacing:.2px; }
     .brand .tag{ margin-top:2px; color: var(--muted); font-size:13px; }
-    .splashBtns{ display:flex; gap:10px; flex-wrap:wrap; }
+
     .btn{
       border:1px solid var(--line);
       background: var(--panel);
       color: var(--text);
       border-radius: 12px;
       padding: 10px 12px;
-      font-weight: 700;
+      font-weight: 900;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease, border .15s ease;
       user-select:none;
@@ -96,11 +84,9 @@
     .btn.primary{
       background: linear-gradient(135deg, var(--blue), var(--blue2));
       border-color: rgba(37,99,235,.65);
+      color:#fff;
     }
-    .btn.ghost{
-      background: transparent;
-      border-color: var(--line);
-    }
+
     .splashBody{
       margin-top:14px;
       border-top:1px solid var(--line);
@@ -112,33 +98,33 @@
     .splashBody p{ margin:0; color: var(--muted); line-height:1.5; font-size:14px; }
     .pillRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:flex-start; }
     .pill{
-      background: rgba(37,99,235,.14);
-      border:1px solid rgba(37,99,235,.35);
+      background: rgba(37,99,235,.10);
+      border:1px solid rgba(37,99,235,.28);
       color: var(--text);
       font-size:12px;
       padding: 6px 10px;
       border-radius: 999px;
-      font-weight: 700;
+      font-weight: 900;
       white-space: nowrap;
     }
     .pill.neutral{
       background: var(--chip);
       border-color: var(--line);
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 900;
     }
     @media (max-width: 860px){
       .splashBody{ grid-template-columns: 1fr; }
       .pillRow{ justify-content:flex-start; }
     }
 
-    /* Layout principal */
+    /* Header */
     header{
       position: sticky;
       top:0;
       z-index: 50;
       backdrop-filter: blur(10px);
-      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
       border-bottom: 1px solid var(--line);
     }
     .wrap{ width:min(1180px, 94vw); margin: 0 auto; }
@@ -148,34 +134,36 @@
       gap: 12px;
       flex-wrap:wrap;
     }
-    .leftTop{
-      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    }
+    .leftTop{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
     .miniLogo{
       width:28px; height:28px; border-radius:10px;
       background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.25));
-      box-shadow: 0 8px 18px rgba(37,99,235,.22);
+      box-shadow: 0 8px 18px rgba(37,99,235,.14);
     }
     .titleBlock{ display:flex; flex-direction:column; line-height:1.1; }
     .titleBlock b{ font-size: 14px; letter-spacing:.2px;}
     .titleBlock span{ font-size: 12px; color: var(--muted); margin-top:3px;}
-    nav{
-      display:flex; gap: 8px; flex-wrap:wrap; align-items:center;
-    }
+
+    nav{ display:flex; gap: 8px; flex-wrap:wrap; align-items:center; }
     .tab{
       border:1px solid var(--line);
       background: var(--panel);
       color: var(--text);
       border-radius: 999px;
       padding: 8px 12px;
-      font-weight: 800;
+      font-weight: 1000;
       cursor:pointer;
       font-size: 13px;
     }
     .tab.active{
-      background: rgba(37,99,235,.16);
-      border-color: rgba(37,99,235,.55);
+      background: rgba(37,99,235,.10);
+      border-color: rgba(37,99,235,.40);
     }
+    .tab.casos{
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
     .rightTop{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .toggle{
       border:1px solid var(--line);
@@ -183,12 +171,13 @@
       border-radius: 999px;
       padding: 7px 10px;
       cursor:pointer;
-      font-weight: 800;
+      font-weight: 1000;
       color: var(--text);
       font-size: 13px;
     }
 
     main{ padding: 16px 0 28px; }
+
     .grid2{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -205,28 +194,14 @@
       box-shadow: var(--shadow);
       padding: 14px;
     }
-    .card h2{
-      margin:0;
-      font-size: 16px;
-      letter-spacing:.2px;
-    }
-    .sub{
-      margin:6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.4;
-    }
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+    .card h2{ margin:0; font-size: 16px; letter-spacing:.2px; }
+    .sub{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     .hr{ height:1px; background: var(--line); margin:12px 0; }
 
     label{
       display:block;
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
       color: var(--muted);
       margin-bottom:6px;
@@ -242,7 +217,7 @@
       color: var(--text);
       padding: 10px 10px;
       outline: none;
-      font-weight: 700;
+      font-weight: 900;
       font-size: 14px;
     }
     textarea{ min-height: 90px; resize: vertical; font-family: var(--sans); }
@@ -256,7 +231,7 @@
       border: 1px solid var(--line);
       background: var(--chip);
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
     }
     .chip b{ color: var(--text); }
@@ -264,15 +239,15 @@
       display:inline-block;
       padding: 6px 10px;
       border-radius: 999px;
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
       border:1px solid var(--line);
       background: var(--chip);
       color: var(--text);
     }
-    .badge.good{ border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.12); }
-    .badge.warn{ border-color: rgba(245,158,11,.40); background: rgba(245,158,11,.12); }
-    .badge.bad{ border-color: rgba(239,68,68,.40); background: rgba(239,68,68,.12); }
+    .badge.good{ border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.10); }
+    .badge.warn{ border-color: rgba(245,158,11,.40); background: rgba(245,158,11,.10); }
+    .badge.bad{ border-color: rgba(239,68,68,.40); background: rgba(239,68,68,.10); }
 
     details{
       border:1px solid var(--line);
@@ -280,11 +255,7 @@
       border-radius: 14px;
       padding: 10px 12px;
     }
-    summary{
-      cursor:pointer;
-      font-weight: 900;
-      list-style:none;
-    }
+    summary{ cursor:pointer; font-weight: 1000; list-style:none; }
     summary::-webkit-details-marker{ display:none; }
     .klist{
       margin:10px 0 0;
@@ -295,6 +266,7 @@
     }
     .klist li{ margin: 6px 0; }
     .klist b{ color: var(--text); }
+
     a{ color: var(--text); text-decoration: none; border-bottom: 1px dashed rgba(37,99,235,.45); }
     a:hover{ border-bottom-color: rgba(37,99,235,.85); }
 
@@ -308,10 +280,8 @@
     }
 
     .mono{ font-family: var(--mono); }
-
     .hide{ display:none !important; }
 
-    /* Checklists */
     .checks{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -326,11 +296,7 @@
       border-radius: 14px;
       padding: 10px 12px;
     }
-    .checkGroup h3{
-      margin:0 0 8px;
-      font-size: 13px;
-      letter-spacing:.2px;
-    }
+    .checkGroup h3{ margin:0 0 8px; font-size: 13px; letter-spacing:.2px; }
     .opt{
       display:flex;
       gap:10px;
@@ -351,10 +317,13 @@
       padding: 10px 12px;
     }
     .outBox h3{ margin:0 0 8px; font-size: 13px; }
-    .outBox .txt{ color: var(--muted); font-size: 13px; line-height:1.5; white-space:pre-wrap; }
-    .outBox .txt b{ color: var(--text); }
+    .outBox .txt{
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
 
-    /* PEEP table */
     table{ width:100%; border-collapse: collapse; overflow:hidden; border-radius: 14px; }
     th,td{
       border-bottom: 1px solid var(--line);
@@ -370,12 +339,11 @@
       border-radius: 14px;
       overflow:hidden;
     }
-
     .note{
-      border-left: 4px solid rgba(37,99,235,.65);
+      border-left: 4px solid rgba(37,99,235,.55);
       padding: 10px 12px;
       border-radius: 12px;
-      background: rgba(37,99,235,.08);
+      background: rgba(37,99,235,.07);
       color: var(--muted);
       font-size: 13px;
       line-height:1.45;
@@ -384,7 +352,7 @@
   </style>
 </head>
 
-<body class="dark">
+<body>
 
   <!-- SPLASH -->
   <div id="splash">
@@ -398,7 +366,6 @@
           </div>
         </div>
         <div class="splashBtns">
-          <button class="btn ghost" onclick="toggleTheme()">Alternar tema</button>
           <button class="btn primary" onclick="enterApp()">Entrar</button>
         </div>
       </div>
@@ -409,12 +376,12 @@
           Não substitui protocolos, diretrizes institucionais, treinamento formal ou julgamento clínico.
         </p>
         <div class="pillRow">
-          <span class="pill">SARA / Sepse / Choque séptico</span>
+          <span class="pill">SARA / Sepse / Choque</span>
           <span class="pill">DPOC / Obesidade</span>
-          <span class="pill">Neurocrítico / Trauma</span>
+          <span class="pill">Neuro / Trauma</span>
           <span class="pill">Assincronias</span>
-          <span class="pill">Mecânica pelas curvas</span>
-          <span class="pill neutral">Evidências linkadas</span>
+          <span class="pill">Mecânica</span>
+          <span class="pill neutral">Evidências</span>
         </div>
       </div>
     </div>
@@ -428,12 +395,12 @@
           <div class="miniLogo"></div>
           <div class="titleBlock">
             <b>SyncVent</b>
-            <span>Organizador educacional — ventilação por cenários + motor por curvas</span>
+            <span>Organizador educacional — cenários + motor por curvas</span>
           </div>
         </div>
 
         <nav>
-          <button class="tab active" id="tabCasos" onclick="showTab('casos')">Casos</button>
+          <button class="tab casos active" id="tabCasos" onclick="showTab('casos')">Casos</button>
           <button class="tab" id="tabAssin" onclick="showTab('assin')">Assincronias</button>
           <button class="tab" id="tabMec" onclick="showTab('mec')">Mecânica</button>
           <button class="tab" id="tabRefs" onclick="showTab('refs')">Evidências</button>
@@ -441,7 +408,6 @@
         </nav>
 
         <div class="rightTop">
-          <button class="toggle" onclick="toggleTheme()">Tema</button>
           <button class="toggle" onclick="openAllDetails()">Expandir</button>
           <button class="toggle" onclick="closeAllDetails()">Recolher</button>
         </div>
@@ -456,8 +422,8 @@
       <div class="card">
         <h2>Selecione o cenário clínico</h2>
         <p class="sub">
-          O app abre blocos com: (1) definidores/estratificação, (2) parâmetros ventilatórios que costumam ser acompanhados, (3) pontos de atenção nas curvas,
-          (4) links para evidências/diretrizes.
+          O app abre blocos com: (1) definidores/estratificação, (2) parâmetros monitorados, (3) pontos de atenção por curvas/métricas,
+          (4) links de diretrizes/consensos.
         </p>
 
         <div class="hr"></div>
@@ -469,39 +435,22 @@
               <option value="">Selecione…</option>
               <option value="sara">SARA (ARDS)</option>
               <option value="sepse">Sepse / Choque séptico</option>
-              <option value="dpoc">DPOC (asma/COPD-like)</option>
-              <option value="restritiva">Doença restritiva (fibrose, baixa complacência)</option>
-              <option value="cardiaca">Edema pulmonar cardiogênico / cardiopatia</option>
+              <option value="dpoc">DPOC (obstrutivo)</option>
+              <option value="restritiva">Doença restritiva</option>
+              <option value="cardiaca">Cardíaca (edema cardiogênico)</option>
               <option value="obeso">Obeso / OHS</option>
               <option value="neuro">Neuromuscular</option>
-              <option value="neurocrit">Neurocrítico (TCE, tumor, ABI)</option>
-              <option value="trauma">Trauma (politrauma/torácico)</option>
+              <option value="neurocrit">Neurocrítico (TCE, tumor, etc.)</option>
+              <option value="trauma">Trauma</option>
             </select>
-            <div class="small">
-              Uso sugerido: escolha o cenário → complete definidores (quando houver) → use “Pontos de atenção” para revisão rápida por curvas e por métricas.
-            </div>
-          </div>
-
-          <div style="flex:1; min-width:240px;">
-            <label>Atalhos de cálculo</label>
-            <div class="row">
-              <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
-              <span class="chip">Driving Pressure (ΔP) <b class="mono" id="dpQuick">—</b></span>
-              <span class="chip">SARA (Berlin) <b class="mono" id="ardsQuick">—</b></span>
-            </div>
-            <div class="small">
-              Preencha os campos em “SARA” para atualizar estes atalhos.
-            </div>
           </div>
         </div>
 
         <div class="hr"></div>
-
         <div id="caseArea"></div>
 
         <div class="footer">
-          <b>Nota de escopo:</b> o SyncVent é educacional, organiza evidências e pontos de atenção.
-          Não é prescritivo, não substitui protocolos locais, nem avaliação clínica completa.
+          <b>Nota de escopo:</b> app educacional. Não emite prescrição/ajuste; não substitui protocolos locais.
         </div>
       </div>
     </section>
@@ -509,10 +458,9 @@
     <!-- ===================== ASSINCRONIAS ===================== -->
     <section id="secAssin" class="hide">
       <div class="card">
-        <h2>Assincronias — motor por achados nas curvas</h2>
+        <h2>Assincronias — motor por achados observáveis</h2>
         <p class="sub">
-          Selecione achados observáveis (separados por curva e por fase do ciclo). O motor retorna hipóteses de assincronia, explicação fisiológica e limitações.
-          Não gera “ordem de ajuste”; organiza raciocínio.
+          Selecione o que você vê no traçado (curva e fase do ciclo). O motor retorna hipóteses fisiológicas e limites.
         </p>
 
         <div class="hr"></div>
@@ -522,9 +470,9 @@
             <label>Contexto (opcional)</label>
             <select id="assinContext">
               <option value="">Sem contexto</option>
-              <option value="control">Modo controlado / mandatória</option>
+              <option value="control">Controlado / mandatória</option>
               <option value="assist">Assistido (A/C, PSV, etc.)</option>
-              <option value="wean">Desmame / suporte baixo</option>
+              <option value="wean">Desmame</option>
               <option value="obstruct">Obstrutivo (DPOC/asma)</option>
               <option value="lowC">Baixa complacência (SARA/restritiva)</option>
             </select>
@@ -533,7 +481,7 @@
             <label>Ação</label>
             <div class="row">
               <button class="btn primary" onclick="runAssinMotor()">Rodar motor</button>
-              <button class="btn ghost" onclick="resetChecks('assin')">Limpar seleção</button>
+              <button class="btn" onclick="resetChecks('assin')">Limpar</button>
             </div>
           </div>
         </div>
@@ -542,65 +490,57 @@
 
         <div class="checks">
           <div class="checkGroup">
-            <h3>Pressão × tempo — disparo / início da inspiração</h3>
+            <h3>Pressão × tempo — disparo / início</h3>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="pt_trigger_delay" />
               <div>
-                <b>Atraso de disparo (concavidade/“scoop” inicial)</b>
-                <span>Esforço inicial visível antes do ciclo entregar fluxo/pressão.</span>
+                <b>Antes do ciclo iniciar, aparece “esforço” e o ventilador demora a responder</b>
+                <span>Achado compatível com atraso de disparo/dificuldade de trigger.</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="pt_negative_deflection" />
               <div>
-                <b>Deflexão negativa marcada</b>
-                <span>Queda de pressão no início sugerindo esforço significativo para disparar.</span>
+                <b>Queda negativa marcada de pressão no início (o paciente “puxa” para disparar)</b>
+                <span>Achado compatível com carga para disparar (limiar/auto-PEEP/drive alto).</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="pt_double_trigger" />
               <div>
-                <b>Dois ciclos muito próximos (duplo disparo)</b>
-                <span>Dois ciclos quase colados, sem expiração completa entre eles.</span>
+                <b>Dois ciclos quase colados, com pouco ou nenhum tempo expiratório</b>
+                <span>Confirmar em fluxo e volume (empilhamento).</span>
               </div>
             </div>
           </div>
 
           <div class="checkGroup">
-            <h3>Fluxo × tempo — inspiração / ciclagem</h3>
+            <h3>Fluxo × tempo — inspiração / término</h3>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_flow_starvation" />
               <div>
-                <b>“Flow starvation” (fluxo insuficiente)</b>
-                <span>Concavidade do fluxo inspiratório / demanda maior do paciente.</span>
-              </div>
-            </div>
-
-            <div class="opt">
-              <input type="checkbox" class="assin" value="ft_excess_flow" />
-              <div>
-                <b>Fluxo excessivo (pico alto, desconforto)</b>
-                <span>Entrega muito rápida/alta comparada ao padrão de demanda.</span>
+                <b>Durante a inspiração, a curva sugere demanda maior que a entrega (concavidade/“scoop”)</b>
+                <span>Achado compatível com demanda &gt; entrega (modo-dependente).</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_early_cycle" />
               <div>
-                <b>Ciclagem precoce</b>
-                <span>Paciente mantém esforço após o ventilador ciclar para expiração.</span>
+                <b>A inspiração termina enquanto ainda há esforço inspiratório do paciente</b>
+                <span>Esforço continua após ciclar; em PSV, avaliar critério de ciclagem.</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_late_cycle" />
               <div>
-                <b>Ciclagem tardia</b>
-                <span>Ventilador mantém inspiração quando paciente já quer expirar.</span>
+                <b>A inspiração se mantém quando o paciente já parece querer expirar (desconforto no fim)</b>
+                <span>Em PSV, pode refletir término tardio; confirmar padrão repetitivo.</span>
               </div>
             </div>
           </div>
@@ -611,44 +551,44 @@
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_exp_incomplete" />
               <div>
-                <b>Expiração incompleta / fluxo não zera</b>
-                <span>Sugere air-trapping/auto-PEEP, tempo expiratório insuficiente ou obstrução.</span>
+                <b>O fluxo expiratório não retorna a zero antes do próximo ciclo</b>
+                <span>Achado compatível com expiração incompleta/air-trapping/auto-PEEP.</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_ineffective_effort" />
               <div>
-                <b>Esforço inefetivo (deflexões sem disparo)</b>
-                <span>Pequenas deflexões/“notches” em expiração sem iniciar ciclo.</span>
+                <b>Deflexões sugerem esforço em expiração, mas não ocorre disparo (ciclo não inicia)</b>
+                <span>Achado compatível com esforço sem disparo (frequente com auto-PEEP + fraqueza).</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="ft_auto_trigger" />
               <div>
-                <b>Auto-disparo (ciclos sem esforço evidente)</b>
-                <span>Disparos frequentes sem padrão de esforço; avaliar artefatos e sensibilidade.</span>
+                <b>O ventilador dispara ciclos sem padrão claro de esforço do paciente</b>
+                <span>Considerar sensibilidade, vazamento, condensado e artefatos.</span>
               </div>
             </div>
           </div>
 
           <div class="checkGroup">
-            <h3>Volume × tempo — padrão de empilhamento</h3>
+            <h3>Volume × tempo</h3>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="vt_breath_stacking" />
               <div>
-                <b>Empilhamento de volume (breath stacking)</b>
-                <span>Volume não retorna ao baseline antes de novo ciclo (sobretudo em duplo disparo).</span>
+                <b>O volume não retorna ao baseline antes de novo ciclo (empilhamento)</b>
+                <span>Confirmar junto de ciclos colados e/ou expiração incompleta.</span>
               </div>
             </div>
 
             <div class="opt">
               <input type="checkbox" class="assin" value="vt_leak_suspicion" />
               <div>
-                <b>Suspeita de vazamento (discrepância inspiração/expiração)</b>
-                <span>Volume expirado muito menor que inspirado / padrão compatível com leak.</span>
+                <b>Discrepância persistente: volume expirado muito menor que o inspirado</b>
+                <span>Achado compatível com vazamento/medição inconsistente (confirmar alarmes/inspeção).</span>
               </div>
             </div>
           </div>
@@ -660,20 +600,14 @@
           <h3>Saída do motor (Assincronias)</h3>
           <div class="txt" id="assinOut">Selecione achados e clique em “Rodar motor”.</div>
         </div>
-
-        <div class="footer">
-          Este módulo descreve hipóteses e fisiologia. Não substitui supervisão, protocolos ou decisão clínica.
-        </div>
       </div>
     </section>
 
     <!-- ===================== MECÂNICA ===================== -->
     <section id="secMec" class="hide">
       <div class="card">
-        <h2>Mecânica ventilatória — motor por achados nas curvas</h2>
-        <p class="sub">
-          Selecione achados em pressão/fluxo/volume e obtenha hipóteses de mecânica (complacência, resistência, auto-PEEP, esforço, vazamento) com limitações.
-        </p>
+        <h2>Mecânica — hipóteses por achados nas curvas</h2>
+        <p class="sub">Selecione achados de pressão/fluxo/volume. Saída: hipóteses e limites (educacional).</p>
 
         <div class="hr"></div>
 
@@ -683,8 +617,8 @@
             <select id="mecContext">
               <option value="">Sem contexto</option>
               <option value="lowC">Baixa complacência (SARA/restritiva)</option>
-              <option value="highR">Alta resistência (DPOC/asma/broncoespasmo)</option>
-              <option value="wean">Desmame / esforço aumentado</option>
+              <option value="highR">Alta resistência (DPOC/asma)</option>
+              <option value="wean">Desmame / esforço</option>
               <option value="obeso">Obesidade / parede torácica</option>
             </select>
           </div>
@@ -692,7 +626,7 @@
             <label>Ação</label>
             <div class="row">
               <button class="btn primary" onclick="runMecMotor()">Rodar motor</button>
-              <button class="btn ghost" onclick="resetChecks('mec')">Limpar seleção</button>
+              <button class="btn" onclick="resetChecks('mec')">Limpar</button>
             </div>
           </div>
         </div>
@@ -702,112 +636,86 @@
         <div class="checks">
           <div class="checkGroup">
             <h3>Pressão × tempo</h3>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="pt_high_plateau" />
               <div>
-                <b>Platô elevado (Pplat alta)</b>
-                <span>Compatível com baixa complacência do sistema respiratório (pulmão/parede torácica).</span>
+                <b>Pressão sustentada alta no final da inspiração / platô elevado (se medido)</b>
+                <span>Compatível com baixa complacência do sistema (pulmão/parede).</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="pt_high_peak_normal_plateau" />
               <div>
-                <b>Pico alto com platô relativamente menor</b>
-                <span>Sugere componente resistivo (via aérea/tubo/obstrução) mais proeminente.</span>
+                <b>Pico desproporcional no início (maior que o “final”/platô, quando disponível)</b>
+                <span>Compatível com componente resistivo (via aérea/tubo/circuito).</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="pt_sawtooth" />
               <div>
-                <b>“Dente de serra” / serrilhado</b>
-                <span>Vibração/oscilações; pode sugerir secreção, condensado, turbulência, artefato.</span>
+                <b>Serrilhado/oscilações (“dente de serra”) em pressão</b>
+                <span>Pode refletir secreção, condensado, turbulência ou artefato.</span>
               </div>
             </div>
           </div>
 
           <div class="checkGroup">
             <h3>Fluxo × tempo</h3>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="ft_exp_not_zero" />
               <div>
-                <b>Fluxo expiratório não zera</b>
-                <span>Air-trapping/auto-PEEP/tempo expiratório insuficiente/obstrução.</span>
+                <b>Fluxo expiratório não zera antes do próximo ciclo</b>
+                <span>Compatível com expiração incompleta/auto-PEEP/obstrução/FR alta.</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="ft_insp_decel_steep" />
               <div>
-                <b>Fluxo inspiratório desacelera muito rápido</b>
-                <span>Pode refletir baixa complacência (enchimento rápido e limitado) dependendo do modo.</span>
+                <b>O fluxo inspiratório “cai rápido” durante a inspiração (modo-dependente)</b>
+                <span>Pode sugerir baixa complacência dependendo do modo.</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="ft_insp_decel_slow" />
               <div>
-                <b>Fluxo inspiratório desacelera lentamente</b>
-                <span>Pode refletir resistência aumentada/tempo constante alto (interpretação depende do modo).</span>
+                <b>O fluxo inspiratório “cai lentamente” (modo-dependente)</b>
+                <span>Pode sugerir resistência aumentada/constante de tempo alta.</span>
               </div>
             </div>
           </div>
 
           <div class="checkGroup">
             <h3>Volume × tempo</h3>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="vt_slow_fill" />
               <div>
-                <b>Enchimento lento (subida lenta do volume)</b>
-                <span>Pode sugerir limitação de fluxo/resistência, ou restrições de modo/limites.</span>
+                <b>Subida do volume lenta/prolongada (enchimento lento)</b>
+                <span>Pode refletir resistência/limitação de fluxo ou configuração do modo.</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="vt_incomplete_empty" />
               <div>
-                <b>Esvaziamento incompleto (baseline não retorna)</b>
-                <span>Compatível com aprisionamento aéreo/auto-PEEP ou expiração curta.</span>
+                <b>Volume não retorna ao baseline antes do próximo ciclo</b>
+                <span>Compatível com air-trapping/auto-PEEP/expiração curta.</span>
               </div>
             </div>
-
             <div class="opt">
               <input type="checkbox" class="mec" value="vt_leak" />
               <div>
-                <b>Discrepância importante entre volumes insp/exp</b>
-                <span>Sugere vazamento/circuito, cuff, interface, ou medição inconsistente.</span>
+                <b>Discrepância persistente entre volume inspirado e expirado</b>
+                <span>Compatível com vazamento/medição inconsistente.</span>
               </div>
             </div>
           </div>
 
           <div class="checkGroup">
-            <h3>Integração (métricas)</h3>
-
-            <div class="opt">
-              <input type="checkbox" class="mec" value="met_dp_high" />
-              <div>
-                <b>Driving pressure (ΔP) elevada</b>
-                <span>ΔP = Pplat − PEEP (em VC) ou Pinsp − PEEP (em PC); “ponto de atenção” em ventilação protetora.</span>
-              </div>
-            </div>
-
-            <div class="opt">
-              <input type="checkbox" class="mec" value="met_rr_high" />
-              <div>
-                <b>FR alta com sinais de esforço</b>
-                <span>Avaliar demanda ventilatória, conforto, sincronia, carga resistiva/complacência.</span>
-              </div>
-            </div>
-
+            <h3>Integração</h3>
             <div class="opt">
               <input type="checkbox" class="mec" value="met_asynchrony_suspect" />
               <div>
-                <b>Padrão sugere assincronia coexistente</b>
-                <span>Considere usar também o módulo “Assincronias”.</span>
+                <b>O padrão sugere que pode haver assincronia coexistente</b>
+                <span>Use o módulo “Assincronias”.</span>
               </div>
             </div>
           </div>
@@ -819,66 +727,85 @@
           <h3>Saída do motor (Mecânica)</h3>
           <div class="txt" id="mecOut">Selecione achados e clique em “Rodar motor”.</div>
         </div>
-
-        <div class="footer">
-          Este módulo organiza hipóteses. Interpretação depende de modo ventilatório, calibração, sedação/esforço, hemodinâmica e contexto.
-        </div>
       </div>
     </section>
 
-    <!-- ===================== REFS ===================== -->
+    <!-- ===================== EVIDÊNCIAS ===================== -->
     <section id="secRefs" class="hide">
       <div class="card">
-        <h2>Evidências e diretrizes (links)</h2>
-        <p class="sub">
-          Links para documentos principais. Use o cenário clínico para ver onde cada evidência é citada no app.
-        </p>
+        <h2>Evidências e consensos (por cenário)</h2>
+        <p class="sub">Links diretos para diretrizes/consensos e revisões relevantes. (Sem prescrição; uso educacional.)</p>
 
         <div class="hr"></div>
 
         <div class="grid2">
           <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>SARA / Ventilação protetora</h2>
+            <h2>Brasil — AMIB/SBPT (Ventilação)</h2>
             <ul class="klist">
-              <li><b>Berlin Definition (2012)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/22797452/" target="_blank">22797452</a></li>
-              <li><b>ARDSNet (2000)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/10793162/" target="_blank">10793162</a></li>
-              <li><b>Driving Pressure (Amato 2015)</b> — PubMed: <a href="https://pubmed.ncbi.nlm.nih.gov/25693014/" target="_blank">25693014</a></li>
-              <li><b>Global definition update (ATS workshop 2024)</b> — PDF: <a href="https://www.atsjournals.org/doi/pdf/10.1164/rccm.202303-0558WS?download=true" target="_blank">ATS 2024</a></li>
+              <li><b>Orientações Práticas em Ventilação Mecânica 2024 (AMIB/SBPT)</b> — <a href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf" target="_blank">PDF</a></li>
+              <li><b>Notícia AMIB</b> — <a href="https://amib.org.br/amib-e-sbpt-lancam-edicao-atualizada-das-orientacoes-praticas-em-ventilacao-mecanica/" target="_blank">página</a></li>
             </ul>
           </div>
 
           <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Sepse / Choque séptico</h2>
+            <h2>SARA (ARDS) — Global Definition / Europa</h2>
             <ul class="klist">
-              <li><b>Surviving Sepsis Campaign 2021</b> — SCCM: <a href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021" target="_blank">página</a></li>
-              <li><b>SSC 2021 PDF</b> — (arquivo aberto): <a href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf" target="_blank">PDF</a></li>
-              <li><b>Sepsis-3 (Singer 2016)</b> — PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4968574/" target="_blank">texto</a></li>
+              <li><b>Global Definition of ARDS</b> — PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/" target="_blank">texto</a></li>
+              <li><b>Global Definition (PubMed)</b> — <a href="https://pubmed.ncbi.nlm.nih.gov/37487152/" target="_blank">37487152</a></li>
+              <li><b>ESICM ARDS Guidelines 2023</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/" target="_blank">PMC</a></li>
+              <li><b>Press release ATS (resumo)</b> — <a href="https://site.thoracic.org/press-releases/experts-propose-new-global-definition-of-acute-respiratory-distress-syndrome" target="_blank">ATS</a></li>
+            </ul>
+            <div class="note" style="margin-top:10px;">
+              <b>Critérios-chave (Global Definition):</b> inclui HFNO (≥30 L/min) e permite SpO₂/FiO₂ ≤ 315 se SpO₂ ≤ 97%. :contentReference[oaicite:2]{index=2}
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Cardíaca — Edema pulmonar cardiogênico</h2>
+            <ul class="klist">
+              <li><b>Cochrane 2019 — CPAP/BiPAP em edema cardiogênico</b> — <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD005351.pub4/full" target="_blank">Cochrane</a></li>
+              <li><b>ERS/ATS NIV (2017)</b> — PDF: <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">guideline</a></li>
+              <li><b>Clinical review ERS (2024)</b> — <a href="https://publications.ersnet.org/content/erj/64/5/2400396" target="_blank">ERJ</a></li>
+              <li><b>Guia clínico (2025, PMC) — suporte não invasivo em edema cardiogênico</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12625427/" target="_blank">PMC</a></li>
             </ul>
           </div>
 
           <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>DPOC / Obstrutivo</h2>
+            <h2>Obesidade / OHS</h2>
             <ul class="klist">
-              <li><b>GOLD 2025 (PDF)</b> — <a href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf" target="_blank">download</a></li>
-              <li><b>GOLD 2025 (site)</b> — <a href="https://goldcopd.org/2025-gold-report/" target="_blank">página</a></li>
-              <li><b>Pocket Guide 2025</b> — <a href="https://goldcopd.org/wp-content/uploads/2024/11/Pocket-Guide-2025-v1.0-New-Format-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
+              <li><b>Ventilation in the obese (ERS Review 2025)</b> — <a href="https://publications.ersnet.org/content/errev/34/176/240190" target="_blank">ERR</a></li>
+              <li><b>Transpulmonary pressure-guided strategies (Respiratory Care 2021)</b> — <a href="https://www.liebertpub.com/doi/pdf/10.4187/respcare.08686" target="_blank">PDF</a></li>
+              <li><b>PEEP optimization in obesity (BJA 2025)</b> — <a href="https://www.bjanaesthesia.org/article/S0007-0912%2825%2900639-7/fulltext" target="_blank">BJA</a></li>
             </ul>
           </div>
 
           <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Neurocrítico</h2>
+            <h2>Neuromuscular</h2>
             <ul class="klist">
-              <li><b>Mechanical ventilation in acute brain injury (Robba 2020)</b> — PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7655906/" target="_blank">texto</a></li>
-              <li><b>ENLS TBI Protocol</b> — PDF: <a href="https://www.neurocriticalcare.org/Portals/0/Docs/ENLS/ENLS_V_4_0_Protocol_TBI_FINAL.pdf" target="_blank">download</a></li>
+              <li><b>CHEST Guideline 2023 — manejo respiratório em NMD</b> — <a href="https://journal.chestnet.org/article/S0012-3692%2823%2900353-7/fulltext" target="_blank">CHEST</a></li>
+              <li><b>ERS/ATS NIV (2017)</b> — <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
+            </ul>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>HFNC / Suporte não invasivo (geral)</h2>
+            <ul class="klist">
+              <li><b>ERS guideline HFNC em insuficiência respiratória aguda (2022)</b> — <a href="https://publications.ersnet.org/content/erj/59/4/2101574" target="_blank">ERJ</a></li>
+              <li><b>ERS/ATS NIV (2017)</b> — <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
+            </ul>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Neurocrítico / TCE</h2>
+            <ul class="klist">
+              <li><b>ACS TQP Best Practices Guidelines — TBI (2025)</b> — <a href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf" target="_blank">PDF</a></li>
+              <li><b>Resumo de diretriz (recomenda contra hiperventilação profilática prolongada)</b> — <a href="https://www.nature.com/articles/s41598-025-04793-9" target="_blank">Sci Rep 2025</a></li>
             </ul>
           </div>
         </div>
 
-        <div class="hr"></div>
-
-        <div class="note">
-          <b>Como usar as evidências no app:</b> em cada cenário, os “Pontos de atenção” destacam métricas/curvas a acompanhar e mostram links diretos para diretrizes/estudos.
-          Se você quiser que o app traga uma lista “Top 5” de evidências por cenário (com ano e tipo: guideline/RCT/meta-análise), isso pode ser colocado na próxima revisão do HTML.
+        <div class="footer">
+          Critério editorial: priorizar diretriz/consenso e revisões; estudos originais entram como suporte didático.
         </div>
       </div>
     </section>
@@ -887,48 +814,30 @@
     <section id="secSobre" class="hide">
       <div class="card">
         <h2>Sobre</h2>
-        <p class="sub">
-          SyncVent é um app educacional para apoiar o raciocínio do profissional em ventilação mecânica por cenários clínicos e interpretação de curvas.
-        </p>
+        <p class="sub">SyncVent é um app educacional para organizar raciocínio por cenários e por leitura de curvas.</p>
 
         <div class="hr"></div>
 
         <details open>
-          <summary>Declaração de uso e limites</summary>
+          <summary>Uso e limites</summary>
           <ul class="klist">
-            <li><b>Não-prescritor:</b> não fornece “ordens” de ajuste, nem substitui protocolos locais.</li>
-            <li><b>Decisão profissional:</b> a responsabilidade é do profissional assistente e da equipe.</li>
-            <li><b>Educação:</b> organiza achados observáveis, hipóteses fisiológicas e links para evidências.</li>
+            <li><b>Não-prescritor:</b> não fornece ordens de ajuste.</li>
+            <li><b>Apoio à decisão:</b> estrutura pontos de atenção e hipóteses.</li>
+            <li><b>Responsabilidade:</b> decisão clínica é do profissional e da equipe.</li>
           </ul>
         </details>
-
-        <div style="height:10px;"></div>
-
-        <details>
-          <summary>Autoria e proteção</summary>
-          <ul class="klist">
-            <li><b>SyncVent</b> — Conteúdo e estrutura educacional: autoria do projeto (preencha conforme necessário).</li>
-            <li>Uso comercial/redistribuição: definir licença e termos de uso conforme estratégia do projeto.</li>
-          </ul>
-        </details>
-
-        <div class="footer">
-          Recomenda-se validação editorial e revisão por pares internos (fisioterapia, medicina intensiva, RT, enfermagem) antes de uso educacional institucional.
-        </div>
       </div>
     </section>
 
   </main>
 
   <script>
-    // ===================== Splash =====================
     function enterApp(){
       const el = document.getElementById("splash");
       el.classList.add("hide");
       setTimeout(()=>{ el.style.display="none"; }, 420);
     }
 
-    // ===================== Tabs =====================
     function showTab(which){
       const secCasos = document.getElementById("secCasos");
       const secAssin = document.getElementById("secAssin");
@@ -951,102 +860,92 @@
       window.scrollTo({top:0, behavior:"smooth"});
     }
 
-    function openAllDetails(){
-      document.querySelectorAll("details").forEach(d=> d.open = true);
-    }
-    function closeAllDetails(){
-      document.querySelectorAll("details").forEach(d=> d.open = false);
-    }
+    function openAllDetails(){ document.querySelectorAll("details").forEach(d=> d.open = true); }
+    function closeAllDetails(){ document.querySelectorAll("details").forEach(d=> d.open = false); }
 
-    // ===================== Theme =====================
-    function toggleTheme(){
-      const b = document.body;
-      const light = b.classList.contains("light");
-      if(light){
-        b.classList.remove("light");
-        b.classList.add("dark");
-      }else{
-        b.classList.add("light");
-        b.classList.remove("dark");
-      }
-    }
-
-    // ===================== Helpers =====================
     function num(v){
       if(v===null || v===undefined) return NaN;
       const s = String(v).replace(",", ".").trim();
       const n = Number(s);
       return Number.isFinite(n) ? n : NaN;
     }
-    function clamp(x,min,max){ return Math.max(min, Math.min(max, x)); }
-    function badge(txt, cls){ return `<span class="badge ${cls||""}">${txt}</span>`; }
 
-    // ===================== CASE DATA =====================
     const CASES = {
       sara: {
-        title: "SARA (ARDS) — definidores, estratificação e pontos de atenção",
-        lead: "Inclui: cálculo P/F, classificação Berlin, tabela PEEP/FiO₂ e destaque de métricas associadas à ventilação protetora (educacional).",
+        title: "SARA (ARDS) — Global Definition (educacional) + estratificação por hipoxemia",
+        lead: "Inclui HFNO (≥30 L/min) e alternativa SpO₂/FiO₂ ≤ 315 quando SpO₂ ≤ 97% (Global Definition).",
         render: () => `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Definição e estratificação (Berlin)</h2>
-              <p class="sub">Critérios resumidos: início em até 1 semana, opacidades bilaterais, edema não totalmente explicado por causa cardíaca/volume, e hipoxemia por P/F com PEEP/CPAP ≥ 5.</p>
+              <h2>Triagem de hipoxemia compatível com SARA (Global Definition)</h2>
+              <p class="sub">
+                Este bloco calcula: PaO₂/FiO₂ e/ou SpO₂/FiO₂. Para SpO₂/FiO₂, o critério é válido quando <b>SpO₂ ≤ 97%</b>.
+                HFNO é considerado no critério com <b>fluxo ≥ 30 L/min</b>.
+              </p>
 
               <div class="hr"></div>
 
               <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>PaO₂ (mmHg)</label>
-                  <input id="pao2" placeholder="ex.: 80" oninput="updateArdsCalc()"/>
+                <div style="flex:1; min-width:220px;">
+                  <label>Tipo de suporte (para critério Global)</label>
+                  <select id="supportType" onchange="updateArdsGlobal()">
+                    <option value="">Selecione…</option>
+                    <option value="imv">VM invasiva</option>
+                    <option value="niv">NIV/CPAP</option>
+                    <option value="hfno">HFNO</option>
+                  </select>
+                  <div class="small">Global Definition inclui HFNO ≥30 L/min. :contentReference[oaicite:3]{index=3}</div>
                 </div>
-                <div style="flex:1; min-width:200px;">
+                <div style="flex:1; min-width:220px;">
+                  <label>PEEP/CPAP (cmH₂O) — se aplicável</label>
+                  <input id="peep" placeholder="ex.: 10" oninput="updateArdsGlobal()"/>
+                  <div class="small">Em VM invasiva/NIV, PEEP/CPAP é usada na prática para padronização (ver diretrizes locais).</div>
+                </div>
+              </div>
+
+              <div style="height:10px;"></div>
+
+              <div class="row">
+                <div style="flex:1; min-width:220px;">
+                  <label>Fluxo HFNO (L/min) — apenas se HFNO</label>
+                  <input id="hfFlow" placeholder="ex.: 40" oninput="updateArdsGlobal()"/>
+                  <div class="small">Critério: HFNO ≥ 30 L/min. :contentReference[oaicite:4]{index=4}</div>
+                </div>
+                <div style="flex:1; min-width:220px;">
                   <label>FiO₂ (fração)</label>
-                  <input id="fio2" placeholder="ex.: 0,60" oninput="updateArdsCalc()"/>
-                  <div class="small">Digite como fração (0,21–1,00).</div>
+                  <input id="fio2" placeholder="ex.: 0,60" oninput="updateArdsGlobal()"/>
                 </div>
               </div>
 
               <div style="height:10px;"></div>
 
               <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>PEEP/CPAP (cmH₂O)</label>
-                  <input id="peep" placeholder="ex.: 10" oninput="updateArdsCalc()"/>
+                <div style="flex:1; min-width:220px;">
+                  <label>PaO₂ (mmHg) — opcional</label>
+                  <input id="pao2" placeholder="ex.: 80" oninput="updateArdsGlobal()"/>
+                  <div class="small">Se disponível, PaO₂/FiO₂ é a referência.</div>
                 </div>
-                <div style="flex:1; min-width:200px;">
-                  <label>Plató (Pplat) (cmH₂O) — opcional</label>
-                  <input id="pplat" placeholder="ex.: 28" oninput="updateArdsCalc()"/>
+                <div style="flex:1; min-width:220px;">
+                  <label>SpO₂ (%) — opcional</label>
+                  <input id="spo2" placeholder="ex.: 92" oninput="updateArdsGlobal()"/>
+                  <div class="small">Para usar SpO₂/FiO₂ no critério, aplicar quando <b>SpO₂ ≤ 97%</b>. :contentReference[oaicite:5]{index=5}</div>
                 </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <label>Atalhos (após preenchimento)</label>
+              <div class="row">
+                <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
+                <span class="chip">S/F <b class="mono" id="sfQuick">—</b></span>
+                <span class="chip">Compatível Global? <b class="mono" id="globalQuick">—</b></span>
               </div>
 
               <div style="height:10px;"></div>
 
-              <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>Pressão inspiratória (Pinsp) (cmH₂O) — opcional</label>
-                  <input id="pinsp" placeholder="ex.: 22 (PC)" oninput="updateArdsCalc()"/>
-                  <div class="small">Se modo pressórico, Pinsp é a pressão acima da PEEP (pressão de controle).</div>
-                </div>
-                <div style="flex:1; min-width:200px;">
-                  <label>PBW (kg) — opcional</label>
-                  <input id="pbw" placeholder="ex.: 60" oninput="updateArdsCalc()"/>
-                  <div class="small">Se preenchido, o app calcula VT “por kg PBW” (educacional).</div>
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>VT atual (mL) — opcional</label>
-                  <input id="vt" placeholder="ex.: 360" oninput="updateArdsCalc()"/>
-                </div>
-                <div style="flex:1; min-width:200px;">
-                  <label>Resultado</label>
-                  <div class="outBox">
-                    <div class="txt" id="ardsOut">Preencha PaO₂, FiO₂ e PEEP para classificar.</div>
-                  </div>
-                </div>
+              <div class="outBox">
+                <h3>Resultado</h3>
+                <div class="txt" id="ardsOut">Preencha suporte, FiO₂ e PaO₂ e/ou SpO₂.</div>
               </div>
 
               <div class="hr"></div>
@@ -1054,28 +953,27 @@
               <details open>
                 <summary>Pontos de atenção (educacional)</summary>
                 <ul class="klist">
-                  <li><b>Ventilação protetora:</b> destaque para VT por PBW, pressão de platô e ΔP (driving pressure). (ARDSNet 2000; Amato 2015)</li>
-                  <li><b>ΔP</b> (ΔP = Pplat − PEEP em VC; ou Pinsp em PC): usada como “sinal de alerta” em estratégia protetora; frequentemente se cita limiar ~15 cmH₂O como ponto de atenção.</li>
-                  <li><b>Curvas:</b> procurar sinais de “flow starvation”, assincronias e expiração incompleta (especialmente se FR alta).</li>
-                  <li><b>Oxygenação:</b> usar P/F para estratificar gravidade e discutir necessidade de estratégias avançadas conforme protocolo local.</li>
+                  <li><b>Critério de hipoxemia (Global):</b> PaO₂/FiO₂ ≤ 300, ou SpO₂/FiO₂ ≤ 315 se SpO₂ ≤ 97%. :contentReference[oaicite:6]{index=6}</li>
+                  <li><b>HFNO no critério:</b> fluxo ≥ 30 L/min. :contentReference[oaicite:7]{index=7}</li>
+                  <li><b>Integração:</b> diagnóstico completo inclui início temporal e critério de imagem (bilateral opacities; US pulmonar pode ser usado em alguns contextos).</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary>Links (SARA)</summary>
+                <ul class="klist">
+                  <li><b>Global Definition (PMC)</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/" target="_blank">texto</a></li>
+                  <li><b>ESICM ARDS 2023</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/" target="_blank">PMC</a></li>
+                  <li><b>AMIB/SBPT 2024</b> — <a href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf" target="_blank">PDF</a></li>
                 </ul>
               </details>
             </div>
 
             <div class="card" style="box-shadow:none; background: var(--panel2);">
               <h2>Tabela PEEP/FiO₂ (educacional)</h2>
-              <p class="sub">Tabela no estilo ARDSNet “low PEEP/FiO₂” para consulta didática (não substitui protocolo institucional).</p>
-
-              <div class="hr"></div>
-
               <div class="tableWrap">
                 <table>
-                  <thead>
-                    <tr>
-                      <th>FiO₂</th>
-                      <th>PEEP (cmH₂O)</th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th>FiO₂</th><th>PEEP (cmH₂O)</th></tr></thead>
                   <tbody>
                     <tr><td>0,30</td><td>5</td></tr>
                     <tr><td>0,40</td><td>5–8</td></tr>
@@ -1088,23 +986,8 @@
                   </tbody>
                 </table>
               </div>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li>Berlin Definition (2012): <a href="https://pubmed.ncbi.nlm.nih.gov/22797452/" target="_blank">PubMed 22797452</a></li>
-                  <li>ARDSNet (2000): <a href="https://pubmed.ncbi.nlm.nih.gov/10793162/" target="_blank">PubMed 10793162</a></li>
-                  <li>Driving Pressure (2015): <a href="https://pubmed.ncbi.nlm.nih.gov/25693014/" target="_blank">PubMed 25693014</a></li>
-                </ul>
-              </details>
-
-              <div style="height:10px;"></div>
-
-              <div class="note">
-                <b>Leitura por curvas (checklist rápido):</b>
-                Pressão: Pplat/ΔP; Fluxo: expiração zera? sinais de esforço; Volume: empilhamento/retorno ao baseline.
+              <div class="note" style="margin-top:10px;">
+                <b>Nota:</b> esta tabela é didática; use o protocolo institucional como referência.
               </div>
             </div>
           </div>
@@ -1112,292 +995,29 @@
       },
 
       sepse: {
-        title: "Sepse / Choque séptico — definidores e ventilação (pontos de atenção)",
-        lead: "Inclui definidores (Sepsis-3 / SSC), e checklist ventilatório focado em segurança hemodinâmica + interação VM–circulação.",
+        title: "Sepse / Choque séptico — ventilação (pontos de atenção)",
+        lead: "Checklist por curvas e integração com SARA (use o bloco SARA quando houver hipoxemia).",
         render: () => `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Definidores (educacional)</h2>
-              <p class="sub">Sepse-3: disfunção orgânica ameaçadora à vida por resposta desregulada à infecção. Choque séptico: vasopressor para MAP ≥ 65 e lactato > 2 mmol/L na ausência de hipovolemia.</p>
-
-              <div class="hr"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>MAP (mmHg)</label>
-                  <input id="map" placeholder="ex.: 62" oninput="updateSepsisCalc()"/>
-                </div>
-                <div style="flex:1; min-width:200px;">
-                  <label>Lactato (mmol/L)</label>
-                  <input id="lac" placeholder="ex.: 3,2" oninput="updateSepsisCalc()"/>
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:200px;">
-                  <label>Vasopressor em uso?</label>
-                  <select id="vaso" onchange="updateSepsisCalc()">
-                    <option value="">Selecione…</option>
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
-                  </select>
-                </div>
-                <div style="flex:1; min-width:200px;">
-                  <label>Resultado</label>
-                  <div class="outBox">
-                    <div class="txt" id="sepseOut">Preencha MAP, lactato e vasopressor.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Pontos de atenção ventilatória (educacional)</summary>
-                <ul class="klist">
-                  <li><b>Interação VM–hemodinâmica:</b> pressões intratorácicas podem impactar retorno venoso e débito cardíaco — monitorar resposta clínica ao longo do tempo.</li>
-                  <li><b>Oxigenação e perfusão:</b> focar em metas de oxigenação conforme contexto; evitar extremos e reavaliar frequentemente.</li>
-                  <li><b>Se houver SARA concomitante:</b> considerar “pontos de atenção” de ventilação protetora (VT PBW, Pplat, ΔP).</li>
-                  <li><b>Curvas:</b> procurar assincronias por esforço aumentado (demanda ventilatória alta) e expiração incompleta se FR elevada.</li>
-                </ul>
-              </details>
-
+              <h2>Pontos de atenção (educacional)</h2>
+              <ul class="klist">
+                <li><b>Demanda ventilatória alta</b> pode aumentar assincronias; use “Assincronias”.</li>
+                <li><b>Se hipoxemia relevante</b>, avaliar compatibilidade com SARA (Global Definition) no bloco SARA. :contentReference[oaicite:8]{index=8}</li>
+                <li><b>Integração hemodinâmica:</b> observar resposta clínica a mudanças ventilatórias.</li>
+              </ul>
               <details>
-                <summary>Evidências (links)</summary>
+                <summary>Links</summary>
                 <ul class="klist">
-                  <li>Surviving Sepsis Campaign 2021 (SCCM): <a href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021" target="_blank">página</a></li>
-                  <li>SSC 2021 PDF: <a href="https://sepsis.ch/wp-content/uploads/2024/09/Surviving-Sepsis-Campaign_International-Guidelines-for-Management-of-Sepsis-and-Septic-Shock-2021.pdf" target="_blank">PDF</a></li>
-                  <li>Sepsis-3 (Singer 2016): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4968574/" target="_blank">PMC</a></li>
+                  <li><b>AMIB/SBPT 2024</b> — <a href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf" target="_blank">PDF</a></li>
                 </ul>
               </details>
             </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Checklist ventilatório (para revisão rápida)</h2>
-              <p class="sub">Use como “lista de verificação” ao avaliar ventilação em sepse/choque (educacional).</p>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Monitorar parâmetros e sinais</summary>
-                <ul class="klist">
-                  <li><b>Pressões:</b> PEEP, Pplat, ΔP; tendência ao longo do tempo.</li>
-                  <li><b>Ventilação/minuto:</b> FR, VT, EtCO₂/PaCO₂ conforme disponível.</li>
-                  <li><b>Oxigenação:</b> SpO₂/PaO₂, FiO₂; considerar P/F se hipoxemia.</li>
-                  <li><b>Curvas:</b> esforço elevado, auto-PEEP, assincronias (use o módulo dedicado).</li>
-                  <li><b>Hemodinâmica:</b> sinais de hipoperfusão e resposta após mudanças ventilatórias.</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>Padrões comuns de curva (situações frequentes)</summary>
-                <ul class="klist">
-                  <li><b>Demanda ventilatória alta:</b> pode aparecer como “flow starvation”, FR alta, assincronias por esforço.</li>
-                  <li><b>Hipoperfusão/acidose:</b> pode aumentar drive respiratório e piorar sincronia — reavaliar contexto.</li>
-                  <li><b>Obstrução concomitante:</b> atenção a expiração incompleta (fluxo não zera).</li>
-                </ul>
-              </details>
-            </div>
-          </div>
-        `
-      },
-
-      dpoc: {
-        title: "DPOC (obstrutivo) — pontos de atenção por curvas e mecânica",
-        lead: "Foco educacional em: tempo expiratório, auto-PEEP, aprisionamento aéreo e assincronias típicas.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Expiração incompleta / auto-PEEP:</b> checar se o fluxo expiratório zera antes do próximo ciclo.</li>
-                <li><b>Aprisionamento aéreo:</b> atenção a baseline de volume e empilhamento.</li>
-                <li><b>Componente resistivo:</b> pico alto com platô relativamente menor pode sugerir resistência aumentada.</li>
-                <li><b>Assincronias frequentes:</b> esforços inefetivos (auto-PEEP), ciclagem inadequada no PSV, auto-disparo por vazamento/condensado.</li>
-              </ul>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Leitura rápida por curvas</summary>
-                <ul class="klist">
-                  <li><b>Fluxo:</b> expiração zera? tempo expiratório suficiente? sinais de esforço inefetivo em expiração?</li>
-                  <li><b>Pressão:</b> pico vs platô; serrilhado (“dente de serra”) por secreção/artefato.</li>
-                  <li><b>Volume:</b> retorno ao baseline; discrepâncias (leak).</li>
-                </ul>
-              </details>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Evidências (links)</h2>
-              <ul class="klist">
-                <li><b>GOLD 2025</b> — relatório completo: <a href="https://goldcopd.org/wp-content/uploads/2024/11/GOLD-2025-Report-v1.0-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
-                <li><b>GOLD 2025 (site)</b>: <a href="https://goldcopd.org/2025-gold-report/" target="_blank">página</a></li>
-                <li><b>Pocket Guide 2025</b>: <a href="https://goldcopd.org/wp-content/uploads/2024/11/Pocket-Guide-2025-v1.0-New-Format-15Nov2024_WMV.pdf" target="_blank">PDF</a></li>
-              </ul>
-
-              <div class="hr"></div>
-
-              <div class="note">
-                <b>Recomendação de uso no app:</b> para hipóteses e mecanismos, use os módulos “Assincronias” e “Mecânica” com os achados do traçado.
-              </div>
-            </div>
-          </div>
-        `
-      },
-
-      restritiva: {
-        title: "Doença restritiva — baixa complacência",
-        lead: "Foco educacional em sinais de baixa complacência, pressões e integração com ventilação protetora quando aplicável.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Baixa complacência:</b> Pplat e ΔP tendem a subir para volumes equivalentes; interpretar com contexto.</li>
-                <li><b>Curvas:</b> fluxo inspiratório pode desacelerar rapidamente em modos com desaceleração; considerar modo.</li>
-                <li><b>Integração:</b> se hipoxemia e critérios compatíveis, avaliar SARA (use o bloco SARA).</li>
-                <li><b>Assincronias:</b> esforço aumentado pode coexistir; usar motor dedicado.</li>
-              </ul>
-            </div>
-
             <div class="card" style="box-shadow:none; background: var(--panel2);">
               <h2>Checklist por curvas</h2>
               <ul class="klist">
-                <li><b>Pressão:</b> Pplat/ΔP e tendência.</li>
-                <li><b>Fluxo:</b> sinais de demanda (“flow starvation”) em assistidos.</li>
-                <li><b>Volume:</b> empilhamento e retorno ao baseline.</li>
-              </ul>
-            </div>
-          </div>
-        `
-      },
-
-      cardiaca: {
-        title: "Cardíaca — edema pulmonar cardiogênico / cardiopatia",
-        lead: "Foco educacional em oxigenação, interação com hemodinâmica e leitura por curvas.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Interação VM–hemodinâmica:</b> pressões intratorácicas podem alterar pré/pós-carga; reavaliar após mudanças.</li>
-                <li><b>Oxigenação:</b> monitorar resposta a suporte ventilatório; considerar causas mistas (cardíaca + SARA).</li>
-                <li><b>Curvas:</b> verificar esforço, assincronias por desconforto, e expiração completa.</li>
-              </ul>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Como o app ajuda</h2>
-              <ul class="klist">
-                <li>Use “Assincronias” para diferenciar desconforto/drive alto de problemas de ciclagem/disparo.</li>
-                <li>Use “Mecânica” para interpretar pico vs platô e suspeitas de resistência/complacência.</li>
-              </ul>
-            </div>
-          </div>
-        `
-      },
-
-      obeso: {
-        title: "Obeso / OHS — parede torácica e mecânica",
-        lead: "Foco educacional em complacência do sistema respiratório, pressão transpulmonar (conceitual), e risco de atelectasia.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Complacência do sistema:</b> parede torácica pode contribuir para pressões mais altas sem representar o mesmo estresse pulmonar.</li>
-                <li><b>Curvas:</b> observar sinais de colapso/atelectasia (dependente do modo) e assincronias se esforço alto.</li>
-                <li><b>Oxigenação:</b> considerar posição e fatores extra-pulmonares no raciocínio.</li>
-              </ul>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Evidência (link)</summary>
-                <ul class="klist">
-                  <li>Mechanical Ventilation in the Obese Patient (2021, PMC): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7924569/" target="_blank">texto</a></li>
-                </ul>
-              </details>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Checklist por curvas</h2>
-              <ul class="klist">
-                <li><b>Pressão:</b> Pplat/ΔP e tendência; interpretar junto de mecânica (pulmão vs parede).</li>
-                <li><b>Fluxo:</b> expiração completa e sinais de auto-PEEP se obstrução coexistente.</li>
-                <li><b>Volume:</b> empilhamento / baseline.</li>
-              </ul>
-            </div>
-          </div>
-        `
-      },
-
-      neuro: {
-        title: "Neuromuscular — fraqueza muscular e dependência ventilatória",
-        lead: "Foco educacional em sinais de esforço, falha de gatilho/ciclagem e avaliação por curvas.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Esforço inefetivo:</b> comum quando há fraqueza + auto-PEEP + limiares de disparo.</li>
-                <li><b>Assincronias:</b> atrasos de disparo, ciclagem inadequada e esforços sem disparo podem predominar.</li>
-                <li><b>Curvas:</b> rastrear padrão de esforço e fadiga (tendência).</li>
-              </ul>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Diretriz de NIV em insuficiência respiratória aguda (link)</summary>
-                <ul class="klist">
-                  <li>ERS/ATS NIV guideline (2017, PDF): <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
-                </ul>
-              </details>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Como o app ajuda</h2>
-              <ul class="klist">
-                <li>Use “Assincronias” para mapear esforço inefetivo, atraso de disparo e ciclagem.</li>
-                <li>Use “Mecânica” para diferenciar limitação resistiva vs baixa complacência vs vazamento.</li>
-              </ul>
-            </div>
-          </div>
-        `
-      },
-
-      neurocrit: {
-        title: "Neurocrítico (TCE, tumor, ABI) — ventilação e CO₂ (educacional)",
-        lead: "Foco em pontos de atenção relacionados a PaCO₂/oxigenação e evitar práticas profiláticas não recomendadas; depende de ICP/condição neurológica.",
-        render: () => `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
-              <ul class="klist">
-                <li><b>Alvos de PaCO₂ dependem do contexto:</b> revisões sugerem faixa 35–45 mmHg quando não há hipertensão intracraniana clinicamente significativa; hiperventilação como medida temporária em situações específicas.</li>
-                <li><b>Evitar hiperventilação profilática prolongada</b> (educacional; seguir protocolo neurocrítico local).</li>
-                <li><b>Curvas:</b> evitar assincronias importantes que gerem oscilação de CO₂/pressões; monitorar esforço.</li>
-              </ul>
-
-              <div class="hr"></div>
-
-              <details open>
-                <summary>Evidências (links)</summary>
-                <ul class="klist">
-                  <li>Robba 2020 (PMC): <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7655906/" target="_blank">texto</a></li>
-                  <li>ENLS TBI Protocol (PDF): <a href="https://www.neurocriticalcare.org/Portals/0/Docs/ENLS/ENLS_V_4_0_Protocol_TBI_FINAL.pdf" target="_blank">download</a></li>
-                </ul>
-              </details>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Checklist por curvas</h2>
-              <ul class="klist">
-                <li><b>Pressão:</b> estabilidade e variações; evitar picos/oscilações com esforço intenso.</li>
-                <li><b>Fluxo:</b> detectar assincronias que aumentem trabalho respiratório.</li>
+                <li><b>Fluxo:</b> expiração zera? há sinais de esforço sem disparo?</li>
+                <li><b>Pressão:</b> picos/oscilações; desconforto e sincronia.</li>
                 <li><b>Volume:</b> empilhamento/retorno ao baseline.</li>
               </ul>
             </div>
@@ -1405,25 +1025,167 @@
         `
       },
 
-      trauma: {
-        title: "Trauma — torácico/politrauma (educacional)",
-        lead: "Foco em integração: risco de contusão, dor, obstrução, e coexistência de SARA/choque; avaliação sistemática por curvas e métricas.",
+      dpoc: {
+        title: "DPOC (obstrutivo)",
+        lead: "Foco em expiração incompleta/auto-PEEP e assincronias típicas.",
         render: () => `
           <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Pontos de atenção (educacional)</h2>
+              <h2>Pontos de atenção</h2>
               <ul class="klist">
-                <li><b>Coexistência de fenótipos:</b> trauma pode combinar hipovolemia/choque + contusão + obstrução + SARA.</li>
-                <li><b>Curvas:</b> verificar expiração completa, resistência elevada, e assincronias por dor/drive alto.</li>
-                <li><b>Se critérios de SARA:</b> usar bloco SARA (P/F, Berlin, ΔP).</li>
+                <li><b>Fluxo expiratório não zera</b> sugere expiração incompleta/auto-PEEP.</li>
+                <li><b>Esforço sem disparo</b> pode ocorrer em auto-PEEP + fraqueza.</li>
+              </ul>
+              <details>
+                <summary>Links</summary>
+                <ul class="klist">
+                  <li><b>AMIB/SBPT 2024</b> — <a href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf" target="_blank">PDF</a></li>
+                </ul>
+              </details>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Use os motores</h2>
+              <ul class="klist">
+                <li><b>Assincronias:</b> selecione o que vê (ciclos colados, esforço sem disparo, expiração incompleta).</li>
+                <li><b>Mecânica:</b> resistência vs auto-PEEP vs artefato.</li>
               </ul>
             </div>
+          </div>
+        `
+      },
 
+      restritiva: {
+        title: "Doença restritiva",
+        lead: "Sinais de baixa complacência e integração com hipoxemia.",
+        render: () => `
+          <div class="grid2">
             <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Como o app ajuda</h2>
+              <h2>Pontos de atenção</h2>
               <ul class="klist">
-                <li>Use “Casos” para estruturar hipóteses e checar definidores (SARA/choque).</li>
-                <li>Use “Assincronias” e “Mecânica” para interpretar traçados em tempo real (educacional).</li>
+                <li><b>Pressão sustentada alta</b> pode sugerir baixa complacência.</li>
+                <li><b>Se hipoxemia</b>, usar bloco SARA (Global Definition). :contentReference[oaicite:9]{index=9}</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Links</h2>
+              <ul class="klist">
+                <li><b>ESICM ARDS 2023</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/" target="_blank">PMC</a></li>
+                <li><b>AMIB/SBPT 2024</b> — <a href="https://d1xe7tfg0uwul9.cloudfront.net/amib-portal/wp-content/uploads/2024/09/12100249/Orientacoes-Praticas-de-Ventilacao-Mecanica-Interativo-SET-11-1.pdf" target="_blank">PDF</a></li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      cardiaca: {
+        title: "Cardíaca (edema cardiogênico)",
+        lead: "Evidência forte para CPAP/BiPAP em edema cardiogênico; integração com hemodinâmica (educacional).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção</h2>
+              <ul class="klist">
+                <li><b>Oxigenação</b> e <b>trabalho respiratório</b> melhoram com pressão positiva em edema cardiogênico em diversos estudos e revisões.</li>
+                <li><b>Integração hemodinâmica</b> é mandatória.</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Links</h2>
+              <ul class="klist">
+                <li><b>Cochrane 2019</b> — <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD005351.pub4/full" target="_blank">CD005351</a></li>
+                <li><b>ERS/ATS NIV 2017</b> — <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
+                <li><b>Clinical guide (PMC 2025)</b> — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12625427/" target="_blank">texto</a></li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      obeso: {
+        title: "Obeso / OHS",
+        lead: "Interpretação de pressões no contexto de parede torácica e estratégias individualizadas (educacional).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção</h2>
+              <ul class="klist">
+                <li><b>Pressões mais altas</b> podem refletir contribuição de parede torácica.</li>
+                <li><b>Risco de colapso/atelectasia</b> e dificuldade de desmame são temas recorrentes na literatura.</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Links</h2>
+              <ul class="klist">
+                <li><b>ERS Review 2025</b> — <a href="https://publications.ersnet.org/content/errev/34/176/240190" target="_blank">ERRev</a></li>
+                <li><b>Respiratory Care 2021</b> — <a href="https://www.liebertpub.com/doi/pdf/10.4187/respcare.08686" target="_blank">PDF</a></li>
+                <li><b>BJA 2025</b> — <a href="https://www.bjanaesthesia.org/article/S0007-0912%2825%2900639-7/fulltext" target="_blank">artigo</a></li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      neuro: {
+        title: "Neuromuscular",
+        lead: "Foco em fraqueza, esforço sem disparo e suporte ventilatório (educacional).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção</h2>
+              <ul class="klist">
+                <li><b>Esforço sem disparo</b> é frequente com fraqueza + auto-PEEP.</li>
+                <li><b>Integração com secreção</b> e trabalho respiratório é fundamental.</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Links</h2>
+              <ul class="klist">
+                <li><b>CHEST Guideline 2023</b> — <a href="https://journal.chestnet.org/article/S0012-3692%2823%2900353-7/fulltext" target="_blank">texto</a></li>
+                <li><b>ERS/ATS NIV 2017</b> — <a href="https://www.thoracic.org/statements/resources/cc/niv-guidelines.pdf" target="_blank">PDF</a></li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      neurocrit: {
+        title: "Neurocrítico (TCE, tumor, etc.)",
+        lead: "Evitar extremos de PaCO₂ e reduzir oscilações por assincronia (educacional; seguir protocolo local).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção</h2>
+              <ul class="klist">
+                <li><b>Evitar hiperventilação profilática prolongada</b> e oscilações grandes de CO₂ quando possível (contexto-dependente).</li>
+                <li><b>Assincronias</b> podem aumentar variação de pressões/CO₂; use o motor.</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Links</h2>
+              <ul class="klist">
+                <li><b>ACS TQP TBI (2025)</b> — <a href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf" target="_blank">PDF</a></li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+
+      trauma: {
+        title: "Trauma",
+        lead: "Fenótipos mistos e leitura sistemática por curvas (educacional).",
+        render: () => `
+          <div class="grid2">
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Pontos de atenção</h2>
+              <ul class="klist">
+                <li><b>Fenótipos mistos:</b> choque/contusão/obstrução/SARA podem coexistir.</li>
+                <li><b>Curvas:</b> expiração incompleta, resistência, assincronia por dor/drive alto.</li>
+              </ul>
+            </div>
+            <div class="card" style="box-shadow:none; background: var(--panel2);">
+              <h2>Link (TBI/Trauma)</h2>
+              <ul class="klist">
+                <li><b>ACS TQP TBI (2025)</b> — <a href="https://www.facs.org/media/vgfgjpfk/best-practices-guidelines-traumatic-brain-injury.pdf" target="_blank">PDF</a></li>
               </ul>
             </div>
           </div>
@@ -1434,10 +1196,7 @@
     function renderCase(){
       const v = document.getElementById("caseSel").value;
       const area = document.getElementById("caseArea");
-      if(!v){
-        area.innerHTML = "";
-        return;
-      }
+      if(!v){ area.innerHTML = ""; return; }
       const c = CASES[v];
       area.innerHTML = `
         <div class="card" style="box-shadow:none; background: var(--panel2);">
@@ -1455,220 +1214,159 @@
           ${c.render()}
         </div>
       `;
-
-      // Se mudou para SARA, tenta atualizar atalhos
-      if(v==="sara"){
-        setTimeout(updateArdsCalc, 0);
-      }else{
-        // limpa atalhos se não for SARA
-        document.getElementById("pfQuick").textContent = "—";
-        document.getElementById("dpQuick").textContent = "—";
-        document.getElementById("ardsQuick").textContent = "—";
-      }
+      if(v==="sara"){ setTimeout(updateArdsGlobal, 0); }
     }
 
-    // ===================== ARDS calc =====================
-    function updateArdsCalc(){
-      const pao2 = num(document.getElementById("pao2")?.value);
-      const fio2 = num(document.getElementById("fio2")?.value);
+    // ===== ARDS Global Definition screening (educational) =====
+    function updateArdsGlobal(){
+      const support = document.getElementById("supportType")?.value || "";
       const peep = num(document.getElementById("peep")?.value);
-      const pplat = num(document.getElementById("pplat")?.value);
-      const pinsp = num(document.getElementById("pinsp")?.value);
-      const pbw = num(document.getElementById("pbw")?.value);
-      const vt = num(document.getElementById("vt")?.value);
+      const hfFlow = num(document.getElementById("hfFlow")?.value);
+      const fio2 = num(document.getElementById("fio2")?.value);
+      const pao2 = num(document.getElementById("pao2")?.value);
+      const spo2 = num(document.getElementById("spo2")?.value);
 
       const out = document.getElementById("ardsOut");
       if(!out) return;
 
       let lines = [];
-      let pf = NaN;
+      let pf = NaN, sf = NaN;
+
       if(Number.isFinite(pao2) && Number.isFinite(fio2) && fio2>0){
         pf = pao2 / fio2;
-        lines.push(`P/F = ${pf.toFixed(0)} mmHg`);
         document.getElementById("pfQuick").textContent = pf.toFixed(0);
+        lines.push(`PaO₂/FiO₂ = ${pf.toFixed(0)} mmHg`);
       }else{
         document.getElementById("pfQuick").textContent = "—";
       }
 
-      let ardsClass = "—";
-      if(Number.isFinite(pf) && Number.isFinite(peep) && peep >= 5){
-        if(pf <= 100) ardsClass = "SARA grave (Berlin)";
-        else if(pf <= 200) ardsClass = "SARA moderada (Berlin)";
-        else if(pf <= 300) ardsClass = "SARA leve (Berlin)";
-        else ardsClass = "Não classifica SARA por P/F (Berlin)";
-        lines.push(`Berlin: ${ardsClass} (PEEP ≥ 5)`);
-        document.getElementById("ardsQuick").textContent = ardsClass.replace(" (Berlin)","");
+      if(Number.isFinite(spo2) && Number.isFinite(fio2) && fio2>0){
+        sf = spo2 / fio2;
+        document.getElementById("sfQuick").textContent = sf.toFixed(0);
+        lines.push(`SpO₂/FiO₂ = ${sf.toFixed(0)} (usar quando SpO₂ ≤ 97%)`);
       }else{
-        if(Number.isFinite(peep) && peep < 5){
-          lines.push(`Observação: PEEP < 5 (Berlin usa PEEP/CPAP ≥ 5).`);
+        document.getElementById("sfQuick").textContent = "—";
+      }
+
+      if(support) lines.push(`Suporte: ${support.toUpperCase()}`);
+      if(Number.isFinite(peep)) lines.push(`PEEP/CPAP: ${peep.toFixed(0)} cmH₂O`);
+      if(support==="hfno" && Number.isFinite(hfFlow)) lines.push(`HFNO fluxo: ${hfFlow.toFixed(0)} L/min`);
+
+      // Global hypoxemia criteria
+      let hypoxemia = false;
+      let hypoxemiaWhy = [];
+
+      if(Number.isFinite(pf) && pf <= 300){
+        hypoxemia = true;
+        hypoxemiaWhy.push("PaO₂/FiO₂ ≤ 300");
+      }
+      if(Number.isFinite(sf) && Number.isFinite(spo2) && spo2 <= 97 && sf <= 315){
+        hypoxemia = true;
+        hypoxemiaWhy.push("SpO₂/FiO₂ ≤ 315 com SpO₂ ≤ 97%");
+      }
+
+      // HFNO inclusion (≥30 L/min) note
+      let supportOk = true;
+      if(support==="hfno"){
+        if(Number.isFinite(hfFlow) && hfFlow >= 30){
+          supportOk = true;
+        }else{
+          supportOk = false;
         }
-        document.getElementById("ardsQuick").textContent = "—";
       }
 
-      // Driving pressure
-      let dp = NaN;
-      if(Number.isFinite(pplat) && Number.isFinite(peep)){
-        dp = pplat - peep;
-        lines.push(`ΔP (Pplat−PEEP) = ${dp.toFixed(1)} cmH₂O`);
-      }else if(Number.isFinite(pinsp) && Number.isFinite(peep)){
-        // Em PC, Pinsp é pressão acima da PEEP; ΔP ≈ Pinsp (educacional)
-        dp = pinsp;
-        lines.push(`ΔP (aprox. em PC) ≈ Pinsp = ${dp.toFixed(1)} cmH₂O`);
-      }
-
-      if(Number.isFinite(dp)){
-        document.getElementById("dpQuick").textContent = dp.toFixed(1);
-        if(dp <= 15) lines.push(`ΔP: ponto de atenção geralmente citado ~15 cmH₂O (ok neste valor).`);
-        else lines.push(`ΔP: acima de ~15 cmH₂O (ponto de atenção em ventilação protetora).`);
+      let globalCompat = "—";
+      if(!support){
+        globalCompat = "Selecione o tipo de suporte";
+      }else if(support==="hfno" && !Number.isFinite(hfFlow)){
+        globalCompat = "Preencha fluxo HFNO";
+      }else if(support==="hfno" && supportOk===false){
+        globalCompat = "HFNO < 30 L/min (fora do critério Global)";
+      }else if(!Number.isFinite(fio2)){
+        globalCompat = "Preencha FiO₂";
       }else{
-        document.getElementById("dpQuick").textContent = "—";
+        globalCompat = (hypoxemia ? "SIM (hipoxemia compatível)" : "NÃO (sem hipoxemia pelo critério)");
       }
 
-      // VT por PBW
-      if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
-        const vtkg = vt / pbw;
-        lines.push(`VT/PBW = ${vtkg.toFixed(1)} mL/kg (educacional; ARDSNet usou ~6 mL/kg PBW).`);
+      document.getElementById("globalQuick").textContent = globalCompat.includes("SIM") ? "SIM" : (globalCompat.includes("NÃO") ? "NÃO" : "—");
+
+      let tail = "";
+      if(hypoxemia){
+        tail += `\nCritério(s) atendido(s): ${hypoxemiaWhy.join(" + ")}.`;
+      }
+      if(support==="hfno"){
+        tail += supportOk ? "\nHFNO: fluxo ≥ 30 L/min (ok no critério Global)." : "\nHFNO: fluxo < 30 L/min (não atende critério Global).";
       }
 
       if(lines.length===0){
-        out.textContent = "Preencha PaO₂, FiO₂ e PEEP para classificar.";
-      }else{
-        // badges
-        let tags = [];
-        if(ardsClass.includes("grave")) tags.push(badge("grave","bad"));
-        else if(ardsClass.includes("moderada")) tags.push(badge("moderada","warn"));
-        else if(ardsClass.includes("leve")) tags.push(badge("leve","good"));
-
-        out.innerHTML = `${tags.join(" ")}\n${lines.join("\n")}\n\nLinks: Berlin (2012), ARDSNet (2000), Amato (2015) em “Evidências”.`;
-      }
-    }
-
-    // ===================== Sepsis/Septic shock calc =====================
-    function updateSepsisCalc(){
-      const map = num(document.getElementById("map")?.value);
-      const lac = num(document.getElementById("lac")?.value);
-      const vaso = document.getElementById("vaso")?.value || "";
-      const out = document.getElementById("sepseOut");
-      if(!out) return;
-
-      let lines = [];
-      if(Number.isFinite(map)) lines.push(`MAP informado: ${map.toFixed(0)} mmHg`);
-      if(Number.isFinite(lac)) lines.push(`Lactato informado: ${lac.toFixed(1)} mmol/L`);
-      if(vaso) lines.push(`Vasopressor: ${vaso.toUpperCase()}`);
-
-      let verdict = "—";
-      if(vaso==="sim" && Number.isFinite(map) && Number.isFinite(lac)){
-        // Sepsis-3: vasopressor to maintain MAP ≥65 AND lactate >2 (absence of hypovolemia)
-        if(map < 65 || lac > 2){
-          verdict = "Compatível com critérios clínicos de choque séptico (Sepsis-3) — verificar hipovolemia.";
-        }else{
-          verdict = "Vasopressor + MAP≥65 e lactato≤2: não preenche critério clássico de choque séptico (Sepsis-3).";
-        }
-      }else if(vaso==="nao" && Number.isFinite(map) && Number.isFinite(lac)){
-        if(map < 65 && lac > 2){
-          verdict = "Hipoperfusão provável; choque séptico requer vasopressor (Sepsis-3).";
-        }else{
-          verdict = "Sem vasopressor: avaliar sepse/disfunção orgânica e perfusão global (educacional).";
-        }
-      }else{
-        verdict = "Preencha MAP, lactato e vasopressor para o definidor educacional.";
+        out.textContent = "Preencha suporte, FiO₂ e PaO₂ e/ou SpO₂.";
+        return;
       }
 
-      out.textContent = (lines.length? (lines.join("\n") + "\n\n") : "") + verdict;
+      out.textContent =
+        lines.join("\n") +
+        "\n\nCompatibilidade Global (hipoxemia): " + globalCompat +
+        tail +
+        "\n\nObservação: diagnóstico completo de SARA requer também critérios clínicos/temporais e de imagem (educacional).";
     }
 
-    // ===================== Motors: Assincronias =====================
+    // ===== Motors: Assincronias =====
     const ASSIN_RULES = [
       {
-        id:"ineffort",
         when:["ft_ineffective_effort"],
-        title:"Esforço inefetivo",
+        title:"Esforço observado sem disparo (compatível com esforço inefetivo)",
         conf:"Alta",
-        phys:"Há esforço neural/muscular sem gatilho do ventilador. Em obstrutivos, auto-PEEP eleva o limiar de disparo; em fraqueza, o esforço não atinge o limiar.",
-        hypos:[
-          "Auto-PEEP/air-trapping elevando limiar de disparo",
-          "Sensibilidade de disparo inadequada ou atraso de trigger",
-          "Fraqueza neuromuscular/fadiga",
-          "Sedação/nível de consciência interferindo na coordenação"
-        ],
-        limits:"Precisa correlacionar com modo ventilatório, ajustes de trigger, esforço clínico e contexto (DPOC/neuromuscular)."
+        phys:"Esforço ocorre sem gatilho. Em obstrutivo, auto-PEEP eleva o limiar; em fraqueza, o esforço não atinge o limiar.",
+        hypos:["Auto-PEEP/air-trapping","Sensibilidade/atraso de trigger","Fraqueza/fadiga","Sedação/coordenação"],
+        limits:"Integrar com modo, presença de expiração incompleta e esforço clínico."
       },
       {
-        id:"doubletrigger",
-        when:["pt_double_trigger","vt_breath_stacking"],
-        title:"Duplo disparo / empilhamento",
+        when:["pt_double_trigger"],
+        title:"Dois ciclos quase colados (compatível com duplo disparo)",
         conf:"Alta",
-        phys:"Ocorre quando a demanda inspiratória do paciente excede o tempo/volume do ciclo ventilatório, gerando um segundo disparo antes de expiração completa.",
-        hypos:[
-          "Tempo inspiratório curto para a demanda do paciente",
-          "Esforço intenso / drive elevado",
-          "Ciclagem precoce em modos assistidos"
-        ],
-        limits:"Confirmar padrão em pressão, fluxo e volume; excluir artefatos e auto-disparo."
+        phys:"Demanda inspiratória excede tempo/volume do ciclo, favorecendo novo disparo antes de expiração completa.",
+        hypos:["Tempo inspiratório curto","Drive elevado","Término precoce da inspiração"],
+        limits:"Confirmar com volume (empilhamento) e fluxo expiratório."
       },
       {
-        id:"flowstarvation",
         when:["ft_flow_starvation"],
-        title:"Fluxo insuficiente (“flow starvation”)",
+        title:"Demanda aparente maior que a entrega na inspiração (fluxo insuficiente)",
         conf:"Média–Alta",
-        phys:"A concavidade do fluxo/pressão sugere que a demanda do paciente excede a entrega do ventilador naquele momento do ciclo.",
-        hypos:[
-          "Drive elevado (acidose/dor/ansiedade) com demanda aumentada",
-          "Ajustes de forma de fluxo e/ou limite de suporte insuficientes (dependente do modo)",
-          "Sincronia inadequada de ciclagem"
-        ],
-        limits:"Interpretação depende do modo (VC/PC/PSV) e do padrão de fluxo programado."
+        phys:"Concavidade sugere demanda > entrega naquele momento.",
+        hypos:["Drive alto","Entrega limitada (modo-dependente)","Término inadequado da inspiração"],
+        limits:"Interpretação depende do modo."
       },
       {
-        id:"latecycle",
-        when:["ft_late_cycle"],
-        title:"Ciclagem tardia",
-        conf:"Média",
-        phys:"O ventilador mantém inspiração quando o paciente já está iniciando expiração, gerando desconforto e possível aumento de pressão.",
-        hypos:[
-          "Critério de ciclagem inadequado (especialmente em PSV)",
-          "Drive expiratório precoce / tempo inspiratório excessivo"
-        ],
-        limits:"Requer avaliação do modo e do critério de ciclagem; correlacionar com esforço em pressão."
-      },
-      {
-        id:"earlycycle",
         when:["ft_early_cycle"],
-        title:"Ciclagem precoce",
+        title:"Inspiração termina com esforço ainda presente (término precoce)",
         conf:"Média",
-        phys:"O ventilador encerra inspiração antes do término do esforço inspiratório do paciente, mantendo esforço após ciclar para expiração.",
-        hypos:[
-          "Critério de ciclagem encerra cedo (PSV)",
-          "Tempo inspiratório muito curto (dependente do modo)",
-          "Drive elevado sustentado"
-        ],
-        limits:"Checar presença de esforço pós-ciclagem em pressão/fluxo."
+        phys:"O ciclo termina antes do fim do esforço; esforço persiste após ciclar.",
+        hypos:["Critério de ciclagem cedo (PSV)","Ti curto","Drive alto"],
+        limits:"Confirmar em pressão/fluxo."
       },
       {
-        id:"autotrigger",
+        when:["ft_late_cycle"],
+        title:"Inspiração se mantém quando há desejo expiratório (término tardio)",
+        conf:"Média",
+        phys:"Ventilador mantém inspiração quando paciente já tenta expirar.",
+        hypos:["Critério tardio (PSV)","Ti excessivo","Mudança do drive neural"],
+        limits:"Confirmar padrão repetitivo."
+      },
+      {
         when:["ft_auto_trigger"],
-        title:"Auto-disparo",
+        title:"Ciclos sem padrão claro de esforço (auto-disparo/artefato)",
         conf:"Média",
-        phys:"Ciclos ocorrem sem esforço evidente, por sensibilidade excessiva ou artefatos (vazamento, oscilação, condensado).",
-        hypos:[
-          "Vazamento no circuito/interface/cuff",
-          "Condensado/turbulência",
-          "Sensibilidade de trigger muito alta"
-        ],
-        limits:"Confirmar em múltiplos ciclos e correlacionar com o paciente; excluir movimentos/artefatos."
+        phys:"Sensibilidade elevada ou artefatos (leak/condensado) podem gerar ciclos.",
+        hypos:["Vazamento","Condensado","Sensibilidade alta"],
+        limits:"Confirmar com alarmes/inspeção."
       },
       {
-        id:"expincomplete",
         when:["ft_exp_incomplete"],
-        title:"Expiração incompleta / air-trapping",
+        title:"Fluxo expiratório não zera (expiração incompleta/auto-PEEP)",
         conf:"Média–Alta",
-        phys:"Fluxo expiratório não retorna a zero antes do próximo ciclo, sugerindo tempo expiratório insuficiente, obstrução ou elevada constante de tempo.",
-        hypos:[
-          "Obstrução (DPOC/asma, tubo) ou secreção",
-          "FR alta com tempo expiratório curto",
-          "PEEP/pressões e demanda aumentando aprisionamento (contextual)"
-        ],
-        limits:"Medidas formais de auto-PEEP e correlação com volumes/pressões aumentam a confiabilidade."
+        phys:"Sugere tempo expiratório insuficiente, obstrução ou constante de tempo alta.",
+        hypos:["Obstrução","FR alta/Te curto","Aprisionamento"],
+        limits:"Medidas formais aumentam confiabilidade."
       }
     ];
 
@@ -1681,103 +1379,57 @@
         return;
       }
 
-      let hits = ASSIN_RULES.filter(r => r.when.every(w => picked.includes(w)));
-      // fallback: regras parciais (qualquer match)
-      if(hits.length===0){
-        hits = ASSIN_RULES.filter(r => r.when.some(w => picked.includes(w)));
-      }
+      let hits = ASSIN_RULES.filter(r => r.when.some(w => picked.includes(w)));
 
       let lines = [];
       lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
       lines.push(`Achados selecionados: ${picked.join(", ")}`);
       lines.push("");
 
-      // prioriza regras com mais condições satisfeitas
-      hits.sort((a,b)=> b.when.filter(w=>picked.includes(w)).length - a.when.filter(w=>picked.includes(w)).length);
-
-      hits.slice(0,5).forEach((r, idx) => {
+      hits.forEach((r, idx) => {
         lines.push(`(${idx+1}) ${r.title} — Confiança: ${r.conf}`);
         lines.push(`Fisiologia: ${r.phys}`);
-        lines.push(`Hipóteses: ${r.hypos.map(x=>"- "+x).join("\n")}`);
+        lines.push(`Hipóteses:\n${r.hypos.map(x=>"- "+x).join("\n")}`);
         lines.push(`Limites: ${r.limits}`);
         lines.push("");
       });
 
-      // heurística de destaque
-      if(picked.includes("pt_negative_deflection") || picked.includes("pt_trigger_delay")){
-        lines.push("Observação: deflexão negativa/atraso de disparo reforçam hipótese de carga para trigger (esforço alto, auto-PEEP, sensibilidade).");
-      }
-
       document.getElementById("assinOut").textContent = lines.join("\n");
     }
 
-    // ===================== Motors: Mecânica =====================
+    // ===== Motors: Mecânica =====
     const MEC_RULES = [
       {
-        id:"lowC",
         whenAny:["pt_high_plateau","ft_insp_decel_steep"],
-        title:"Sugere baixa complacência (pulmão/parede torácica)",
+        title:"Baixa complacência provável (pulmão e/ou parede torácica)",
         conf:"Média",
-        phys:"Platô elevado e/ou padrão de enchimento compatível com sistema mais rígido. Em obesidade, parede torácica pode contribuir.",
-        hypos:[
-          "SARA / edema / atelectasia",
-          "Doença restritiva",
-          "Obesidade/parede torácica",
-          "Ascite/pressão abdominal elevada (contexto)"
-        ],
-        limits:"Diferença entre estresse pulmonar e pressão do sistema requer contexto; idealmente correlacionar com gasometria e imagem."
+        phys:"Pressão sustentada alta e padrões compatíveis podem sugerir sistema mais rígido.",
+        hypos:["SARA/edema/atelectasia","Restritiva","Obesidade/parede"],
+        limits:"Interpretar com modo e contexto."
       },
       {
-        id:"highR",
         whenAny:["pt_high_peak_normal_plateau","ft_insp_decel_slow","ft_exp_not_zero"],
-        title:"Sugere resistência aumentada / constante de tempo elevada",
+        title:"Resistência aumentada / constante de tempo alta provável",
         conf:"Média–Alta",
-        phys:"Pico desproporcional e expiração prolongada favorecem componente resistivo (via aérea, tubo, broncoespasmo) e risco de aprisionamento.",
-        hypos:[
-          "DPOC/asma/broncoespasmo",
-          "Tubo/circuito (dobras, secreção)",
-          "Secreções/condensado"
-        ],
-        limits:"Necessita integrar com ausculta, secreção, calibres e resposta clínica."
+        phys:"Pico desproporcional e expiração prolongada favorecem componente resistivo e risco de aprisionamento.",
+        hypos:["DPOC/asma","Tubo/circuito (dobras, secreção, condensado)"],
+        limits:"Integrar com ausculta e inspeção."
       },
       {
-        id:"airtrap",
         whenAny:["ft_exp_not_zero","vt_incomplete_empty"],
-        title:"Aprisionamento aéreo / auto-PEEP provável",
+        title:"Expiração incompleta / auto-PEEP provável",
         conf:"Alta",
-        phys:"Fluxo expiratório não zera e volume não retorna ao baseline sugerem expiração incompleta e PEEP intrínseca.",
-        hypos:[
-          "Obstrução + FR alta",
-          "Tempo expiratório insuficiente",
-          "Drive elevado com ciclos frequentes"
-        ],
-        limits:"Quantificação formal (auto-PEEP) melhora precisão; correlacionar com assincronias por esforço inefetivo."
+        phys:"Fluxo expiratório não zera e volume não retorna ao baseline sugerem aprisionamento.",
+        hypos:["Obstrução + FR alta","Te insuficiente","Drive elevado"],
+        limits:"Quantificação formal melhora precisão."
       },
       {
-        id:"leak",
         whenAny:["vt_leak","pt_sawtooth"],
-        title:"Suspeita de vazamento/artefato",
+        title:"Vazamento/artefato possível",
         conf:"Baixa–Média",
-        phys:"Discrepância de volumes e/ou serrilhado pode ocorrer por leak, condensado, secreção ou turbulência.",
-        hypos:[
-          "Vazamento em cuff/circuito/interface",
-          "Condensado no circuito",
-          "Secreção e turbulência"
-        ],
-        limits:"Confirmar com alarmes, inspeção do circuito e consistência do traçado."
-      },
-      {
-        id:"dp",
-        whenAny:["met_dp_high"],
-        title:"ΔP elevada como ponto de atenção em estratégia protetora",
-        conf:"Média",
-        phys:"ΔP (driving pressure) se associa a desfechos em SARA em estudos observacionais/meta-análises de dados; usada como alerta educacional.",
-        hypos:[
-          "Baixa complacência",
-          "VT relativamente alto para PBW",
-          "PEEP/pressões elevadas com estresse do sistema"
-        ],
-        limits:"Interpretar em conjunto com Pplat, VT/PBW, complacência e fenótipo (pulmão vs parede)."
+        phys:"Discrepância de volumes e serrilhado podem ocorrer por leak/condensado/secreção.",
+        hypos:["Leak cuff/interface","Condensado","Secreção"],
+        limits:"Confirmar com alarmes/inspeção."
       }
     ];
 
@@ -1791,34 +1443,23 @@
       }
 
       let hits = MEC_RULES.filter(r => r.whenAny.some(w => picked.includes(w)));
-      // prioriza pela quantidade de match
-      hits.sort((a,b)=>{
-        const am = a.whenAny.filter(w=>picked.includes(w)).length;
-        const bm = b.whenAny.filter(w=>picked.includes(w)).length;
-        return bm - am;
-      });
 
       let lines = [];
       lines.push(`Contexto: ${ctx ? ctx : "não informado"}`);
       lines.push(`Achados selecionados: ${picked.join(", ")}`);
       lines.push("");
 
-      hits.slice(0,5).forEach((r, idx) => {
+      hits.forEach((r, idx) => {
         lines.push(`(${idx+1}) ${r.title} — Confiança: ${r.conf}`);
         lines.push(`Fisiologia: ${r.phys}`);
-        lines.push(`Hipóteses: ${r.hypos.map(x=>"- "+x).join("\n")}`);
+        lines.push(`Hipóteses:\n${r.hypos.map(x=>"- "+x).join("\n")}`);
         lines.push(`Limites: ${r.limits}`);
         lines.push("");
       });
 
-      if(picked.includes("met_asynchrony_suspect")){
-        lines.push("Observação: padrão sugere componente de assincronia — usar o módulo “Assincronias” para refinar hipóteses.");
-      }
-
       document.getElementById("mecOut").textContent = lines.join("\n");
     }
 
-    // ===================== Reset checkboxes =====================
     function resetChecks(which){
       const cls = which === "assin" ? "assin" : "mec";
       document.querySelectorAll(`input.${cls}`).forEach(x=> x.checked = false);
@@ -1826,8 +1467,6 @@
       if(which==="mec") document.getElementById("mecOut").textContent = "Selecione achados e clique em “Rodar motor”.";
     }
 
-    // ===================== Init =====================
-    // Default: render none
     renderCase();
   </script>
 </body>
