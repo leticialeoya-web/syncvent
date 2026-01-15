@@ -302,6 +302,9 @@
 #splash { pointer-events: auto; }
 #splash .splashCard { pointer-events: auto; position: relative; z-index: 10000; }
 #btnEnterSplash { pointer-events: auto; position: relative; z-index: 10001; }
+   #splash{ display:flex; opacity:1; pointer-events:auto; }
+#splash .splashCard{ position:relative; z-index:10000; pointer-events:auto; }
+#btnEnterSplash{ position:relative; z-index:10001; pointer-events:auto; }
   </style>
 </head>
 
@@ -750,6 +753,8 @@
       if(!el) return;
       el.classList.add("hide");
       setTimeout(()=>{ el.style.display="none"; }, 420);
+      #splash{ display:flex; opacity:1; pointer-events:auto; }
+window.enterApp = enterApp;
     }
     // Fallback: garante o splash mesmo se outro JS quebrar
 (function(){
