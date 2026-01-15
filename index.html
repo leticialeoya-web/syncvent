@@ -315,7 +315,7 @@
           </div>
         </div>
         <div class="splashBtns">
-          <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
+         <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
         </div>
       </div>
 
@@ -747,6 +747,14 @@
       el.classList.add("hide");
       setTimeout(()=>{ el.style.display="none"; }, 420);
     }
+    // Fallback: garante o splash mesmo se outro JS quebrar
+(function(){
+  const b = document.getElementById("btnEnterSplash");
+  if(b){
+    b.onclick = enterApp;
+    b.addEventListener("touchend", function(e){ e.preventDefault(); enterApp(); }, {passive:false});
+  }
+})();
     window.enterApp = enterApp;
 
     // ========= Tabs =========
