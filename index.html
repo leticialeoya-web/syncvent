@@ -1032,6 +1032,170 @@
             </div>
           </div>
         `
+        desmame: {
+  title: "Desmame / TRE (SBT) — processo estruturado (educacional)",
+  lead: "Bloco único com fluxo de triagem diária → TRE/SBT → critérios de sucesso/falha → passos pós-TRE. Sem prescrição.",
+  body: `
+    <div class="grid2">
+      <div class="card" style="box-shadow:none; background: var(--panel2);">
+        <h2>Processo (atualizado) — visão operacional</h2>
+
+        <details open>
+          <summary>1) Triagem diária de prontidão (screening)</summary>
+          <ul class="klist">
+            <li><b>Doença de base em melhora</b> (tendência clínica favorável).</li>
+            <li><b>Oxigenação/ventilação aceitáveis</b> para tentativa (conforme meta institucional e contexto).</li>
+            <li><b>Estabilidade hemodinâmica</b> (sem escalada recente de suporte, conforme protocolo local).</li>
+            <li><b>Nível de consciência e proteção de via aérea</b> compatíveis com tentativa (quando aplicável).</li>
+            <li><b>Secreção/carga de tosse</b> consideradas (limitações de via aérea podem ser determinantes).</li>
+          </ul>
+          <div class="note">
+            <b>Nota:</b> “prontidão” é triagem. Critérios exatos variam por UTI/protocolo; este bloco descreve o processo.
+          </div>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>2) Como fazer o TRE/SBT (estrutura)</summary>
+          <ul class="klist">
+            <li><b>Modalidades usadas em evidência/guidelines:</b> TRE/SBT com <b>PSV baixo</b> ou <b>T-piece</b> por tempo definido.</li>
+            <li><b>Duração típica:</b> janela curta até <b>~30–120 min</b> (serviço define; estudos/guidelines usam até 2h).</li>
+            <li><b>Durante o TRE/SBT:</b> observar padrão respiratório, conforto, sincronia, hemodinâmica e gasometria quando indicada.</li>
+          </ul>
+          <div class="note">
+            Referências de método e duração: AARC CPG 2024 e estudos comparando PSV vs T-piece. :contentReference[oaicite:2]{index=2}
+          </div>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>3) Critérios de interrupção (falha do TRE/SBT) — sinais de intolerância</summary>
+          <ul class="klist">
+            <li><b>Piora sustentada</b> de dispneia/trabalho respiratório ou padrão respiratório desorganizado.</li>
+            <li><b>Instabilidade hemodinâmica</b> ou deterioração clínica durante a tentativa.</li>
+            <li><b>Queda relevante de oxigenação</b> ou necessidade crescente de suporte (conforme metas locais).</li>
+            <li><b>Alteração importante</b> do estado mental, sudorese intensa, sinais de fadiga.</li>
+          </ul>
+          <div class="note">
+            <b>Importante:</b> não usar um único número isolado; usar conjunto de sinais e tendência (processo).
+          </div>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>4) Se TRE/SBT for bem-sucedido: próximos passos</summary>
+          <ul class="klist">
+            <li><b>Checar risco de falha/extubação difícil</b> conforme protocolo (ex.: estridor/edema de via aérea em alto risco — diretriz ATS/CHEST aborda cuff leak test em alto risco).</li>
+            <li><b>Planejar suporte pós-extubação</b> quando indicado (alto risco, DPOC, cardiogênico, etc.) conforme política local.</li>
+            <li><b>Documentar:</b> modalidade do SBT, duração, motivo de sucesso/falha e principais sinais observados.</li>
+          </ul>
+          <div class="note">
+            Referência: ATS/CHEST 2017 (liberação da VM: protocolo, avaliação, pontos como cuff leak em alto risco). :contentReference[oaicite:3]{index=3}
+          </div>
+        </details>
+
+        <details style="margin-top:10px;">
+          <summary>Evidência (links)</summary>
+          <ul class="klist">
+            <li><b>AARC CPG 2024 — Spontaneous Breathing Trials</b>: <a target="_blank" href="https://www.aarc.org/wp-content/uploads/2023/11/CPG2024SpontaneousBreathingTrial.pdf">PDF</a></li>
+            <li><b>AARC CPG 2024 (PMC)</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11285503/">PMC</a></li>
+            <li><b>ATS/CHEST 2017 — Liberation from Mechanical Ventilation</b>: <a target="_blank" href="https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf">PDF</a></li>
+            <li><b>NEJM 2022 — PSV vs T-piece SBT</b>: <a target="_blank" href="https://www.nejm.org/doi/full/10.1056/NEJMoa2209041">artigo</a></li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="card" style="box-shadow:none; background: var(--panel2);">
+        <h2>Checklist por curvas durante TRE/SBT</h2>
+        <ul class="klist">
+          <li><b>Demanda &gt; entrega:</b> concavidade e desconforto (em PSV baixo).</li>
+          <li><b>Ciclos colados / empilhamento:</b> sugerem esforço elevado/tempo neural longo.</li>
+          <li><b>Expiração incompleta:</b> fluxo não zera (especialmente obstrutivo).</li>
+          <li><b>Esforço sem disparo:</b> pode aparecer com auto-PEEP + fraqueza.</li>
+        </ul>
+        <div class="note">
+          Use o módulo <b>Assincronias</b> para estruturar hipóteses quando houver intolerância ao TRE/SBT.
+        </div>
+      </div>
+    </div>
+  
+  imt: {
+  title: "Treinamento muscular inspiratório na VM (IMT) — processo (educacional)",
+  lead: "Bloco único com critérios de elegibilidade → execução estruturada → monitorização e interrupção. Não inclui treino por alteração de trigger.",
+  body: `
+    <div class="grid2">
+      <div class="card" style="box-shadow:none; background: var(--panel2);">
+        <h2>Processo (IMT) — estrutura segura e reprodutível (educacional)</h2>
+
+        <details open>
+          <summary>1) Elegibilidade (screening) antes de iniciar</summary>
+          <ul class="klist">
+            <li><b>Estabilidade clínica suficiente</b> para sessão planejada (sem deterioração aguda em curso).</li>
+            <li><b>Capacidade de interação</b> (quando o método exigir cooperação) ou estratégia definida pela equipe.</li>
+            <li><b>Via aérea e interface</b> compatíveis com o método escolhido (ex.: dispositivo/estratégia de carga dedicada).</li>
+            <li><b>Risco de fadiga</b>: considerar fraqueza severa, alta demanda ventilatória e sinais de exaustão.</li>
+          </ul>
+          <div class="note">
+            <b>Escopo:</b> IMT aqui é tratado como intervenção dedicada (carga inspiratória), e <b>não</b> como “treino alterando trigger”.
+          </div>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>2) Como executar (sem prescrever números)</summary>
+          <ul class="klist">
+            <li><b>Definir método IMT</b> adotado pela UTI (ex.: dispositivo de carga inspiratória / estratégia específica de IMT).</li>
+            <li><b>Definir dose</b> pelo protocolo local (intensidade, séries/repetições, frequência).</li>
+            <li><b>Registrar parâmetros da sessão</b> (método, duração, tolerância, sinais durante a execução).</li>
+          </ul>
+          <div class="note">
+            As revisões sugerem melhora de força inspiratória em vários contextos; protocolos variam (por isso, dose fica como campo do serviço). :contentReference[oaicite:4]{index=4}
+          </div>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>3) Monitorização durante IMT (critérios de pausa/interrupção)</summary>
+          <ul class="klist">
+            <li><b>Intolerância clínica</b> (dispneia intensa, sinais de exaustão, desconforto importante).</li>
+            <li><b>Instabilidade hemodinâmica</b> durante a sessão.</li>
+            <li><b>Deterioração de oxigenação</b> ou necessidade crescente de suporte (metas locais).</li>
+            <li><b>Assincronias relevantes</b> surgindo/acentuando (usar módulo Assincronias para organizar hipóteses).</li>
+          </ul>
+        </details>
+
+        <details open style="margin-top:10px;">
+          <summary>4) Integração com desmame (quando aplicável)</summary>
+          <ul class="klist">
+            <li><b>Objetivo educacional:</b> relacionar IMT com tolerância ao TRE/SBT e sinais de fadiga.</li>
+            <li><b>Se houver piora no TRE/SBT</b>, revisar se há: demanda elevada, auto-PEEP, esforço sem disparo e resistência aumentada.</li>
+          </ul>
+        </details>
+
+        <details style="margin-top:10px;">
+          <summary>Evidência (links)</summary>
+          <ul class="klist">
+            <li><b>Systematic review 2025 (open access/PMC)</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11815589/">PMC</a></li>
+            <li><b>Systematic review & meta-analysis 2025 (Einstein)</b>: <a target="_blank" href="https://www.scielo.br/j/eins/a/PDnXFZwpswzJx9yRtmZLbVg/?format=pdf&lang=en">PDF</a></li>
+            <li><b>Systematic review 2025 (MDPI)</b>: <a target="_blank" href="https://www.mdpi.com/2411-5142/10/2/111">artigo</a></li>
+            <li><b>Implementation/feasibility (2024)</b>: <a target="_blank" href="https://www.australiancriticalcare.com/article/S1036-7314%2824%2900021-3/fulltext">full text</a></li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="card" style="box-shadow:none; background: var(--panel2);">
+        <h2>Checklist por curvas durante IMT</h2>
+        <ul class="klist">
+          <li><b>Demanda &gt; entrega:</b> concavidade e aumento de esforço.</li>
+          <li><b>Ciclos colados/empilhamento:</b> possível sinal de esforço elevado/tempo neural longo.</li>
+          <li><b>Expiração incompleta:</b> fluxo não zera (se obstrutivo coexistir).</li>
+          <li><b>Esforço sem disparo:</b> pode ocorrer com auto-PEEP + fraqueza (avaliar contexto).</li>
+        </ul>
+        <div class="note">
+          Se surgirem achados relevantes, use <b>Assincronias</b> e <b>Mecânica</b> para organizar hipóteses (compacto → expandido).
+        </div>
+      </div>
+    </div>
+  `
+},
+`
+},
+
       },
 
       sepse: {
