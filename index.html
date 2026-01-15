@@ -733,7 +733,11 @@
         </details>
       </div>
     </section>
-
+<div class="footer" style="margin-top:18px;">
+  <b>© <span id="yearNow"></span> Leticia Moreira — SyncVent.</b><br>
+  Conteúdo e estrutura do app protegidos por direitos autorais. Proibida a reprodução, distribuição ou uso comercial sem autorização expressa da autora.<br>
+  Uso exclusivamente educacional; não fornece prescrição, ordens de ajuste ou conduta.
+</div>
   </main>
   <script>
     // ========= Splash =========
@@ -1226,45 +1230,175 @@
         </div>`
       }
     };
+    // ========= Conteúdo educacional + Evidências por caso (aparece no final de cada caso) =========
+    const EDU_BY_CASE = {
+      sara: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — SARA (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Confirmar contexto:</b> suporte (IMV/NIV/CPAP/HFNO) e estabilidade clínica.</li>
+            <li><b>Hipoxemia (triagem):</b> usar P/F e, quando aplicável, S/F com SpO₂ ≤ 97%.</li>
+            <li><b>Interpretação por curvas:</b> integrar pressão + fluxo + volume; priorizar padrão repetitivo (não 1 ciclo isolado).</li>
+            <li><b>Assincronias frequentes:</b> demanda &gt; entrega, término precoce/tardio, ciclos colados (drive elevado).</li>
+            <li><b>Mecânica (interpretação):</b> padrões compatíveis com baixa complacência variam por modo; confirmar com tendência e contexto.</li>
+            <li><b>Limites do app:</b> não define diagnóstico nem prescreve ajustes; apenas organiza leitura e hipóteses.</li>
+          </ul>
+        </details>
+      `,
+      sepse: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Sepse/Choque séptico (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Drive respiratório:</b> pode estar elevado por acidose/dor/desconforto; isso aumenta risco de assincronias.</li>
+            <li><b>Curvas:</b> procurar concavidade inspiratória (demanda &gt; entrega), ciclos colados/empilhamento e padrões instáveis.</li>
+            <li><b>Integração VM–hemodinâmica:</b> observar variações importantes ao longo do tempo (não pontuais).</li>
+            <li><b>Transição de sedação/desmame:</b> mudanças de interação paciente–ventilador podem aparecer primeiro nas curvas.</li>
+          </ul>
+        </details>
+      `,
+      dpoc: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — DPOC/Obstrutivo (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Constante de tempo:</b> esvaziamento expiratório lento; risco de expiração incompleta.</li>
+            <li><b>Sinal-chave:</b> fluxo expiratório <b>não zera</b> antes do próximo ciclo (padrão repetitivo).</li>
+            <li><b>Consequências por curvas:</b> esforço sem disparo no fim da expiração (auto-PEEP + fraqueza/drive).</li>
+            <li><b>Empilhamento:</b> ciclos colados podem aparecer quando o tempo expiratório é insuficiente.</li>
+          </ul>
+        </details>
+      `,
+      restritiva: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Restritiva (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Padrões modo-dependentes:</b> “pressão alta” precisa ser lida com modo, esforço e tendência clínica.</li>
+            <li><b>Curvas:</b> observar padrão inspiratório e estabilidade ciclo a ciclo; integrar com oxigenação e conforto.</li>
+            <li><b>Sobreposição:</b> pode coexistir com assincronias de demanda &gt; entrega em assistidos.</li>
+          </ul>
+        </details>
+      `,
+      cardiaca: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Edema cardiogênico (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Integração clínica:</b> oscilações hemodinâmicas e desconforto frequentemente precedem alterações consistentes em curvas.</li>
+            <li><b>Curvas:</b> procurar sinais de esforço elevado e assincronia (concavidade, ciclos colados) quando houver desconforto.</li>
+            <li><b>Interpretação:</b> foco em tendência e repetição do padrão, não em evento isolado.</li>
+          </ul>
+        </details>
+      `,
+      obeso: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Obesidade/OHS (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Parede torácica:</b> pressões podem refletir componente extrapulmonar; interpretar com contexto.</li>
+            <li><b>Curvas:</b> checar expiração completa, empilhamento e sinais de demanda &gt; entrega.</li>
+            <li><b>Desmame:</b> atenção a sinais de esforço excessivo e assincronia durante transições.</li>
+          </ul>
+        </details>
+      `,
+      neuro: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Neuromuscular (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Fraqueza:</b> aumenta chance de esforço sem disparo e fadiga.</li>
+            <li><b>Curvas:</b> deflexões sem trigger, padrão de esforço crescente, irregularidade durante baixo suporte.</li>
+            <li><b>Interpretação:</b> integrar com sinais de tolerância e tendência ao longo do tempo.</li>
+          </ul>
+        </details>
+      `,
+      neurocrit: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Neurocrítico (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Estabilidade:</b> assincronias podem aumentar variabilidade ventilatória e desconforto.</li>
+            <li><b>Curvas:</b> ciclos colados/empilhamento e concavidade em assistidos, especialmente em transições.</li>
+            <li><b>Dependência de protocolo:</b> metas clínicas são do serviço; aqui é apenas leitura educacional.</li>
+          </ul>
+        </details>
+      `,
+      trauma: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Trauma (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Fenótipo misto:</b> dor/choque/contusão podem alterar drive e sincronia.</li>
+            <li><b>Curvas:</b> concavidade e empilhamento são comuns com drive elevado.</li>
+            <li><b>Organização:</b> usar “SARA”, “DPOC” e “Pneumotórax” conforme padrão dominante e contexto.</li>
+          </ul>
+        </details>
+      `,
+      tb: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Tuberculose na UTI (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Gravidade:</b> pode coexistir com sepse/hipoxemia; organizar hipóteses por tendência clínica.</li>
+            <li><b>Curvas:</b> demanda &gt; entrega, ciclos colados/empilhamento e expiração incompleta quando houver obstrução associada.</li>
+            <li><b>Triagem:</b> se hipoxemia importante, usar “SARA” para organizar cálculos.</li>
+          </ul>
+        </details>
+      `,
+      pneumo: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Pneumotórax em PPV/VM (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Reconhecimento:</b> mudanças abruptas de padrão e deterioração clínica exigem avaliação imediata da equipe.</li>
+            <li><b>Curvas:</b> comparar antes/depois; procurar alteração consistente na mecânica ao longo de vários ciclos.</li>
+            <li><b>Limites:</b> este app não diagnostica nem orienta manejo; apenas organiza leitura.</li>
+          </ul>
+        </details>
+      `,
+      desmame: `
+        <details open style="margin-top:10px;">
+          <summary>Conteúdo educacional — Desmame/TRE (o que observar)</summary>
+          <ul class="klist">
+            <li><b>Durante TRE:</b> observar conforto, padrão ventilatório e sincronia.</li>
+            <li><b>Cur
 
-    function renderCase(){
-      const sel = document.getElementById("caseSel");
-      const area = document.getElementById("caseArea");
-      if(!sel || !area) return;
+   function renderCase(){
+  const sel = document.getElementById("caseSel");
+  const area = document.getElementById("caseArea");
+  if(!sel || !area) return;
 
-      const v = sel.value;
-      if(!v){ area.innerHTML = ""; return; }
+  const v = sel.value;
+  if(!v){ area.innerHTML = ""; return; }
 
-      const c = CASES[v];
-      area.innerHTML = `
-        <div class="card" style="box-shadow:none; background: var(--panel2);">
-          <div class="row" style="justify-content:space-between;">
-            <div>
-              <h2>${c.title}</h2>
-              <p class="sub">${c.lead}</p>
-            </div>
-          </div>
-          <div class="hr"></div>
-          ${c.body}
+  const c = CASES[v];
+
+  const edu = (typeof EDU_BY_CASE !== "undefined" && EDU_BY_CASE[v]) ? EDU_BY_CASE[v] : `
+    <details open style="margin-top:10px;">
+      <summary>Conteúdo educacional (o que observar)</summary>
+      <ul class="klist">
+        <li>Integrar pressão + fluxo + volume; procurar padrão repetitivo.</li>
+        <li>Se houver desconforto, usar “Assincronias” para organizar hipóteses.</li>
+        <li>Se houver alteração consistente de mecânica, usar “Mecânica” para organizar hipóteses.</li>
+        <li>Uso exclusivamente educacional; sem prescrição.</li>
+      </ul>
+    </details>
+  `;
+
+  const evid = (typeof renderEvidenceForCase === "function") ? renderEvidenceForCase(v) : "";
+
+  area.innerHTML = `
+    <div class="card" style="box-shadow:none; background: var(--panel2);">
+      <div class="row" style="justify-content:space-between;">
+        <div>
+          <h2>${c.title}</h2>
+          <p class="sub">${c.lead}</p>
         </div>
-      `;
+      </div>
+      <div class="hr"></div>
+      ${c.body}
 
-      if(v==="sara"){
-        const wire = () => { updateArds(); updateProtective(); };
-        ["ards_support","ards_hfflow","ards_fio2","ards_pao2","ards_spo2","ards_peep"].forEach(id=>{
-          const el = document.getElementById(id);
-          if(!el) return;
-          el.addEventListener("input", wire);
-          if(el.tagName==="SELECT") el.addEventListener("change", wire);
-        });
-        ["prot_pbw","prot_vt","prot_pplat","prot_peep","prot_pinsp"].forEach(id=>{
-          const el = document.getElementById(id);
-          if(el) el.addEventListener("input", wire);
-        });
-        wire();
-      }
-    }
+      <div class="hr"></div>
+      ${edu}
+      ${evid}
+    </div>
+  `;
 
+  if(v==="sara"){
+    const wire = ()
+ }
+}
     function updateArds(){
       const out = document.getElementById("ardsOut");
       const pfQ = document.getElementById("pfQuick");
