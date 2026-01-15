@@ -1780,6 +1780,65 @@ window.enterApp = enterApp;
     window.onerror = function(message, source, lineno, colno){
       alert("Erro de JavaScript: " + message + "\nLinha: " + lineno + ":" + colno);
     };
+    // ========= INIT / WIRING ROBUSTO (garante que o app responda) =========
+(function initSyncVent(){
+  const $ = (id)=>document.getElementById(id);
+
+  // Tabs
+  const tabCasos = $("tabCasos");
+  const tabAssin = $("tabAssin");
+  const tabMec   = $("tabMec");
+  const tabRefs  = $("tabRefs");
+  const tabSobre = $("tabSobre");
+
+  tabCasos && tabCasos.addEventListener("click", ()=>showTab("casos"));
+  tabAssin && tabAssin.addEventListener("click", ()=>showTab("assin"));
+  tabMec   && tabMec.addEventListener("click", ()=>showTab("mec"));
+  tabRefs  && tabRefs.addEventListener("click", ()=>showTab("refs"));
+  tabSobre && tabSobre.addEventListener("click", ()=>showTab("sobre"));
+
+  // Casos: seleção precisa chamar renderCase()
+  const caseSel = $("caseSel");
+  caseSel && caseSel.addEventListener("change", renderCase);
+
+  // Assincronias
+  const btnAssinRun   = $("btnAssinRun");
+  const btnAssinClear = $("btnAssinClear");
+  const btnAssinExp   = $("btnAssinExpand");
+
+  btnAssinRun   && btnAssinRun.addEventListener("click", runAssinMotor);
+  btnAssinClear && btnAssinClear.addEventListener("click", ()=>resetChecks("assin"));
+  btnAssinExp   && btnAssinExp.addEventListener("click", ()=>{
+    const box = $("assinExpand");
+    if(!box) return;
+    box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+  });
+
+  // Mecânica
+  const btnMecRun   = $("btnMecRun");
+  const btnMecClear = $("btnMecClear");
+  const btnMecExp   = $("btnMecExpand");
+
+  btnMecRun   && btnMecRun.addEventListener("click", runMecMotor);
+  btnMecClear && btnMecClear.addEventListener("click", ()=>resetChecks("mec"));
+  btnMecExp   && btnMecExp.addEventListener("click", ()=>{
+    const box = $("mecExpand");
+    if(!box) return;
+    box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+  });
+
+  // Rodapé (se existir)
+  const yearNow = $("yearNow");
+  yearNow && (yearNow.textContent = new Date().getFullYear());
+
+  // Estado inicial
+  try{
+    renderCase();
+  }catch(e){
+    // se renderCase falhar, pelo menos não derruba o app
+    console.log("renderCase falhou:", e);
+  }
+})();
   </script>
 </body>
 </html>
