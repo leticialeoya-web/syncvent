@@ -315,7 +315,7 @@
           </div>
         </div>
         <div class="splashBtns">
-          <button class="btn primary" id="btnEnterSplash">Entrar</button>
+          <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
         </div>
       </div>
 
@@ -735,7 +735,6 @@
     </section>
 
   </main>
-
   <script>
     // ========= Splash =========
     function enterApp(){
@@ -744,6 +743,7 @@
       el.classList.add("hide");
       setTimeout(()=>{ el.style.display="none"; }, 420);
     }
+    window.enterApp = enterApp;
 
     // ========= Tabs =========
     function showTab(which){
@@ -753,17 +753,23 @@
       const secRefs  = document.getElementById("secRefs");
       const secSobre = document.getElementById("secSobre");
 
-      secCasos.classList.toggle("hide", which!=="casos");
-      secAssin.classList.toggle("hide", which!=="assin");
-      secMec.classList.toggle("hide", which!=="mec");
-      secRefs.classList.toggle("hide", which!=="refs");
-      secSobre.classList.toggle("hide", which!=="sobre");
+      if(secCasos) secCasos.classList.toggle("hide", which!=="casos");
+      if(secAssin) secAssin.classList.toggle("hide", which!=="assin");
+      if(secMec)   secMec.classList.toggle("hide", which!=="mec");
+      if(secRefs)  secRefs.classList.toggle("hide", which!=="refs");
+      if(secSobre) secSobre.classList.toggle("hide", which!=="sobre");
 
-      document.getElementById("tabCasos").classList.toggle("active", which==="casos");
-      document.getElementById("tabAssin").classList.toggle("active", which==="assin");
-      document.getElementById("tabMec").classList.toggle("active", which==="mec");
-      document.getElementById("tabRefs").classList.toggle("active", which==="refs");
-      document.getElementById("tabSobre").classList.toggle("active", which==="sobre");
+      const tCasos = document.getElementById("tabCasos");
+      const tAssin = document.getElementById("tabAssin");
+      const tMec   = document.getElementById("tabMec");
+      const tRefs  = document.getElementById("tabRefs");
+      const tSobre = document.getElementById("tabSobre");
+
+      if(tCasos) tCasos.classList.toggle("active", which==="casos");
+      if(tAssin) tAssin.classList.toggle("active", which==="assin");
+      if(tMec)   tMec.classList.toggle("active", which==="mec");
+      if(tRefs)  tRefs.classList.toggle("active", which==="refs");
+      if(tSobre) tSobre.classList.toggle("active", which==="sobre");
 
       window.scrollTo({top:0, behavior:"smooth"});
     }
@@ -1224,6 +1230,8 @@
     function renderCase(){
       const sel = document.getElementById("caseSel");
       const area = document.getElementById("caseArea");
+      if(!sel || !area) return;
+
       const v = sel.value;
       if(!v){ area.innerHTML = ""; return; }
 
@@ -1245,8 +1253,9 @@
         const wire = () => { updateArds(); updateProtective(); };
         ["ards_support","ards_hfflow","ards_fio2","ards_pao2","ards_spo2","ards_peep"].forEach(id=>{
           const el = document.getElementById(id);
-          if(el) el.addEventListener("input", wire);
-          if(el && el.tagName==="SELECT") el.addEventListener("change", wire);
+          if(!el) return;
+          el.addEventListener("input", wire);
+          if(el.tagName==="SELECT") el.addEventListener("change", wire);
         });
         ["prot_pbw","prot_vt","prot_pplat","prot_peep","prot_pinsp"].forEach(id=>{
           const el = document.getElementById(id);
@@ -1257,31 +1266,34 @@
     }
 
     function updateArds(){
+      const out = document.getElementById("ardsOut");
+      const pfQ = document.getElementById("pfQuick");
+      const sfQ = document.getElementById("sfQuick");
+      const gQ  = document.getElementById("globalQuick");
+      if(!out || !pfQ || !sfQ || !gQ) return;
+
       const support = document.getElementById("ards_support")?.value || "";
       const hfflow  = num(document.getElementById("ards_hfflow")?.value);
       const fio2    = num(document.getElementById("ards_fio2")?.value);
       const pao2    = num(document.getElementById("ards_pao2")?.value);
       const spo2    = num(document.getElementById("ards_spo2")?.value);
 
-      const out = document.getElementById("ardsOut");
-      if(!out) return;
-
       let lines=[], pf=NaN, sf=NaN;
 
       if(Number.isFinite(pao2) && Number.isFinite(fio2) && fio2>0){
         pf = pao2 / fio2;
-        document.getElementById("pfQuick").textContent = pf.toFixed(0);
+        pfQ.textContent = pf.toFixed(0);
         lines.push(`PaO₂/FiO₂ = ${pf.toFixed(0)}`);
       }else{
-        document.getElementById("pfQuick").textContent = "—";
+        pfQ.textContent = "—";
       }
 
       if(Number.isFinite(spo2) && Number.isFinite(fio2) && fio2>0){
         sf = spo2 / fio2;
-        document.getElementById("sfQuick").textContent = sf.toFixed(0);
+        sfQ.textContent = sf.toFixed(0);
         lines.push(`SpO₂/FiO₂ = ${sf.toFixed(0)} (válido p/ critério se SpO₂ ≤ 97%)`);
       }else{
-        document.getElementById("sfQuick").textContent = "—";
+        sfQ.textContent = "—";
       }
 
       if(support) lines.push(`Suporte: ${support.toUpperCase()}`);
@@ -1303,8 +1315,7 @@
       else if(support==="hfno" && !supportOk) verdict="HFNO < 30 L/min (fora do critério Global para HFNO).";
       else verdict = hyp ? "SIM (hipoxemia compatível)" : "NÃO (sem hipoxemia pelo critério)";
 
-      document.getElementById("globalQuick").textContent =
-        verdict.startsWith("SIM") ? "SIM" : (verdict.startsWith("NÃO") ? "NÃO" : "—");
+      gQ.textContent = verdict.startsWith("SIM") ? "SIM" : (verdict.startsWith("NÃO") ? "NÃO" : "—");
 
       out.textContent =
         (lines.length ? lines.join("\n") : "Preencha suporte + FiO₂ + PaO₂ e/ou SpO₂.") +
@@ -1319,16 +1330,19 @@
       const pplat = num(document.getElementById("prot_pplat")?.value);
       const peep  = num(document.getElementById("prot_peep")?.value);
       const pinsp = num(document.getElementById("prot_pinsp")?.value);
+
       const out   = document.getElementById("protOut");
-      if(!out) return;
+      const vtkgQ = document.getElementById("vtkgQuick");
+      const dpQ   = document.getElementById("dpQuick");
+      if(!out || !vtkgQ || !dpQ) return;
 
       let lines=[];
       if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
         const vtkg = vt/pbw;
-        document.getElementById("vtkgQuick").textContent = vtkg.toFixed(1) + " mL/kg";
+        vtkgQ.textContent = vtkg.toFixed(1) + " mL/kg";
         lines.push(`VT/PBW = ${vtkg.toFixed(1)} mL/kg`);
       }else{
-        document.getElementById("vtkgQuick").textContent = "—";
+        vtkgQ.textContent = "—";
       }
 
       let dp=NaN;
@@ -1340,12 +1354,7 @@
         lines.push(`ΔP (aprox. em PC) ≈ Pinsp = ${dp.toFixed(1)} cmH₂O`);
       }
 
-      if(Number.isFinite(dp)){
-        document.getElementById("dpQuick").textContent = dp.toFixed(1) + " cmH₂O";
-      }else{
-        document.getElementById("dpQuick").textContent = "—";
-      }
-
+      dpQ.textContent = Number.isFinite(dp) ? (dp.toFixed(1) + " cmH₂O") : "—";
       out.textContent = lines.length ? lines.join("\n") : "Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).";
     }
 
@@ -1402,15 +1411,22 @@
     ];
 
     function runAssinMotor(){
-      const ctx = document.getElementById("assinContext").value;
+      const ctxSel = document.getElementById("assinContext");
+      const out = document.getElementById("assinOut");
+      const box = document.getElementById("assinExpand");
+      const btn = document.getElementById("btnAssinExpand");
+      const txt = document.getElementById("assinExpandText");
+      if(!ctxSel || !out || !box || !btn || !txt) return;
+
+      const ctx = ctxSel.value;
       const picked = [...document.querySelectorAll("input.assin:checked")].map(x=>x.value);
 
-      document.getElementById("assinExpand").style.display="none";
-      document.getElementById("btnAssinExpand").style.display="none";
-      document.getElementById("assinExpandText").innerHTML="";
+      box.style.display="none";
+      btn.style.display="none";
+      txt.innerHTML="";
 
       if(picked.length===0){
-        document.getElementById("assinOut").textContent="Selecione ao menos 1 achado e rode novamente.";
+        out.textContent="Selecione ao menos 1 achado e rode novamente.";
         return;
       }
 
@@ -1429,7 +1445,7 @@
         lines.push("");
       });
 
-      document.getElementById("assinOut").textContent = lines.join("\n");
+      out.textContent = lines.join("\n");
 
       const esc = (s)=> String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
       let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
@@ -1441,8 +1457,8 @@
         html += `<div><b>Diferenciar:</b><ul>` + r.exp.diff.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div><div style="height:8px;"></div>`;
       });
 
-      document.getElementById("assinExpandText").innerHTML = html;
-      document.getElementById("btnAssinExpand").style.display="inline-block";
+      txt.innerHTML = html;
+      btn.style.display="inline-block";
     }
 
     const MEC_RULES = [
@@ -1477,15 +1493,22 @@
     ];
 
     function runMecMotor(){
-      const ctx = document.getElementById("mecContext").value;
+      const ctxSel = document.getElementById("mecContext");
+      const out = document.getElementById("mecOut");
+      const box = document.getElementById("mecExpand");
+      const btn = document.getElementById("btnMecExpand");
+      const txt = document.getElementById("mecExpandText");
+      if(!ctxSel || !out || !box || !btn || !txt) return;
+
+      const ctx = ctxSel.value;
       const picked = [...document.querySelectorAll("input.mec:checked")].map(x=>x.value);
 
-      document.getElementById("mecExpand").style.display="none";
-      document.getElementById("btnMecExpand").style.display="none";
-      document.getElementById("mecExpandText").innerHTML="";
+      box.style.display="none";
+      btn.style.display="none";
+      txt.innerHTML="";
 
       if(picked.length===0){
-        document.getElementById("mecOut").textContent="Selecione ao menos 1 achado e rode novamente.";
+        out.textContent="Selecione ao menos 1 achado e rode novamente.";
         return;
       }
 
@@ -1508,7 +1531,7 @@
         lines.push("Observação: padrão sugere assincronia coexistente → use “Assincronias”.");
       }
 
-      document.getElementById("mecOut").textContent = lines.join("\n");
+      out.textContent = lines.join("\n");
 
       const esc = (s)=> String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
       let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
@@ -1517,65 +1540,94 @@
         html += `<ul>` + r.exp.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul><div style="height:8px;"></div>`;
       });
 
-      document.getElementById("mecExpandText").innerHTML = html;
-      document.getElementById("btnMecExpand").style.display="inline-block";
+      txt.innerHTML = html;
+      btn.style.display="inline-block";
     }
 
     function resetChecks(which){
       if(which==="assin"){
         document.querySelectorAll("input.assin").forEach(x=>x.checked=false);
-        document.getElementById("assinOut").textContent="Selecione os achados e clique em “Rodar análise”.";
-        document.getElementById("btnAssinExpand").style.display="none";
-        document.getElementById("assinExpand").style.display="none";
-        document.getElementById("assinExpandText").innerHTML="";
+        const out = document.getElementById("assinOut");
+        const btn = document.getElementById("btnAssinExpand");
+        const box = document.getElementById("assinExpand");
+        const txt = document.getElementById("assinExpandText");
+        if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
+        if(btn) btn.style.display="none";
+        if(box) box.style.display="none";
+        if(txt) txt.innerHTML="";
       }
       if(which==="mec"){
         document.querySelectorAll("input.mec").forEach(x=>x.checked=false);
-        document.getElementById("mecOut").textContent="Selecione os achados e clique em “Rodar análise”.";
-        document.getElementById("btnMecExpand").style.display="none";
-        document.getElementById("mecExpand").style.display="none";
-        document.getElementById("mecExpandText").innerHTML="";
+        const out = document.getElementById("mecOut");
+        const btn = document.getElementById("btnMecExpand");
+        const box = document.getElementById("mecExpand");
+        const txt = document.getElementById("mecExpandText");
+        if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
+        if(btn) btn.style.display="none";
+        if(box) box.style.display="none";
+        if(txt) txt.innerHTML="";
       }
     }
 
-    // ========= Wiring (garante que o botão Entrar sempre funciona) =========
-    document.addEventListener("DOMContentLoaded", () => {
-      // splash enter
-      document.getElementById("btnEnterSplash").addEventListener("click", enterApp);
+    // ========= Wiring (robusto; não quebra se algum elemento faltar) =========
+    function wireAll(){
+      const btnEnter = document.getElementById("btnEnterSplash");
+      if(btnEnter){
+        btnEnter.addEventListener("click", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+        btnEnter.addEventListener("touchend", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+        btnEnter.onclick = (e)=>{ if(e) e.preventDefault(); enterApp(); };
+      }
 
-      // tabs
-      document.getElementById("tabCasos").addEventListener("click", ()=>showTab("casos"));
-      document.getElementById("tabAssin").addEventListener("click", ()=>showTab("assin"));
-      document.getElementById("tabMec").addEventListener("click", ()=>showTab("mec"));
-      document.getElementById("tabRefs").addEventListener("click", ()=>showTab("refs"));
-      document.getElementById("tabSobre").addEventListener("click", ()=>showTab("sobre"));
+      const tabCasos = document.getElementById("tabCasos");
+      const tabAssin = document.getElementById("tabAssin");
+      const tabMec   = document.getElementById("tabMec");
+      const tabRefs  = document.getElementById("tabRefs");
+      const tabSobre = document.getElementById("tabSobre");
 
-      // cases
-      document.getElementById("caseSel").addEventListener("change", renderCase);
+      if(tabCasos) tabCasos.addEventListener("click", ()=>showTab("casos"));
+      if(tabAssin) tabAssin.addEventListener("click", ()=>showTab("assin"));
+      if(tabMec)   tabMec.addEventListener("click", ()=>showTab("mec"));
+      if(tabRefs)  tabRefs.addEventListener("click", ()=>showTab("refs"));
+      if(tabSobre) tabSobre.addEventListener("click", ()=>showTab("sobre"));
 
-      // motors
-      document.getElementById("btnAssinRun").addEventListener("click", runAssinMotor);
-      document.getElementById("btnAssinClear").addEventListener("click", ()=>resetChecks("assin"));
-      document.getElementById("btnAssinExpand").addEventListener("click", ()=>{
+      const caseSel = document.getElementById("caseSel");
+      if(caseSel) caseSel.addEventListener("change", renderCase);
+
+      const btnAssinRun = document.getElementById("btnAssinRun");
+      const btnAssinClear = document.getElementById("btnAssinClear");
+      const btnAssinExpand = document.getElementById("btnAssinExpand");
+      if(btnAssinRun) btnAssinRun.addEventListener("click", runAssinMotor);
+      if(btnAssinClear) btnAssinClear.addEventListener("click", ()=>resetChecks("assin"));
+      if(btnAssinExpand) btnAssinExpand.addEventListener("click", ()=>{
         const box = document.getElementById("assinExpand");
+        if(!box) return;
         box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
       });
 
-      document.getElementById("btnMecRun").addEventListener("click", runMecMotor);
-      document.getElementById("btnMecClear").addEventListener("click", ()=>resetChecks("mec"));
-      document.getElementById("btnMecExpand").addEventListener("click", ()=>{
+      const btnMecRun = document.getElementById("btnMecRun");
+      const btnMecClear = document.getElementById("btnMecClear");
+      const btnMecExpand = document.getElementById("btnMecExpand");
+      if(btnMecRun) btnMecRun.addEventListener("click", runMecMotor);
+      if(btnMecClear) btnMecClear.addEventListener("click", ()=>resetChecks("mec"));
+      if(btnMecExpand) btnMecExpand.addEventListener("click", ()=>{
         const box = document.getElementById("mecExpand");
+        if(!box) return;
         box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
       });
 
-      // init
       renderCase();
-    });
+    }
 
-    // Se houver erro JS, mostra alerta (ajuda a destravar quando algo quebrar)
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", wireAll);
+    }else{
+      wireAll();
+    }
+
     window.onerror = function(message, source, lineno, colno){
       alert("Erro de JavaScript: " + message + "\nLinha: " + lineno + ":" + colno);
     };
   </script>
 </body>
 </html>
+
