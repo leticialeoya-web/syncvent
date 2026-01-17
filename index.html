@@ -43,6 +43,7 @@
       justify-content:center;
       z-index:9999;
       transition: opacity .35s ease;
+      pointer-events: auto;
     }
     #splash.hide{ opacity:0; pointer-events:none; }
 
@@ -53,6 +54,9 @@
       background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,.78));
       box-shadow: var(--shadow);
       padding: 26px 22px;
+      position: relative;
+      z-index: 10000;
+      pointer-events: auto;
     }
     .splashTop{
       display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
@@ -298,13 +302,40 @@
       line-height:1.45;
     }
     .note b{ color: var(--text); }
-    /* garante clique no botão do splash */
-#splash { pointer-events: auto; }
-#splash .splashCard { pointer-events: auto; position: relative; z-index: 10000; }
-#btnEnterSplash { pointer-events: auto; position: relative; z-index: 10001; }
-   #splash{ display:flex; opacity:1; pointer-events:auto; }
-#splash .splashCard{ position:relative; z-index:10000; pointer-events:auto; }
-#btnEnterSplash{ position:relative; z-index:10001; pointer-events:auto; }
+
+    .imgBox{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .imgGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .imgGrid{ grid-template-columns: 1fr; }
+    }
+    .imgItem{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      overflow:hidden;
+    }
+    .imgItem img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .imgCap{
+      padding: 8px 10px;
+      border-top:1px solid var(--line);
+      font-size:12px;
+      color: var(--muted);
+      font-weight: 900;
+    }
   </style>
 </head>
 
@@ -322,7 +353,7 @@
           </div>
         </div>
         <div class="splashBtns">
-         <button class="btn primary" id="btnEnterSplash" type="button" onclick="document.getElementById('splash').style.display='none'">Entrar</button>
+          <button class="btn primary" id="btnEnterSplash" type="button">Entrar</button>
         </div>
       </div>
 
@@ -413,6 +444,23 @@
 
         <div class="hr"></div>
 
+        <!-- Curvas normais (imagens na raiz) -->
+        <details class="imgBox" open>
+          <summary>Curvas normais — referência visual</summary>
+          <div class="imgGrid">
+            <div class="imgItem">
+              <img src="grafico_pcv.png" alt="Curva normal - PCV" />
+              <div class="imgCap">PCV — curva normal (referência visual)</div>
+            </div>
+            <div class="imgItem">
+              <img src="grafico_vcv.png" alt="Curva normal - VCV" />
+              <div class="imgCap">VCV — curva normal (referência visual)</div>
+            </div>
+          </div>
+        </details>
+
+        <div class="hr"></div>
+
         <div class="row">
           <div style="flex:1; min-width:240px;">
             <label>Contexto (opcional)</label>
@@ -428,7 +476,7 @@
           <div style="flex:1; min-width:240px;">
             <label>Ação</label>
             <div class="row">
-             <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
+              <button class="btn primary" id="btnAssinRun" type="button">Rodar análise</button>
               <button class="btn" id="btnAssinClear" type="button">Limpar</button>
             </div>
           </div>
@@ -549,6 +597,23 @@
       <div class="card">
         <h2>Mecânica — selecione o que você vê</h2>
         <p class="sub">O botão “expandido” só aparece depois de rodar a análise compacta.</p>
+
+        <div class="hr"></div>
+
+        <!-- Curvas normais (imagens na raiz) -->
+        <details class="imgBox" open>
+          <summary>Curvas normais — referência visual</summary>
+          <div class="imgGrid">
+            <div class="imgItem">
+              <img src="grafico_pcv.png" alt="Curva normal - PCV" />
+              <div class="imgCap">PCV — curva normal (referência visual)</div>
+            </div>
+            <div class="imgItem">
+              <img src="grafico_vcv.png" alt="Curva normal - VCV" />
+              <div class="imgCap">VCV — curva normal (referência visual)</div>
+            </div>
+          </div>
+        </details>
 
         <div class="hr"></div>
 
@@ -740,1106 +805,1138 @@
         </details>
       </div>
     </section>
-<div class="footer" style="margin-top:18px;">
-  <b>© <span id="yearNow"></span> Leticia Moreira — SyncVent.</b><br>
-  Conteúdo e estrutura do app protegidos por direitos autorais. Proibida a reprodução, distribuição ou uso comercial sem autorização expressa da autora.<br>
-  Uso exclusivamente educacional; não fornece prescrição, ordens de ajuste ou conduta.
-</div>
-  </main>
-  <script>
-    // ========= Splash =========
-    function enterApp(){
-      const el = document.getElementById("splash");
-      if(!el) return;
-      el.classList.add("hide");
-      setTimeout(()=>{ el.style.display="none"; }, 420);
-      #splash{ display:flex; opacity:1; pointer-events:auto; }
-window.enterApp = enterApp;
-    }
-    // Fallback: garante o splash mesmo se outro JS quebrar
-(function(){
-  const b = document.getElementById("btnEnterSplash");
-  if(b){
-    b.onclick = enterApp;
-    b.addEventListener("touchend", function(e){ e.preventDefault(); enterApp(); }, {passive:false});
-  }
-  // garante que enterApp esteja disponível para onclick
-window.enterApp = enterApp;
-})();
-    window.enterApp = enterApp;
 
-    // ========= Tabs =========
-    function showTab(which){
-      const secCasos = document.getElementById("secCasos");
-      const secAssin = document.getElementById("secAssin");
-      const secMec   = document.getElementById("secMec");
-      const secRefs  = document.getElementById("secRefs");
-      const secSobre = document.getElementById("secSobre");
-
-      if(secCasos) secCasos.classList.toggle("hide", which!=="casos");
-      if(secAssin) secAssin.classList.toggle("hide", which!=="assin");
-      if(secMec)   secMec.classList.toggle("hide", which!=="mec");
-      if(secRefs)  secRefs.classList.toggle("hide", which!=="refs");
-      if(secSobre) secSobre.classList.toggle("hide", which!=="sobre");
-
-      const tCasos = document.getElementById("tabCasos");
-      const tAssin = document.getElementById("tabAssin");
-      const tMec   = document.getElementById("tabMec");
-      const tRefs  = document.getElementById("tabRefs");
-      const tSobre = document.getElementById("tabSobre");
-
-      if(tCasos) tCasos.classList.toggle("active", which==="casos");
-      if(tAssin) tAssin.classList.toggle("active", which==="assin");
-      if(tMec)   tMec.classList.toggle("active", which==="mec");
-      if(tRefs)  tRefs.classList.toggle("active", which==="refs");
-      if(tSobre) tSobre.classList.toggle("active", which==="sobre");
-
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-
-    function num(v){
-      if(v===null || v===undefined) return NaN;
-      const s = String(v).replace(",", ".").trim();
-      const n = Number(s);
-      return Number.isFinite(n) ? n : NaN;
-    }
-
-    // ========= Casos =========
-    const CASES = {
-      sara: {
-        title: "SARA (ARDS) — Global (educacional) + calculadoras",
-        lead: "Triagem de hipoxemia compatível (P/F e S/F) + VT/PBW + ΔP (educacional).",
-        body: `
-          <div class="grid2">
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Definição (educacional)</h2>
-              <ul class="klist">
-                <li><b>Hipoxemia compatível:</b> P/F ≤ 300, ou S/F ≤ 315 quando SpO₂ ≤ 97%.</li>
-                <li><b>HFNO:</b> no critério Global, usar fluxo ≥ 30 L/min.</li>
-              </ul>
-
-              <div class="hr"></div>
-              <h2>Calculadora — SARA (Global)</h2>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>Tipo de suporte</label>
-                  <select id="ards_support">
-                    <option value="">Selecione…</option>
-                    <option value="imv">VM invasiva</option>
-                    <option value="niv">NIV/CPAP</option>
-                    <option value="hfno">HFNO</option>
-                  </select>
-                </div>
-                <div style="flex:1; min-width:220px;">
-                  <label>Fluxo HFNO (L/min) — se HFNO</label>
-                  <input id="ards_hfflow" placeholder="ex.: 40" />
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>FiO₂ (fração)</label>
-                  <input id="ards_fio2" placeholder="ex.: 0,60" />
-                </div>
-                <div style="flex:1; min-width:220px;">
-                  <label>PaO₂ (mmHg) — opcional</label>
-                  <input id="ards_pao2" placeholder="ex.: 80" />
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>SpO₂ (%) — opcional</label>
-                  <input id="ards_spo2" placeholder="ex.: 92" />
-                  <div class="small">S/F válido para critério se SpO₂ ≤ 97%.</div>
-                </div>
-                <div style="flex:1; min-width:220px;">
-                  <label>PEEP/CPAP (cmH₂O) — opcional</label>
-                  <input id="ards_peep" placeholder="ex.: 10" />
-                </div>
-              </div>
-
-              <div class="hr"></div>
-
-              <label>Atalhos</label>
-              <div class="row">
-                <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
-                <span class="chip">S/F <b class="mono" id="sfQuick">—</b></span>
-                <span class="chip">Compatível? <b class="mono" id="globalQuick">—</b></span>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="outBox">
-                <h3>Resultado</h3>
-                <div class="txt" id="ardsOut">Preencha suporte + FiO₂ + PaO₂ e/ou SpO₂.</div>
-              </div>
-            </div>
-
-            <div class="card" style="box-shadow:none; background: var(--panel2);">
-              <h2>Ventilação protetora — calculadoras (educacional)</h2>
-
-              <div class="hr"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>PBW (kg)</label>
-                  <input id="prot_pbw" placeholder="ex.: 60" />
-                </div>
-                <div style="flex:1; min-width:220px;">
-                  <label>VT (mL)</label>
-                  <input id="prot_vt" placeholder="ex.: 360" />
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>Pplat (cmH₂O) — opcional</label>
-                  <input id="prot_pplat" placeholder="ex.: 28" />
-                </div>
-                <div style="flex:1; min-width:220px;">
-                  <label>PEEP (cmH₂O) — opcional</label>
-                  <input id="prot_peep" placeholder="ex.: 10" />
-                </div>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="row">
-                <div style="flex:1; min-width:220px;">
-                  <label>Pinsp (cmH₂O) — opcional (modo pressórico)</label>
-                  <input id="prot_pinsp" placeholder="ex.: 14 (acima da PEEP)" />
-                  <div class="small">VC: ΔP=Pplat−PEEP. PC: ΔP≈Pinsp (aprox. educacional).</div>
-                </div>
-              </div>
-
-              <div class="hr"></div>
-
-              <div class="row">
-                <span class="chip">VT/PBW <b class="mono" id="vtkgQuick">—</b></span>
-                <span class="chip">ΔP <b class="mono" id="dpQuick">—</b></span>
-              </div>
-
-              <div style="height:10px;"></div>
-
-              <div class="outBox">
-                <h3>Resultado</h3>
-                <div class="txt" id="protOut">Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).</div>
-              </div>
-            </div>
-          </div>
-        `
-      },
-
-      sepse: {
-        title:"Sepse / Choque séptico (educacional)",
-        lead:"Drive elevado, interação VM–hemodinâmica e risco de hipoxemia/ARDS.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Definições</h2>
-            <ul class="klist">
-              <li><b>Sepse:</b> disfunção orgânica por resposta desregulada à infecção.</li>
-              <li><b>Choque séptico:</b> definição operacional (vasopressor para MAP ≥65 + lactato elevado no contexto).</li>
-            </ul>
-            <details open style="margin-top:10px;">
-              <summary>Pontos de atenção por curvas</summary>
-              <ul class="klist">
-                <li>Concavidade inspiratória (demanda &gt; entrega).</li>
-                <li>Ciclos colados/empilhamento.</li>
-                <li>Expiração incompleta se coexistir obstrução.</li>
-              </ul>
-            </details>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Atalho</h2>
-            <ul class="klist">
-              <li>Se hipoxemia importante: use o caso <b>SARA</b> para triagem P/F e S/F.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      dpoc: {
-        title:"DPOC (obstrutivo) (educacional)",
-        lead:"Resistência elevada, expiração incompleta/auto-PEEP e esforço sem disparo.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Constante de tempo elevada → esvaziamento lento.</li>
-              <li>Achado-chave: <b>fluxo expiratório não zerar</b>.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Checklist por curvas</h2>
-            <ul class="klist">
-              <li>Fluxo expiratório zera?</li>
-              <li>Baseline de volume retorna?</li>
-              <li>Esforço sem disparo no fim da expiração?</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      restritiva: {
-        title:"Doença restritiva (educacional)",
-        lead:"Baixa complacência do sistema; interpretar por modo e contexto.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Pressão sustentada alta pode sugerir baixa complacência (modo-dependente).</li>
-              <li>Se hipoxemia aguda: avaliar SARA.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Integrar pressão + fluxo + volume.</li>
-              <li>Concavidade em assistidos sugere demanda &gt; entrega.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      cardiaca: {
-        title:"Cardíaca (edema cardiogênico) (educacional)",
-        lead:"Integração hemodinâmica e reconhecimento de desconforto/sincronia por curvas.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Reavaliar tendência clínica (hemodinâmica + oxigenação).</li>
-              <li>Usar Assincronias quando houver desconforto importante.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Concavidade inspiratória e ciclos colados.</li>
-              <li>Empilhamento em ciclos muito próximos.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      obeso: {
-        title:"Obeso / OHS (educacional)",
-        lead:"Pressões podem refletir parede torácica; risco de colapso e dificuldade no desmame.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Interpretar pressão com contribuição de parede torácica.</li>
-              <li>Checar expiração completa e empilhamento.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Demanda &gt; entrega e esforço elevado.</li>
-              <li>Usar Mecânica com contexto “obesidade”.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      neuro: {
-        title:"Neuromuscular (educacional)",
-        lead:"Fraqueza → esforço sem disparo e fadiga; sincronia é crítica.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Esforço sem disparo é comum (especialmente com auto-PEEP).</li>
-              <li>Monitorar sinais de fadiga durante baixo suporte.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Deflexões sem disparo no fim da expiração.</li>
-              <li>Demanda &gt; entrega em assistidos.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      neurocrit: {
-        title:"Neurocrítico (educacional)",
-        lead:"Evitar oscilação por assincronia; metas dependem do protocolo local.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Assincronias podem aumentar variabilidade ventilatória.</li>
-              <li>Evitar instabilidade durante transições de suporte.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Ciclos colados e empilhamento.</li>
-              <li>Demanda &gt; entrega em assistidos.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      trauma: {
-        title:"Trauma (educacional)",
-        lead:"Fenótipos mistos (choque/contusão/obstrução/ARDS); usar motores por curvas.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Se hipoxemia aguda: avaliar SARA.</li>
-              <li>Se padrão obstrutivo: avaliar DPOC.</li>
-              <li>Se suspeita de pneumotórax em PPV: avaliar Pneumotórax.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Concavidade e ciclos colados por dor/drive alto.</li>
-              <li>Empilhamento e expiração curta.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      tb: {
-        title:"Tuberculose na UTI (educacional)",
-        lead:"Quadros graves; pode coexistir sepse/ARDS; interpretar por curvas e tendência clínica.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Se hipoxemia importante: usar SARA para triagem.</li>
-              <li>Drive alto e desconforto podem aumentar assincronias.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Demanda &gt; entrega, ciclos colados, empilhamento.</li>
-              <li>Se obstrução coexistir: expiração incompleta.</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      pneumo: {
-        title:"Pneumotórax em PPV/VM (educacional)",
-        lead:"Risco de progressão sob pressão positiva; priorizar reconhecimento e manejo pela equipe.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Pontos de atenção</h2>
-            <ul class="klist">
-              <li>Mudança abrupta de mecânica pode ocorrer (interpretação clínica obrigatória).</li>
-              <li>Alarmes e avaliação clínica são mandatórios.</li>
-            </ul>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas</h2>
-            <ul class="klist">
-              <li>Comparar tendências antes/depois do evento.</li>
-              <li>Usar Mecânica para organizar hipóteses (não é diagnóstico).</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      desmame: {
-        title:"Desmame / TRE (SBT) — processo (educacional)",
-        lead:"Triagem diária → TRE/SBT → critérios de tolerância → próximos passos. Sem prescrição.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Processo (bloco único)</h2>
-            <details open>
-              <summary>1) Triagem diária de prontidão</summary>
-              <ul class="klist">
-                <li>Doença de base em melhora (tendência).</li>
-                <li>Oxigenação/ventilação aceitáveis para tentativa (meta institucional).</li>
-                <li>Estabilidade hemodinâmica (sem escalada recente importante).</li>
-                <li>Consciência/proteção de via aérea conforme contexto.</li>
-                <li>Secreção e tosse consideradas.</li>
-              </ul>
-            </details>
-            <details open style="margin-top:10px;">
-              <summary>2) TRE/SBT (estrutura)</summary>
-              <ul class="klist">
-                <li>Modalidades: PSV baixo ou T-piece (serviço define).</li>
-                <li>Duração típica: ~30–120 min (serviço define).</li>
-                <li>Monitorar padrão respiratório, conforto, sincronia e hemodinâmica.</li>
-              </ul>
-            </details>
-            <details open style="margin-top:10px;">
-              <summary>3) Interromper se intolerância</summary>
-              <ul class="klist">
-                <li>Piora sustentada de trabalho respiratório/desconforto.</li>
-                <li>Instabilidade hemodinâmica/deterioração clínica.</li>
-                <li>Queda de oxigenação ou necessidade crescente de suporte.</li>
-                <li>Sinais de fadiga/intolerância.</li>
-              </ul>
-            </details>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas no TRE/SBT</h2>
-            <ul class="klist">
-              <li>Concavidade (demanda &gt; entrega).</li>
-              <li>Ciclos colados/empilhamento.</li>
-              <li>Expiração incompleta (obstrutivo).</li>
-              <li>Esforço sem disparo (auto-PEEP + fraqueza).</li>
-            </ul>
-          </div>
-        </div>`
-      },
-
-      imt: {
-        title:"IMT na VM (sem trigger) — processo (educacional)",
-        lead:"Elegibilidade → execução estruturada → monitorização e interrupção. Não inclui treino por alteração de trigger.",
-        body:`<div class="grid2">
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Processo (bloco único)</h2>
-            <details open>
-              <summary>1) Elegibilidade (screening)</summary>
-              <ul class="klist">
-                <li>Estabilidade clínica suficiente para sessão planejada.</li>
-                <li>Capacidade de interação quando o método exigir cooperação (ou estratégia definida).</li>
-                <li>Via aérea/interface compatíveis com o método de IMT.</li>
-                <li>Considerar risco de fadiga e demanda ventilatória.</li>
-              </ul>
-              <div class="note"><b>Escopo:</b> IMT aqui é carga inspiratória dedicada. Não inclui alteração de trigger.</div>
-            </details>
-            <details open style="margin-top:10px;">
-              <summary>2) Execução (sem prescrever números)</summary>
-              <ul class="klist">
-                <li>Definir método adotado pela UTI (dispositivo/carga).</li>
-                <li>Usar dose conforme protocolo local (intensidade/séries/frequência).</li>
-                <li>Registrar tolerância e sinais durante a sessão.</li>
-              </ul>
-            </details>
-            <details open style="margin-top:10px;">
-              <summary>3) Pausar/interromper se intolerância</summary>
-              <ul class="klist">
-                <li>Dispneia intensa/sinais de exaustão/desconforto importante.</li>
-                <li>Instabilidade hemodinâmica.</li>
-                <li>Deterioração de oxigenação ou aumento do suporte.</li>
-                <li>Assincronias relevantes surgindo/acentuando.</li>
-              </ul>
-            </details>
-          </div>
-          <div class="card" style="box-shadow:none; background: var(--panel2);">
-            <h2>Curvas durante IMT</h2>
-            <ul class="klist">
-              <li>Concavidade e aumento de esforço.</li>
-              <li>Ciclos colados/empilhamento.</li>
-              <li>Expiração incompleta se obstrutivo coexistir.</li>
-              <li>Esforço sem disparo (auto-PEEP + fraqueza).</li>
-            </ul>
-          </div>
-        </div>`
-      }
-    };
-    // ========= Conteúdo educacional + Evidências por caso (aparece no final de cada caso) =========
-    const EDU_BY_CASE = {
-      sara: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — SARA (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Confirmar contexto:</b> suporte (IMV/NIV/CPAP/HFNO) e estabilidade clínica.</li>
-            <li><b>Hipoxemia (triagem):</b> usar P/F e, quando aplicável, S/F com SpO₂ ≤ 97%.</li>
-            <li><b>Interpretação por curvas:</b> integrar pressão + fluxo + volume; priorizar padrão repetitivo (não 1 ciclo isolado).</li>
-            <li><b>Assincronias frequentes:</b> demanda &gt; entrega, término precoce/tardio, ciclos colados (drive elevado).</li>
-            <li><b>Mecânica (interpretação):</b> padrões compatíveis com baixa complacência variam por modo; confirmar com tendência e contexto.</li>
-            <li><b>Limites do app:</b> não define diagnóstico nem prescreve ajustes; apenas organiza leitura e hipóteses.</li>
-          </ul>
-        </details>
-      `,
-      sepse: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Sepse/Choque séptico (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Drive respiratório:</b> pode estar elevado por acidose/dor/desconforto; isso aumenta risco de assincronias.</li>
-            <li><b>Curvas:</b> procurar concavidade inspiratória (demanda &gt; entrega), ciclos colados/empilhamento e padrões instáveis.</li>
-            <li><b>Integração VM–hemodinâmica:</b> observar variações importantes ao longo do tempo (não pontuais).</li>
-            <li><b>Transição de sedação/desmame:</b> mudanças de interação paciente–ventilador podem aparecer primeiro nas curvas.</li>
-          </ul>
-        </details>
-      `,
-      dpoc: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — DPOC/Obstrutivo (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Constante de tempo:</b> esvaziamento expiratório lento; risco de expiração incompleta.</li>
-            <li><b>Sinal-chave:</b> fluxo expiratório <b>não zera</b> antes do próximo ciclo (padrão repetitivo).</li>
-            <li><b>Consequências por curvas:</b> esforço sem disparo no fim da expiração (auto-PEEP + fraqueza/drive).</li>
-            <li><b>Empilhamento:</b> ciclos colados podem aparecer quando o tempo expiratório é insuficiente.</li>
-          </ul>
-        </details>
-      `,
-      restritiva: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Restritiva (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Padrões modo-dependentes:</b> “pressão alta” precisa ser lida com modo, esforço e tendência clínica.</li>
-            <li><b>Curvas:</b> observar padrão inspiratório e estabilidade ciclo a ciclo; integrar com oxigenação e conforto.</li>
-            <li><b>Sobreposição:</b> pode coexistir com assincronias de demanda &gt; entrega em assistidos.</li>
-          </ul>
-        </details>
-      `,
-      cardiaca: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Edema cardiogênico (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Integração clínica:</b> oscilações hemodinâmicas e desconforto frequentemente precedem alterações consistentes em curvas.</li>
-            <li><b>Curvas:</b> procurar sinais de esforço elevado e assincronia (concavidade, ciclos colados) quando houver desconforto.</li>
-            <li><b>Interpretação:</b> foco em tendência e repetição do padrão, não em evento isolado.</li>
-          </ul>
-        </details>
-      `,
-      obeso: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Obesidade/OHS (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Parede torácica:</b> pressões podem refletir componente extrapulmonar; interpretar com contexto.</li>
-            <li><b>Curvas:</b> checar expiração completa, empilhamento e sinais de demanda &gt; entrega.</li>
-            <li><b>Desmame:</b> atenção a sinais de esforço excessivo e assincronia durante transições.</li>
-          </ul>
-        </details>
-      `,
-      neuro: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Neuromuscular (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Fraqueza:</b> aumenta chance de esforço sem disparo e fadiga.</li>
-            <li><b>Curvas:</b> deflexões sem trigger, padrão de esforço crescente, irregularidade durante baixo suporte.</li>
-            <li><b>Interpretação:</b> integrar com sinais de tolerância e tendência ao longo do tempo.</li>
-          </ul>
-        </details>
-      `,
-      neurocrit: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Neurocrítico (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Estabilidade:</b> assincronias podem aumentar variabilidade ventilatória e desconforto.</li>
-            <li><b>Curvas:</b> ciclos colados/empilhamento e concavidade em assistidos, especialmente em transições.</li>
-            <li><b>Dependência de protocolo:</b> metas clínicas são do serviço; aqui é apenas leitura educacional.</li>
-          </ul>
-        </details>
-      `,
-      trauma: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Trauma (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Fenótipo misto:</b> dor/choque/contusão podem alterar drive e sincronia.</li>
-            <li><b>Curvas:</b> concavidade e empilhamento são comuns com drive elevado.</li>
-            <li><b>Organização:</b> usar “SARA”, “DPOC” e “Pneumotórax” conforme padrão dominante e contexto.</li>
-          </ul>
-        </details>
-      `,
-      tb: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Tuberculose na UTI (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Gravidade:</b> pode coexistir com sepse/hipoxemia; organizar hipóteses por tendência clínica.</li>
-            <li><b>Curvas:</b> demanda &gt; entrega, ciclos colados/empilhamento e expiração incompleta quando houver obstrução associada.</li>
-            <li><b>Triagem:</b> se hipoxemia importante, usar “SARA” para organizar cálculos.</li>
-          </ul>
-        </details>
-      `,
-      pneumo: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Pneumotórax em PPV/VM (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Reconhecimento:</b> mudanças abruptas de padrão e deterioração clínica exigem avaliação imediata da equipe.</li>
-            <li><b>Curvas:</b> comparar antes/depois; procurar alteração consistente na mecânica ao longo de vários ciclos.</li>
-            <li><b>Limites:</b> este app não diagnostica nem orienta manejo; apenas organiza leitura.</li>
-          </ul>
-        </details>
-      `,
-      desmame: `
-        <details open style="margin-top:10px;">
-          <summary>Conteúdo educacional — Desmame/TRE (o que observar)</summary>
-          <ul class="klist">
-            <li><b>Durante TRE:</b> observar conforto, padrão ventilatório e sincronia.</li>
-            <li><b>Cur
-
-   function renderCase(){
-  const sel = document.getElementById("caseSel");
-  const area = document.getElementById("caseArea");
-  if(!sel || !area) return;
-
-  const v = sel.value;
-  if(!v){ area.innerHTML = ""; return; }
-
-  const c = CASES[v];
-
-  const edu = (typeof EDU_BY_CASE !== "undefined" && EDU_BY_CASE[v]) ? EDU_BY_CASE[v] : `
-    <details open style="margin-top:10px;">
-      <summary>Conteúdo educacional (o que observar)</summary>
-      <ul class="klist">
-        <li>Integrar pressão + fluxo + volume; procurar padrão repetitivo.</li>
-        <li>Se houver desconforto, usar “Assincronias” para organizar hipóteses.</li>
-        <li>Se houver alteração consistente de mecânica, usar “Mecânica” para organizar hipóteses.</li>
-        <li>Uso exclusivamente educacional; sem prescrição.</li>
-      </ul>
-    </details>
-  `;
-
-  const evid = (typeof renderEvidenceForCase === "function") ? renderEvidenceForCase(v) : "";
-
-  area.innerHTML = `
-    <div class="card" style="box-shadow:none; background: var(--panel2);">
-      <div class="row" style="justify-content:space-between;">
-        <div>
-          <h2>${c.title}</h2>
-          <p class="sub">${c.lead}</p>
-        </div>
-      </div>
-      <div class="hr"></div>
-      ${c.body}
-
-      <div class="hr"></div>
-      ${edu}
-      ${evid}
+    <div class="footer" style="margin-top:18px;">
+      <b>© <span id="yearNow"></span> Leticia Moreira — SyncVent.</b><br>
+      Conteúdo e estrutura do app protegidos por direitos autorais. Proibida a reprodução, distribuição ou uso comercial sem autorização expressa da autora.<br>
+      Uso exclusivamente educacional; não fornece prescrição, ordens de ajuste ou conduta.
     </div>
-  `;
 
-  if(v==="sara"){
-    const wire = ()
- }
-}
-    function updateArds(){
-      const out = document.getElementById("ardsOut");
-      const pfQ = document.getElementById("pfQuick");
-      const sfQ = document.getElementById("sfQuick");
-      const gQ  = document.getElementById("globalQuick");
-      if(!out || !pfQ || !sfQ || !gQ) return;
+  </main>
 
-      const support = document.getElementById("ards_support")?.value || "";
-      const hfflow  = num(document.getElementById("ards_hfflow")?.value);
-      const fio2    = num(document.getElementById("ards_fio2")?.value);
-      const pao2    = num(document.getElementById("ards_pao2")?.value);
-      const spo2    = num(document.getElementById("ards_spo2")?.value);
+  <!-- BLOCO 2/2 (JavaScript) deve ser colado a partir daqui -->
+  <!-- ===================== PARTE 2/2 (COLE ABAIXO DA PARTE 1/2, SEQUENCIALMENTE) ===================== -->
+<script>
+/* ===================== SyncVent — Reset estrutural (JS) =====================
+   - 1 único boot + 1 único wiring
+   - Sem IDs duplicados (o HTML da Parte 1/2 deve ter apenas 1 #btnEnterSplash)
+   - Sem CSS dentro do JS
+   - Isolamento de erro (não derruba o app inteiro)
+============================================================================= */
 
-      let lines=[], pf=NaN, sf=NaN;
+(function(){
+  "use strict";
 
-      if(Number.isFinite(pao2) && Number.isFinite(fio2) && fio2>0){
-        pf = pao2 / fio2;
-        pfQ.textContent = pf.toFixed(0);
-        lines.push(`PaO₂/FiO₂ = ${pf.toFixed(0)}`);
-      }else{
-        pfQ.textContent = "—";
-      }
-
-      if(Number.isFinite(spo2) && Number.isFinite(fio2) && fio2>0){
-        sf = spo2 / fio2;
-        sfQ.textContent = sf.toFixed(0);
-        lines.push(`SpO₂/FiO₂ = ${sf.toFixed(0)} (válido p/ critério se SpO₂ ≤ 97%)`);
-      }else{
-        sfQ.textContent = "—";
-      }
-
-      if(support) lines.push(`Suporte: ${support.toUpperCase()}`);
-      if(support==="hfno" && Number.isFinite(hfflow)) lines.push(`HFNO fluxo: ${hfflow.toFixed(0)} L/min`);
-
-      let hyp=false, why=[];
-      if(Number.isFinite(pf) && pf<=300){ hyp=true; why.push("P/F ≤ 300"); }
-      if(Number.isFinite(sf) && Number.isFinite(spo2) && spo2<=97 && sf<=315){
-        hyp=true; why.push("S/F ≤ 315 com SpO₂ ≤ 97%");
-      }
-
-      let supportOk = true;
-      if(support==="hfno") supportOk = (Number.isFinite(hfflow) && hfflow>=30);
-
-      let verdict="—";
-      if(!support) verdict="Selecione o tipo de suporte.";
-      else if(!Number.isFinite(fio2)) verdict="Preencha FiO₂.";
-      else if(support==="hfno" && !Number.isFinite(hfflow)) verdict="Preencha o fluxo do HFNO.";
-      else if(support==="hfno" && !supportOk) verdict="HFNO < 30 L/min (fora do critério Global para HFNO).";
-      else verdict = hyp ? "SIM (hipoxemia compatível)" : "NÃO (sem hipoxemia pelo critério)";
-
-      gQ.textContent = verdict.startsWith("SIM") ? "SIM" : (verdict.startsWith("NÃO") ? "NÃO" : "—");
-
-      out.textContent =
-        (lines.length ? lines.join("\n") : "Preencha suporte + FiO₂ + PaO₂ e/ou SpO₂.") +
-        "\n\nCompatibilidade (hipoxemia): " + verdict +
-        (why.length ? ("\nCritério(s): " + why.join(" + ")) : "") +
-        (support==="hfno" ? ("\nHFNO ≥ 30 L/min: " + (supportOk ? "sim" : "não")) : "");
-    }
-
-    function updateProtective(){
-      const pbw   = num(document.getElementById("prot_pbw")?.value);
-      const vt    = num(document.getElementById("prot_vt")?.value);
-      const pplat = num(document.getElementById("prot_pplat")?.value);
-      const peep  = num(document.getElementById("prot_peep")?.value);
-      const pinsp = num(document.getElementById("prot_pinsp")?.value);
-
-      const out   = document.getElementById("protOut");
-      const vtkgQ = document.getElementById("vtkgQuick");
-      const dpQ   = document.getElementById("dpQuick");
-      if(!out || !vtkgQ || !dpQ) return;
-
-      let lines=[];
-      if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
-        const vtkg = vt/pbw;
-        vtkgQ.textContent = vtkg.toFixed(1) + " mL/kg";
-        lines.push(`VT/PBW = ${vtkg.toFixed(1)} mL/kg`);
-      }else{
-        vtkgQ.textContent = "—";
-      }
-
-      let dp=NaN;
-      if(Number.isFinite(pplat) && Number.isFinite(peep)){
-        dp = pplat - peep;
-        lines.push(`ΔP (Pplat−PEEP) = ${dp.toFixed(1)} cmH₂O`);
-      }else if(Number.isFinite(pinsp)){
-        dp = pinsp;
-        lines.push(`ΔP (aprox. em PC) ≈ Pinsp = ${dp.toFixed(1)} cmH₂O`);
-      }
-
-      dpQ.textContent = Number.isFinite(dp) ? (dp.toFixed(1) + " cmH₂O") : "—";
-      out.textContent = lines.length ? lines.join("\n") : "Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).";
-    }
-
-    // ========= Motors =========
-    const ASSIN_RULES = [
-      {
-        matchAny:["ft_ineffective_effort"],
-        title:"Esforço sem disparo (compatível)",
-        phys:"Esforço sem gatilho; auto-PEEP e fraqueza são fatores comuns.",
-        hypos:["Auto-PEEP/air-trapping","Fraqueza/fadiga","Limiar de trigger alto"],
-        exp:{
-          why:["Esforço não atinge limiar de trigger.","Auto-PEEP aumenta limiar efetivo."],
-          common:["DPOC/asma","Neuromuscular","Desmame"],
-          pitfalls:["Ruído/escala","Mandatórias confundidas com esforço"],
-          diff:["Confirmar com fluxo/volume","Comparar com auto-disparo"]
-        }
-      },
-      {
-        matchAny:["pt_double_trigger","vt_breath_stacking"],
-        title:"Ciclos colados/empilhamento (compatível)",
-        phys:"Demanda excede tempo/volume do ciclo; pode ocorrer novo disparo antes de expiração.",
-        hypos:["Drive alto","Término precoce","Tempo inspiratório curto"],
-        exp:{
-          why:["Paciente mantém esforço após ciclar."],
-          common:["SARA com drive alto","Dor/ansiedade"],
-          pitfalls:["Auto-disparo por vazamento"],
-          diff:["Confirmar ausência de expiração entre ciclos"]
-        }
-      },
-      {
-        matchAny:["ft_exp_incomplete"],
-        title:"Expiração incompleta (auto-PEEP possível)",
-        phys:"Fluxo não zera antes do próximo ciclo sugere aprisionamento/constante de tempo alta.",
-        hypos:["Obstrução","FR alta/Te curto","Air-trapping"],
-        exp:{
-          why:["Expiração curta para constante de tempo."],
-          common:["DPOC/asma"],
-          pitfalls:["Escala/ruído"],
-          diff:["Confirmar com volume"]
-        }
-      },
-      {
-        matchAny:["ft_flow_starvation"],
-        title:"Demanda > entrega (fluxo insuficiente)",
-        phys:"Concavidade sugere demanda maior que entrega naquele momento (modo-dependente).",
-        hypos:["Drive alto","Entrega limitada pelo modo","Sincronia inadequada no término"],
-        exp:{
-          why:["Paciente “puxa” mais do que recebe (modo-dependente)."],
-          common:["Sepse/acidose","SARA com desconforto","Transição de sedação/desmame"],
-          pitfalls:["Escala comprimida","Mudança de modo"],
-          diff:["Integrar com pressão/volume e contexto"]
-        }
-      }
-    ];
-
-    function runAssinMotor(){
-      const ctxSel = document.getElementById("assinContext");
-      const out = document.getElementById("assinOut");
-      const box = document.getElementById("assinExpand");
-      const btn = document.getElementById("btnAssinExpand");
-      const txt = document.getElementById("assinExpandText");
-      if(!ctxSel || !out || !box || !btn || !txt) return;
-
-      const ctx = ctxSel.value;
-      const picked = [...document.querySelectorAll("input.assin:checked")].map(x=>x.value);
-
-      box.style.display="none";
-      btn.style.display="none";
-      txt.innerHTML="";
-
-      if(picked.length===0){
-        out.textContent="Selecione ao menos 1 achado e rode novamente.";
-        return;
-      }
-
-      const hits = ASSIN_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
-
-      let lines=[];
-      lines.push(`Contexto: ${ctx || "não informado"}`);
-      lines.push(`Achados: ${picked.join(", ")}`);
-      lines.push("");
-
-      hits.forEach((r,i)=>{
-        lines.push(`(${i+1}) ${r.title}`);
-        lines.push(`Fisiologia: ${r.phys}`);
-        lines.push(`Hipóteses:`);
-        r.hypos.forEach(h=>lines.push(`- ${h}`));
-        lines.push("");
-      });
-
-      out.textContent = lines.join("\n");
-
-      const esc = (s)=> String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
-      hits.slice(0,3).forEach((r,idx)=>{
-        html += `<div><b>(${idx+1}) ${esc(r.title)}</b></div>`;
-        html += `<div><b>Por que:</b><ul>` + r.exp.why.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
-        html += `<div><b>Mais comum em:</b><ul>` + r.exp.common.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
-        html += `<div><b>Armadilhas:</b><ul>` + r.exp.pitfalls.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
-        html += `<div><b>Diferenciar:</b><ul>` + r.exp.diff.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div><div style="height:8px;"></div>`;
-      });
-
-      txt.innerHTML = html;
-      btn.style.display="inline-block";
-    }
-
-    const MEC_RULES = [
-      {
-        matchAny:["pt_high_plateau","ft_insp_decel_steep"],
-        title:"Baixa complacência provável",
-        phys:"Pressão sustentada alta e padrões compatíveis podem sugerir sistema mais rígido (modo-dependente).",
-        hypos:["SARA/edema/atelectasia","Restritiva","Obesidade/parede"],
-        exp:["Interpretar por modo.", "Integrar com esforço e oxigenação."]
-      },
-      {
-        matchAny:["pt_high_peak_normal_plateau","ft_insp_decel_slow"],
-        title:"Resistência aumentada provável",
-        phys:"Pico desproporcional e fluxo compatível sugerem componente resistivo.",
-        hypos:["DPOC/asma","Tubo/circuito (secreção/condensado)"],
-        exp:["Confirmar com expiração incompleta.","Serrilhado sugere secreção/condensado."]
-      },
-      {
-        matchAny:["ft_exp_not_zero","vt_incomplete_empty"],
-        title:"Expiração incompleta/auto-PEEP provável",
-        phys:"Fluxo não zera e volume não retorna ao baseline sugerem aprisionamento.",
-        hypos:["Obstrução + FR alta","Te curto","Drive alto"],
-        exp:["Confirmar padrão repetitivo.","Integrar com esforço sem disparo."]
-      },
-      {
-        matchAny:["vt_leak","pt_sawtooth"],
-        title:"Vazamento/artefato possível",
-        phys:"Discrepância de volumes e/ou serrilhado podem ocorrer por vazamento/condensado/turbulência.",
-        hypos:["Leak cuff/interface/circuito","Condensado","Secreção/turbulência"],
-        exp:["Checar persistência vs episódio.","Integrar com auto-disparo em Assincronias."]
-      }
-    ];
-
-    function runMecMotor(){
-      const ctxSel = document.getElementById("mecContext");
-      const out = document.getElementById("mecOut");
-      const box = document.getElementById("mecExpand");
-      const btn = document.getElementById("btnMecExpand");
-      const txt = document.getElementById("mecExpandText");
-      if(!ctxSel || !out || !box || !btn || !txt) return;
-
-      const ctx = ctxSel.value;
-      const picked = [...document.querySelectorAll("input.mec:checked")].map(x=>x.value);
-
-      box.style.display="none";
-      btn.style.display="none";
-      txt.innerHTML="";
-
-      if(picked.length===0){
-        out.textContent="Selecione ao menos 1 achado e rode novamente.";
-        return;
-      }
-
-      const hits = MEC_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
-
-      let lines=[];
-      lines.push(`Contexto: ${ctx || "não informado"}`);
-      lines.push(`Achados: ${picked.join(", ")}`);
-      lines.push("");
-
-      hits.forEach((r,i)=>{
-        lines.push(`(${i+1}) ${r.title}`);
-        lines.push(`Fisiologia: ${r.phys}`);
-        lines.push(`Hipóteses:`);
-        r.hypos.forEach(h=>lines.push(`- ${h}`));
-        lines.push("");
-      });
-
-      if(picked.includes("met_asynchrony_suspect")){
-        lines.push("Observação: padrão sugere assincronia coexistente → use “Assincronias”.");
-      }
-
-      out.textContent = lines.join("\n");
-
-      const esc = (s)=> String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
-      hits.slice(0,3).forEach((r,idx)=>{
-        html += `<div><b>(${idx+1}) ${esc(r.title)}</b></div>`;
-        html += `<ul>` + r.exp.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul><div style="height:8px;"></div>`;
-      });
-
-      txt.innerHTML = html;
-      btn.style.display="inline-block";
-    }
-
-    function resetChecks(which){
-      if(which==="assin"){
-        document.querySelectorAll("input.assin").forEach(x=>x.checked=false);
-        const out = document.getElementById("assinOut");
-        const btn = document.getElementById("btnAssinExpand");
-        const box = document.getElementById("assinExpand");
-        const txt = document.getElementById("assinExpandText");
-        if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
-        if(btn) btn.style.display="none";
-        if(box) box.style.display="none";
-        if(txt) txt.innerHTML="";
-      }
-      if(which==="mec"){
-        document.querySelectorAll("input.mec").forEach(x=>x.checked=false);
-        const out = document.getElementById("mecOut");
-        const btn = document.getElementById("btnMecExpand");
-        const box = document.getElementById("mecExpand");
-        const txt = document.getElementById("mecExpandText");
-        if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
-        if(btn) btn.style.display="none";
-        if(box) box.style.display="none";
-        if(txt) txt.innerHTML="";
-      }
-    }
-
-    // ========= Wiring (robusto; não quebra se algum elemento faltar) =========
-    function wireAll(){
-      const btnEnter = document.getElementById("btnEnterSplash");
-      if(btnEnter){
-        btnEnter.addEventListener("click", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
-        btnEnter.addEventListener("touchend", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
-        btnEnter.onclick = (e)=>{ if(e) e.preventDefault(); enterApp(); };
-      }
-
-      const tabCasos = document.getElementById("tabCasos");
-      const tabAssin = document.getElementById("tabAssin");
-      const tabMec   = document.getElementById("tabMec");
-      const tabRefs  = document.getElementById("tabRefs");
-      const tabSobre = document.getElementById("tabSobre");
-
-      if(tabCasos) tabCasos.addEventListener("click", ()=>showTab("casos"));
-      if(tabAssin) tabAssin.addEventListener("click", ()=>showTab("assin"));
-      if(tabMec)   tabMec.addEventListener("click", ()=>showTab("mec"));
-      if(tabRefs)  tabRefs.addEventListener("click", ()=>showTab("refs"));
-      if(tabSobre) tabSobre.addEventListener("click", ()=>showTab("sobre"));
-
-      const caseSel = document.getElementById("caseSel");
-      if(caseSel) caseSel.addEventListener("change", renderCase);
-
-      const btnAssinRun = document.getElementById("btnAssinRun");
-      const btnAssinClear = document.getElementById("btnAssinClear");
-      const btnAssinExpand = document.getElementById("btnAssinExpand");
-      if(btnAssinRun) btnAssinRun.addEventListener("click", runAssinMotor);
-      if(btnAssinClear) btnAssinClear.addEventListener("click", ()=>resetChecks("assin"));
-      if(btnAssinExpand) btnAssinExpand.addEventListener("click", ()=>{
-        const box = document.getElementById("assinExpand");
-        if(!box) return;
-        box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
-      });
-
-      const btnMecRun = document.getElementById("btnMecRun");
-      const btnMecClear = document.getElementById("btnMecClear");
-      const btnMecExpand = document.getElementById("btnMecExpand");
-      if(btnMecRun) btnMecRun.addEventListener("click", runMecMotor);
-      if(btnMecClear) btnMecClear.addEventListener("click", ()=>resetChecks("mec"));
-      if(btnMecExpand) btnMecExpand.addEventListener("click", ()=>{
-        const box = document.getElementById("mecExpand");
-        if(!box) return;
-        box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
-      });
-
-      renderCase();
-    }
-
-    if(document.readyState === "loading"){
-      document.addEventListener("DOMContentLoaded", wireAll);
-    }else{
-      wireAll();
-    }
-
-    window.onerror = function(message, source, lineno, colno){
-      alert("Erro de JavaScript: " + message + "\nLinha: " + lineno + ":" + colno);
-    };
-    // ========= INIT / WIRING ROBUSTO (garante que o app responda) =========
-(function initSyncVent(){
-  const $ = (id)=>document.getElementById(id);
-
-  // Tabs
-  const tabCasos = $("tabCasos");
-  const tabAssin = $("tabAssin");
-  const tabMec   = $("tabMec");
-  const tabRefs  = $("tabRefs");
-  const tabSobre = $("tabSobre");
-
-  tabCasos && tabCasos.addEventListener("click", ()=>showTab("casos"));
-  tabAssin && tabAssin.addEventListener("click", ()=>showTab("assin"));
-  tabMec   && tabMec.addEventListener("click", ()=>showTab("mec"));
-  tabRefs  && tabRefs.addEventListener("click", ()=>showTab("refs"));
-  tabSobre && tabSobre.addEventListener("click", ()=>showTab("sobre"));
-
-  // Casos: seleção precisa chamar renderCase()
-  const caseSel = $("caseSel");
-  caseSel && caseSel.addEventListener("change", renderCase);
-
-  // Assincronias
-  const btnAssinRun   = $("btnAssinRun");
-  const btnAssinClear = $("btnAssinClear");
-  const btnAssinExp   = $("btnAssinExpand");
-
-  btnAssinRun   && btnAssinRun.addEventListener("click", runAssinMotor);
-  btnAssinClear && btnAssinClear.addEventListener("click", ()=>resetChecks("assin"));
-  btnAssinExp   && btnAssinExp.addEventListener("click", ()=>{
-    const box = $("assinExpand");
-    if(!box) return;
-    box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
-  });
-
-  // Mecânica
-  const btnMecRun   = $("btnMecRun");
-  const btnMecClear = $("btnMecClear");
-  const btnMecExp   = $("btnMecExpand");
-
-  btnMecRun   && btnMecRun.addEventListener("click", runMecMotor);
-  btnMecClear && btnMecClear.addEventListener("click", ()=>resetChecks("mec"));
-  btnMecExp   && btnMecExp.addEventListener("click", ()=>{
-    const box = $("mecExpand");
-    if(!box) return;
-    box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
-  });
-
-  // Rodapé (se existir)
-  const yearNow = $("yearNow");
-  yearNow && (yearNow.textContent = new Date().getFullYear());
-
-  // Estado inicial
-  try{
-    renderCase();
-  }catch(e){
-    // se renderCase falhar, pelo menos não derruba o app
-    console.log("renderCase falhou:", e);
+  /* ---------- Utils ---------- */
+  const $  = (id)=>document.getElementById(id);
+  const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+  const esc = (s)=> String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+  function num(v){
+    if(v===null || v===undefined) return NaN;
+    const s = String(v).replace(",", ".").trim();
+    const n = Number(s);
+    return Number.isFinite(n) ? n : NaN;
   }
+
+  /* ---------- Error overlay (não altera conteúdo clínico; só protege o app) ---------- */
+  function showFatal(msg){
+    let box = $("errBox");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "errBox";
+      box.style.cssText = [
+        "position:fixed","inset:12px","z-index:99999",
+        "background:rgba(255,255,255,.98)","border:1px solid #d9e2f3",
+        "border-radius:14px","box-shadow:0 18px 45px rgba(18,36,80,.16)",
+        "padding:12px","overflow:auto","font-family:ui-sans-serif,system-ui",
+        "color:#0b1220"
+      ].join(";");
+      box.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
+          <b>Erro de JavaScript (modo seguro)</b>
+          <button id="errClose" style="border:1px solid #d9e2f3;background:#fff;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer;">Fechar</button>
+        </div>
+        <div style="height:10px;"></div>
+        <pre id="errText" style="margin:0;white-space:pre-wrap;line-height:1.35;font-size:12px;color:#41516b;"></pre>
+      `;
+      document.body.appendChild(box);
+      $("errClose")?.addEventListener("click", ()=> box.remove());
+    }
+    $("errText").textContent = msg;
+  }
+
+  /* ---------- Estado ---------- */
+  let booted = false;
+
+  /* ---------- Splash / Boot ---------- */
+  function enterApp(){
+    const splash = $("splash");
+    if(splash){
+      splash.classList.add("hide");
+      setTimeout(()=>{ splash.style.display="none"; }, 420);
+    }
+    // garante init apenas uma vez
+    if(!booted){
+      booted = true;
+      try { initApp(); } catch(e){ showFatal("Falha no initApp():\n" + (e?.stack || e)); }
+    }
+  }
+  window.enterApp = enterApp;
+
+  /* ---------- Tabs ---------- */
+  function showTab(which){
+    const secCasos = $("secCasos");
+    const secAssin = $("secAssin");
+    const secMec   = $("secMec");
+    const secRefs  = $("secRefs");
+    const secSobre = $("secSobre");
+
+    if(secCasos) secCasos.classList.toggle("hide", which!=="casos");
+    if(secAssin) secAssin.classList.toggle("hide", which!=="assin");
+    if(secMec)   secMec.classList.toggle("hide", which!=="mec");
+    if(secRefs)  secRefs.classList.toggle("hide", which!=="refs");
+    if(secSobre) secSobre.classList.toggle("hide", which!=="sobre");
+
+    const tCasos = $("tabCasos");
+    const tAssin = $("tabAssin");
+    const tMec   = $("tabMec");
+    const tRefs  = $("tabRefs");
+    const tSobre = $("tabSobre");
+
+    if(tCasos) tCasos.classList.toggle("active", which==="casos");
+    if(tAssin) tAssin.classList.toggle("active", which==="assin");
+    if(tMec)   tMec.classList.toggle("active", which==="mec");
+    if(tRefs)  tRefs.classList.toggle("active", which==="refs");
+    if(tSobre) tSobre.classList.toggle("active", which==="sobre");
+
+    window.scrollTo({ top: 0, behavior:"smooth" });
+  }
+
+  /* ===================== DATA (conteúdo preservado) ===================== */
+
+  const CASES = {
+    sara: {
+      title: "SARA (ARDS) — Global (educacional) + calculadoras",
+      lead: "Triagem de hipoxemia compatível (P/F e S/F) + VT/PBW + ΔP (educacional).",
+      body: `
+        <div class="grid2">
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Definição (educacional)</h2>
+            <ul class="klist">
+              <li><b>Hipoxemia compatível:</b> P/F ≤ 300, ou S/F ≤ 315 quando SpO₂ ≤ 97%.</li>
+              <li><b>HFNO:</b> no critério Global, usar fluxo ≥ 30 L/min.</li>
+            </ul>
+
+            <div class="hr"></div>
+            <h2>Calculadora — SARA (Global)</h2>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>Tipo de suporte</label>
+                <select id="ards_support">
+                  <option value="">Selecione…</option>
+                  <option value="imv">VM invasiva</option>
+                  <option value="niv">NIV/CPAP</option>
+                  <option value="hfno">HFNO</option>
+                </select>
+              </div>
+              <div style="flex:1; min-width:220px;">
+                <label>Fluxo HFNO (L/min) — se HFNO</label>
+                <input id="ards_hfflow" placeholder="ex.: 40" />
+              </div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>FiO₂ (fração)</label>
+                <input id="ards_fio2" placeholder="ex.: 0,60" />
+              </div>
+              <div style="flex:1; min-width:220px;">
+                <label>PaO₂ (mmHg) — opcional</label>
+                <input id="ards_pao2" placeholder="ex.: 80" />
+              </div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>SpO₂ (%) — opcional</label>
+                <input id="ards_spo2" placeholder="ex.: 92" />
+                <div class="small">S/F válido para critério se SpO₂ ≤ 97%.</div>
+              </div>
+              <div style="flex:1; min-width:220px;">
+                <label>PEEP/CPAP (cmH₂O) — opcional</label>
+                <input id="ards_peep" placeholder="ex.: 10" />
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <label>Atalhos</label>
+            <div class="row">
+              <span class="chip">P/F <b class="mono" id="pfQuick">—</b></span>
+              <span class="chip">S/F <b class="mono" id="sfQuick">—</b></span>
+              <span class="chip">Compatível? <b class="mono" id="globalQuick">—</b></span>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="outBox">
+              <h3>Resultado</h3>
+              <div class="txt" id="ardsOut">Preencha suporte + FiO₂ + PaO₂ e/ou SpO₂.</div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
+            <h2>Ventilação protetora — calculadoras (educacional)</h2>
+
+            <div class="hr"></div>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>PBW (kg)</label>
+                <input id="prot_pbw" placeholder="ex.: 60" />
+              </div>
+              <div style="flex:1; min-width:220px;">
+                <label>VT (mL)</label>
+                <input id="prot_vt" placeholder="ex.: 360" />
+              </div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>Pplat (cmH₂O) — opcional</label>
+                <input id="prot_pplat" placeholder="ex.: 28" />
+              </div>
+              <div style="flex:1; min-width:220px;">
+                <label>PEEP (cmH₂O) — opcional</label>
+                <input id="prot_peep" placeholder="ex.: 10" />
+              </div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label>Pinsp (cmH₂O) — opcional (modo pressórico)</label>
+                <input id="prot_pinsp" placeholder="ex.: 14 (acima da PEEP)" />
+                <div class="small">VC: ΔP=Pplat−PEEP. PC: ΔP≈Pinsp (aprox. educacional).</div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="row">
+              <span class="chip">VT/PBW <b class="mono" id="vtkgQuick">—</b></span>
+              <span class="chip">ΔP <b class="mono" id="dpQuick">—</b></span>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="outBox">
+              <h3>Resultado</h3>
+              <div class="txt" id="protOut">Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).</div>
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    sepse: {
+      title:"Sepse / Choque séptico (educacional)",
+      lead:"Drive elevado, interação VM–hemodinâmica e risco de hipoxemia/ARDS.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Definições</h2>
+          <ul class="klist">
+            <li><b>Sepse:</b> disfunção orgânica por resposta desregulada à infecção.</li>
+            <li><b>Choque séptico:</b> definição operacional (vasopressor para MAP ≥65 + lactato elevado no contexto).</li>
+          </ul>
+          <details open style="margin-top:10px;">
+            <summary>Pontos de atenção por curvas</summary>
+            <ul class="klist">
+              <li>Concavidade inspiratória (demanda &gt; entrega).</li>
+              <li>Ciclos colados/empilhamento.</li>
+              <li>Expiração incompleta se coexistir obstrução.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Atalho</h2>
+          <ul class="klist">
+            <li>Se hipoxemia importante: use o caso <b>SARA</b> para triagem P/F e S/F.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    dpoc: {
+      title:"DPOC (obstrutivo) (educacional)",
+      lead:"Resistência elevada, expiração incompleta/auto-PEEP e esforço sem disparo.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Constante de tempo elevada → esvaziamento lento.</li>
+            <li>Achado-chave: <b>fluxo expiratório não zerar</b>.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Checklist por curvas</h2>
+          <ul class="klist">
+            <li>Fluxo expiratório zera?</li>
+            <li>Baseline de volume retorna?</li>
+            <li>Esforço sem disparo no fim da expiração?</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    restritiva: {
+      title:"Doença restritiva (educacional)",
+      lead:"Baixa complacência do sistema; interpretar por modo e contexto.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Pressão sustentada alta pode sugerir baixa complacência (modo-dependente).</li>
+            <li>Se hipoxemia aguda: avaliar SARA.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Integrar pressão + fluxo + volume.</li>
+            <li>Concavidade em assistidos sugere demanda &gt; entrega.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    cardiaca: {
+      title:"Cardíaca (edema cardiogênico) (educacional)",
+      lead:"Integração hemodinâmica e reconhecimento de desconforto/sincronia por curvas.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Reavaliar tendência clínica (hemodinâmica + oxigenação).</li>
+            <li>Usar Assincronias quando houver desconforto importante.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Concavidade inspiratória e ciclos colados.</li>
+            <li>Empilhamento em ciclos muito próximos.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    obeso: {
+      title:"Obeso / OHS (educacional)",
+      lead:"Pressões podem refletir parede torácica; risco de colapso e dificuldade no desmame.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Interpretar pressão com contribuição de parede torácica.</li>
+            <li>Checar expiração completa e empilhamento.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Demanda &gt; entrega e esforço elevado.</li>
+            <li>Usar Mecânica com contexto “obesidade”.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    neuro: {
+      title:"Neuromuscular (educacional)",
+      lead:"Fraqueza → esforço sem disparo e fadiga; sincronia é crítica.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Esforço sem disparo é comum (especialmente com auto-PEEP).</li>
+            <li>Monitorar sinais de fadiga durante baixo suporte.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Deflexões sem disparo no fim da expiração.</li>
+            <li>Demanda &gt; entrega em assistidos.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    neurocrit: {
+      title:"Neurocrítico (educacional)",
+      lead:"Evitar oscilação por assincronia; metas dependem do protocolo local.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Assincronias podem aumentar variabilidade ventilatória.</li>
+            <li>Evitar instabilidade durante transições de suporte.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Ciclos colados e empilhamento.</li>
+            <li>Demanda &gt; entrega em assistidos.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    trauma: {
+      title:"Trauma (educacional)",
+      lead:"Fenótipos mistos (choque/contusão/obstrução/ARDS); usar motores por curvas.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Se hipoxemia aguda: avaliar SARA.</li>
+            <li>Se padrão obstrutivo: avaliar DPOC.</li>
+            <li>Se suspeita de pneumotórax em PPV: avaliar Pneumotórax.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Concavidade e ciclos colados por dor/drive alto.</li>
+            <li>Empilhamento e expiração curta.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    tb: {
+      title:"Tuberculose na UTI (educacional)",
+      lead:"Quadros graves; pode coexistir sepse/ARDS; interpretar por curvas e tendência clínica.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Se hipoxemia importante: usar SARA para triagem.</li>
+            <li>Drive alto e desconforto podem aumentar assincronias.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Demanda &gt; entrega, ciclos colados, empilhamento.</li>
+            <li>Se obstrução coexistir: expiração incompleta.</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    pneumo: {
+      title:"Pneumotórax em PPV/VM (educacional)",
+      lead:"Risco de progressão sob pressão positiva; priorizar reconhecimento e manejo pela equipe.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Pontos de atenção</h2>
+          <ul class="klist">
+            <li>Mudança abrupta de mecânica pode ocorrer (interpretação clínica obrigatória).</li>
+            <li>Alarmes e avaliação clínica são mandatórios.</li>
+          </ul>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas</h2>
+          <ul class="klist">
+            <li>Comparar tendências antes/depois do evento.</li>
+            <li>Usar Mecânica para organizar hipóteses (não é diagnóstico).</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    desmame: {
+      title:"Desmame / TRE (SBT) — processo (educacional)",
+      lead:"Triagem diária → TRE/SBT → critérios de tolerância → próximos passos. Sem prescrição.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Processo (bloco único)</h2>
+          <details open>
+            <summary>1) Triagem diária de prontidão</summary>
+            <ul class="klist">
+              <li>Doença de base em melhora (tendência).</li>
+              <li>Oxigenação/ventilação aceitáveis para tentativa (meta institucional).</li>
+              <li>Estabilidade hemodinâmica (sem escalada recente importante).</li>
+              <li>Consciência/proteção de via aérea conforme contexto.</li>
+              <li>Secreção e tosse consideradas.</li>
+            </ul>
+          </details>
+          <details open style="margin-top:10px;">
+            <summary>2) TRE/SBT (estrutura)</summary>
+            <ul class="klist">
+              <li>Modalidades: PSV baixo ou T-piece (serviço define).</li>
+              <li>Duração típica: ~30–120 min (serviço define).</li>
+              <li>Monitorar padrão respiratório, conforto, sincronia e hemodinâmica.</li>
+            </ul>
+          </details>
+          <details open style="margin-top:10px;">
+            <summary>3) Interromper se intolerância</summary>
+            <ul class="klist">
+              <li>Piora sustentada de trabalho respiratório/desconforto.</li>
+              <li>Instabilidade hemodinâmica/deterioração clínica.</li>
+              <li>Queda de oxigenação ou necessidade crescente de suporte.</li>
+              <li>Sinais de fadiga/intolerância.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas no TRE/SBT</h2>
+          <ul class="klist">
+            <li>Concavidade (demanda &gt; entrega).</li>
+            <li>Ciclos colados/empilhamento.</li>
+            <li>Expiração incompleta (obstrutivo).</li>
+            <li>Esforço sem disparo (auto-PEEP + fraqueza).</li>
+          </ul>
+        </div>
+      </div>`
+    },
+
+    imt: {
+      title:"IMT na VM (sem trigger) — processo (educacional)",
+      lead:"Elegibilidade → execução estruturada → monitorização e interrupção. Não inclui treino por alteração de trigger.",
+      body:`<div class="grid2">
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Processo (bloco único)</h2>
+          <details open>
+            <summary>1) Elegibilidade (screening)</summary>
+            <ul class="klist">
+              <li>Estabilidade clínica suficiente para sessão planejada.</li>
+              <li>Capacidade de interação quando o método exigir cooperação (ou estratégia definida).</li>
+              <li>Via aérea/interface compatíveis com o método de IMT.</li>
+              <li>Considerar risco de fadiga e demanda ventilatória.</li>
+            </ul>
+            <div class="note"><b>Escopo:</b> IMT aqui é carga inspiratória dedicada. Não inclui alteração de trigger.</div>
+          </details>
+          <details open style="margin-top:10px;">
+            <summary>2) Execução (sem prescrever números)</summary>
+            <ul class="klist">
+              <li>Definir método adotado pela UTI (dispositivo/carga).</li>
+              <li>Usar dose conforme protocolo local (intensidade/séries/frequência).</li>
+              <li>Registrar tolerância e sinais durante a sessão.</li>
+            </ul>
+          </details>
+          <details open style="margin-top:10px;">
+            <summary>3) Pausar/interromper se intolerância</summary>
+            <ul class="klist">
+              <li>Dispneia intensa/sinais de exaustão/desconforto importante.</li>
+              <li>Instabilidade hemodinâmica.</li>
+              <li>Deterioração de oxigenação ou aumento do suporte.</li>
+              <li>Assincronias relevantes surgindo/acentuando.</li>
+            </ul>
+          </details>
+        </div>
+        <div class="card" style="box-shadow:none; background: var(--panel2);">
+          <h2>Curvas durante IMT</h2>
+          <ul class="klist">
+            <li>Concavidade e aumento de esforço.</li>
+            <li>Ciclos colados/empilhamento.</li>
+            <li>Expiração incompleta se obstrutivo coexistir.</li>
+            <li>Esforço sem disparo (auto-PEEP + fraqueza).</li>
+          </ul>
+        </div>
+      </div>`
+    }
+  };
+
+  const EDU_BY_CASE = {
+    sara: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — SARA (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Confirmar contexto:</b> suporte (IMV/NIV/CPAP/HFNO) e estabilidade clínica.</li>
+          <li><b>Hipoxemia (triagem):</b> usar P/F e, quando aplicável, S/F com SpO₂ ≤ 97%.</li>
+          <li><b>Interpretação por curvas:</b> integrar pressão + fluxo + volume; priorizar padrão repetitivo (não 1 ciclo isolado).</li>
+          <li><b>Assincronias frequentes:</b> demanda &gt; entrega, término precoce/tardio, ciclos colados (drive elevado).</li>
+          <li><b>Mecânica (interpretação):</b> padrões compatíveis com baixa complacência variam por modo; confirmar com tendência e contexto.</li>
+          <li><b>Limites do app:</b> não define diagnóstico nem prescreve ajustes; apenas organiza leitura e hipóteses.</li>
+        </ul>
+      </details>
+    `,
+    sepse: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Sepse/Choque séptico (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Drive respiratório:</b> pode estar elevado por acidose/dor/desconforto; isso aumenta risco de assincronias.</li>
+          <li><b>Curvas:</b> procurar concavidade inspiratória (demanda &gt; entrega), ciclos colados/empilhamento e padrões instáveis.</li>
+          <li><b>Integração VM–hemodinâmica:</b> observar variações importantes ao longo do tempo (não pontuais).</li>
+          <li><b>Transição de sedação/desmame:</b> mudanças de interação paciente–ventilador podem aparecer primeiro nas curvas.</li>
+        </ul>
+      </details>
+    `,
+    dpoc: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — DPOC/Obstrutivo (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Constante de tempo:</b> esvaziamento expiratório lento; risco de expiração incompleta.</li>
+          <li><b>Sinal-chave:</b> fluxo expiratório <b>não zera</b> antes do próximo ciclo (padrão repetitivo).</li>
+          <li><b>Consequências por curvas:</b> esforço sem disparo no fim da expiração (auto-PEEP + fraqueza/drive).</li>
+          <li><b>Empilhamento:</b> ciclos colados podem aparecer quando o tempo expiratório é insuficiente.</li>
+        </ul>
+      </details>
+    `,
+    restritiva: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Restritiva (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Padrões modo-dependentes:</b> “pressão alta” precisa ser lida com modo, esforço e tendência clínica.</li>
+          <li><b>Curvas:</b> observar padrão inspiratório e estabilidade ciclo a ciclo; integrar com oxigenação e conforto.</li>
+          <li><b>Sobreposição:</b> pode coexistir com assincronias de demanda &gt; entrega em assistidos.</li>
+        </ul>
+      </details>
+    `,
+    cardiaca: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Edema cardiogênico (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Integração clínica:</b> oscilações hemodinâmicas e desconforto frequentemente precedem alterações consistentes em curvas.</li>
+          <li><b>Curvas:</b> procurar sinais de esforço elevado e assincronia (concavidade, ciclos colados) quando houver desconforto.</li>
+          <li><b>Interpretação:</b> foco em tendência e repetição do padrão, não em evento isolado.</li>
+        </ul>
+      </details>
+    `,
+    obeso: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Obesidade/OHS (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Parede torácica:</b> pressões podem refletir componente extrapulmonar; interpretar com contexto.</li>
+          <li><b>Curvas:</b> checar expiração completa, empilhamento e sinais de demanda &gt; entrega.</li>
+          <li><b>Desmame:</b> atenção a sinais de esforço excessivo e assincronia durante transições.</li>
+        </ul>
+      </details>
+    `,
+    neuro: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Neuromuscular (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Fraqueza:</b> aumenta chance de esforço sem disparo e fadiga.</li>
+          <li><b>Curvas:</b> deflexões sem trigger, padrão de esforço crescente, irregularidade durante baixo suporte.</li>
+          <li><b>Interpretação:</b> integrar com sinais de tolerância e tendência ao longo do tempo.</li>
+        </ul>
+      </details>
+    `,
+    neurocrit: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Neurocrítico (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Estabilidade:</b> assincronias podem aumentar variabilidade ventilatória e desconforto.</li>
+          <li><b>Curvas:</b> ciclos colados/empilhamento e concavidade em assistidos, especialmente em transições.</li>
+          <li><b>Dependência de protocolo:</b> metas clínicas são do serviço; aqui é apenas leitura educacional.</li>
+        </ul>
+      </details>
+    `,
+    trauma: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Trauma (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Fenótipo misto:</b> dor/choque/contusão podem alterar drive e sincronia.</li>
+          <li><b>Curvas:</b> concavidade e empilhamento são comuns com drive elevado.</li>
+          <li><b>Organização:</b> usar “SARA”, “DPOC” e “Pneumotórax” conforme padrão dominante e contexto.</li>
+        </ul>
+      </details>
+    `,
+    tb: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Tuberculose na UTI (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Gravidade:</b> pode coexistir com sepse/hipoxemia; organizar hipóteses por tendência clínica.</li>
+          <li><b>Curvas:</b> demanda &gt; entrega, ciclos colados/empilhamento e expiração incompleta quando houver obstrução associada.</li>
+          <li><b>Triagem:</b> se hipoxemia importante, usar “SARA” para organizar cálculos.</li>
+        </ul>
+      </details>
+    `,
+    pneumo: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Pneumotórax em PPV/VM (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Reconhecimento:</b> mudanças abruptas de padrão e deterioração clínica exigem avaliação imediata da equipe.</li>
+          <li><b>Curvas:</b> comparar antes/depois; procurar alteração consistente na mecânica ao longo de vários ciclos.</li>
+          <li><b>Limites:</b> este app não diagnostica nem orienta manejo; apenas organiza leitura.</li>
+        </ul>
+      </details>
+    `,
+    desmame: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — Desmame/TRE (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Durante TRE:</b> observar conforto, padrão ventilatório e sincronia.</li>
+          <li><b>Curvas:</b> concavidade (demanda &gt; entrega), ciclos colados/empilhamento e expiração incompleta se obstrutivo.</li>
+          <li><b>Fadiga/intolerância:</b> sinais sustentados ao longo do tempo são mais relevantes que eventos isolados.</li>
+          <li><b>Limite:</b> uso educacional; decisão clínica é do serviço/equipe.</li>
+        </ul>
+      </details>
+    `,
+    imt: `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional — IMT na VM (o que observar)</summary>
+        <ul class="klist">
+          <li><b>Durante IMT:</b> observar aumento de esforço, conforto e padrão repetitivo.</li>
+          <li><b>Curvas:</b> concavidade, ciclos colados/empilhamento e esforço sem disparo podem emergir.</li>
+          <li><b>Limite:</b> não inclui treino por alteração de trigger; é carga inspiratória dedicada.</li>
+        </ul>
+      </details>
+    `
+  };
+
+  function renderEvidenceForCase(_v){
+    // Mantém a aba Evidências existente (secRefs). Caso queira evidências por caso no fim, podemos mapear aqui.
+    return "";
+  }
+
+  /* ===================== RENDER (Casos) ===================== */
+  function renderCase(){
+    const sel  = $("caseSel");
+    const area = $("caseArea");
+    if(!sel || !area) return;
+
+    const v = sel.value;
+    if(!v){ area.innerHTML = ""; return; }
+
+    const c = CASES[v];
+    if(!c){ area.innerHTML = ""; return; }
+
+    const edu  = EDU_BY_CASE[v] || `
+      <details open style="margin-top:10px;">
+        <summary>Conteúdo educacional (o que observar)</summary>
+        <ul class="klist">
+          <li>Integrar pressão + fluxo + volume; procurar padrão repetitivo.</li>
+          <li>Se houver desconforto, usar “Assincronias” para organizar hipóteses.</li>
+          <li>Se houver alteração consistente de mecânica, usar “Mecânica” para organizar hipóteses.</li>
+          <li>Uso exclusivamente educacional; sem prescrição.</li>
+        </ul>
+      </details>
+    `;
+
+    const evid = renderEvidenceForCase(v);
+
+    area.innerHTML = `
+      <div class="card" style="box-shadow:none; background: var(--panel2);">
+        <div class="row" style="justify-content:space-between;">
+          <div>
+            <h2>${esc(c.title)}</h2>
+            <p class="sub">${esc(c.lead)}</p>
+          </div>
+        </div>
+        <div class="hr"></div>
+        ${c.body}
+        <div class="hr"></div>
+        ${edu}
+        ${evid}
+      </div>
+    `;
+
+    // wiring específico do caso SARA (inputs dinâmicos)
+    if(v==="sara"){
+      // ARDS
+      ["ards_support","ards_hfflow","ards_fio2","ards_pao2","ards_spo2","ards_peep"].forEach(id=>{
+        $(id)?.addEventListener("input", updateArds);
+        $(id)?.addEventListener("change", updateArds);
+      });
+      // Protetora
+      ["prot_pbw","prot_vt","prot_pplat","prot_peep","prot_pinsp"].forEach(id=>{
+        $(id)?.addEventListener("input", updateProtective);
+        $(id)?.addEventListener("change", updateProtective);
+      });
+
+      // primeira atualização
+      updateArds();
+      updateProtective();
+    }
+  }
+
+  /* ===================== Calculadoras SARA ===================== */
+  function updateArds(){
+    const out = $("ardsOut");
+    const pfQ = $("pfQuick");
+    const sfQ = $("sfQuick");
+    const gQ  = $("globalQuick");
+    if(!out || !pfQ || !sfQ || !gQ) return;
+
+    const support = $("ards_support")?.value || "";
+    const hfflow  = num($("ards_hfflow")?.value);
+    const fio2    = num($("ards_fio2")?.value);
+    const pao2    = num($("ards_pao2")?.value);
+    const spo2    = num($("ards_spo2")?.value);
+
+    let lines=[], pf=NaN, sf=NaN;
+
+    if(Number.isFinite(pao2) && Number.isFinite(fio2) && fio2>0){
+      pf = pao2 / fio2;
+      pfQ.textContent = pf.toFixed(0);
+      lines.push(`PaO₂/FiO₂ = ${pf.toFixed(0)}`);
+    }else pfQ.textContent = "—";
+
+    if(Number.isFinite(spo2) && Number.isFinite(fio2) && fio2>0){
+      sf = spo2 / fio2;
+      sfQ.textContent = sf.toFixed(0);
+      lines.push(`SpO₂/FiO₂ = ${sf.toFixed(0)} (válido p/ critério se SpO₂ ≤ 97%)`);
+    }else sfQ.textContent = "—";
+
+    if(support) lines.push(`Suporte: ${support.toUpperCase()}`);
+    if(support==="hfno" && Number.isFinite(hfflow)) lines.push(`HFNO fluxo: ${hfflow.toFixed(0)} L/min`);
+
+    let hyp=false, why=[];
+    if(Number.isFinite(pf) && pf<=300){ hyp=true; why.push("P/F ≤ 300"); }
+    if(Number.isFinite(sf) && Number.isFinite(spo2) && spo2<=97 && sf<=315){
+      hyp=true; why.push("S/F ≤ 315 com SpO₂ ≤ 97%");
+    }
+
+    let supportOk = true;
+    if(support==="hfno") supportOk = (Number.isFinite(hfflow) && hfflow>=30);
+
+    let verdict="—";
+    if(!support) verdict="Selecione o tipo de suporte.";
+    else if(!Number.isFinite(fio2)) verdict="Preencha FiO₂.";
+    else if(support==="hfno" && !Number.isFinite(hfflow)) verdict="Preencha o fluxo do HFNO.";
+    else if(support==="hfno" && !supportOk) verdict="HFNO < 30 L/min (fora do critério Global para HFNO).";
+    else verdict = hyp ? "SIM (hipoxemia compatível)" : "NÃO (sem hipoxemia pelo critério)";
+
+    gQ.textContent = verdict.startsWith("SIM") ? "SIM" : (verdict.startsWith("NÃO") ? "NÃO" : "—");
+
+    out.textContent =
+      (lines.length ? lines.join("\n") : "Preencha suporte + FiO₂ + PaO₂ e/ou SpO₂.") +
+      "\n\nCompatibilidade (hipoxemia): " + verdict +
+      (why.length ? ("\nCritério(s): " + why.join(" + ")) : "") +
+      (support==="hfno" ? ("\nHFNO ≥ 30 L/min: " + (supportOk ? "sim" : "não")) : "");
+  }
+
+  function updateProtective(){
+    const pbw   = num($("prot_pbw")?.value);
+    const vt    = num($("prot_vt")?.value);
+    const pplat = num($("prot_pplat")?.value);
+    const peep  = num($("prot_peep")?.value);
+    const pinsp = num($("prot_pinsp")?.value);
+
+    const out   = $("protOut");
+    const vtkgQ = $("vtkgQuick");
+    const dpQ   = $("dpQuick");
+    if(!out || !vtkgQ || !dpQ) return;
+
+    let lines=[];
+    if(Number.isFinite(pbw) && pbw>0 && Number.isFinite(vt) && vt>0){
+      const vtkg = vt/pbw;
+      vtkgQ.textContent = vtkg.toFixed(1) + " mL/kg";
+      lines.push(`VT/PBW = ${vtkg.toFixed(1)} mL/kg`);
+    }else vtkgQ.textContent = "—";
+
+    let dp=NaN;
+    if(Number.isFinite(pplat) && Number.isFinite(peep)){
+      dp = pplat - peep;
+      lines.push(`ΔP (Pplat−PEEP) = ${dp.toFixed(1)} cmH₂O`);
+    }else if(Number.isFinite(pinsp)){
+      dp = pinsp;
+      lines.push(`ΔP (aprox. em PC) ≈ Pinsp = ${dp.toFixed(1)} cmH₂O`);
+    }
+
+    dpQ.textContent = Number.isFinite(dp) ? (dp.toFixed(1) + " cmH₂O") : "—";
+    out.textContent = lines.length ? lines.join("\n") : "Preencha PBW + VT e/ou Pplat+PEEP (ou Pinsp).";
+  }
+
+  /* ===================== Motors (Assincronias / Mecânica) ===================== */
+  const ASSIN_RULES = [
+    {
+      matchAny:["ft_ineffective_effort"],
+      title:"Esforço sem disparo (compatível)",
+      phys:"Esforço sem gatilho; auto-PEEP e fraqueza são fatores comuns.",
+      hypos:["Auto-PEEP/air-trapping","Fraqueza/fadiga","Limiar de trigger alto"],
+      exp:{
+        why:["Esforço não atinge limiar de trigger.","Auto-PEEP aumenta limiar efetivo."],
+        common:["DPOC/asma","Neuromuscular","Desmame"],
+        pitfalls:["Ruído/escala","Mandatórias confundidas com esforço"],
+        diff:["Confirmar com fluxo/volume","Comparar com auto-disparo"]
+      }
+    },
+    {
+      matchAny:["pt_double_trigger","vt_breath_stacking"],
+      title:"Ciclos colados/empilhamento (compatível)",
+      phys:"Demanda excede tempo/volume do ciclo; pode ocorrer novo disparo antes de expiração.",
+      hypos:["Drive alto","Término precoce","Tempo inspiratório curto"],
+      exp:{
+        why:["Paciente mantém esforço após ciclar."],
+        common:["SARA com drive alto","Dor/ansiedade"],
+        pitfalls:["Auto-disparo por vazamento"],
+        diff:["Confirmar ausência de expiração entre ciclos"]
+      }
+    },
+    {
+      matchAny:["ft_exp_incomplete"],
+      title:"Expiração incompleta (auto-PEEP possível)",
+      phys:"Fluxo não zera antes do próximo ciclo sugere aprisionamento/constante de tempo alta.",
+      hypos:["Obstrução","FR alta/Te curto","Air-trapping"],
+      exp:{
+        why:["Expiração curta para constante de tempo."],
+        common:["DPOC/asma"],
+        pitfalls:["Escala/ruído"],
+        diff:["Confirmar com volume"]
+      }
+    },
+    {
+      matchAny:["ft_flow_starvation"],
+      title:"Demanda > entrega (fluxo insuficiente)",
+      phys:"Concavidade sugere demanda maior que entrega naquele momento (modo-dependente).",
+      hypos:["Drive alto","Entrega limitada pelo modo","Sincronia inadequada no término"],
+      exp:{
+        why:["Paciente “puxa” mais do que recebe (modo-dependente)."],
+        common:["Sepse/acidose","SARA com desconforto","Transição de sedação/desmame"],
+        pitfalls:["Escala comprimida","Mudança de modo"],
+        diff:["Integrar com pressão/volume e contexto"]
+      }
+    }
+  ];
+
+  function runAssinMotor(){
+    const ctxSel = $("assinContext");
+    const out = $("assinOut");
+    const box = $("assinExpand");
+    const btn = $("btnAssinExpand");
+    const txt = $("assinExpandText");
+    if(!ctxSel || !out || !box || !btn || !txt) return;
+
+    const ctx = ctxSel.value;
+    const picked = $$("input.assin:checked").map(x=>x.value);
+
+    box.style.display="none";
+    btn.style.display="none";
+    txt.innerHTML="";
+
+    if(picked.length===0){
+      out.textContent="Selecione ao menos 1 achado e rode novamente.";
+      return;
+    }
+
+    const hits = ASSIN_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
+
+    let lines=[];
+    lines.push(`Contexto: ${ctx || "não informado"}`);
+    lines.push(`Achados: ${picked.join(", ")}`);
+    lines.push("");
+
+    hits.forEach((r,i)=>{
+      lines.push(`(${i+1}) ${r.title}`);
+      lines.push(`Fisiologia: ${r.phys}`);
+      lines.push(`Hipóteses:`);
+      r.hypos.forEach(h=>lines.push(`- ${h}`));
+      lines.push("");
+    });
+
+    out.textContent = lines.join("\n");
+
+    let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
+    hits.slice(0,3).forEach((r,idx)=>{
+      html += `<div><b>(${idx+1}) ${esc(r.title)}</b></div>`;
+      html += `<div><b>Por que:</b><ul>` + r.exp.why.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
+      html += `<div><b>Mais comum em:</b><ul>` + r.exp.common.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
+      html += `<div><b>Armadilhas:</b><ul>` + r.exp.pitfalls.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div>`;
+      html += `<div><b>Diferenciar:</b><ul>` + r.exp.diff.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul></div><div style="height:8px;"></div>`;
+    });
+
+    txt.innerHTML = html;
+    btn.style.display="inline-block";
+  }
+
+  const MEC_RULES = [
+    {
+      matchAny:["pt_high_plateau","ft_insp_decel_steep"],
+      title:"Baixa complacência provável",
+      phys:"Pressão sustentada alta e padrões compatíveis podem sugerir sistema mais rígido (modo-dependente).",
+      hypos:["SARA/edema/atelectasia","Restritiva","Obesidade/parede"],
+      exp:["Interpretar por modo.", "Integrar com esforço e oxigenação."]
+    },
+    {
+      matchAny:["pt_high_peak_normal_plateau","ft_insp_decel_slow"],
+      title:"Resistência aumentada provável",
+      phys:"Pico desproporcional e fluxo compatível sugerem componente resistivo.",
+      hypos:["DPOC/asma","Tubo/circuito (secreção/condensado)"],
+      exp:["Confirmar com expiração incompleta.","Serrilhado sugere secreção/condensado."]
+    },
+    {
+      matchAny:["ft_exp_not_zero","vt_incomplete_empty"],
+      title:"Expiração incompleta/auto-PEEP provável",
+      phys:"Fluxo não zera e volume não retorna ao baseline sugerem aprisionamento.",
+      hypos:["Obstrução + FR alta","Te curto","Drive alto"],
+      exp:["Confirmar padrão repetitivo.","Integrar com esforço sem disparo."]
+    },
+    {
+      matchAny:["vt_leak","pt_sawtooth"],
+      title:"Vazamento/artefato possível",
+      phys:"Discrepância de volumes e/ou serrilhado podem ocorrer por vazamento/condensado/turbulência.",
+      hypos:["Leak cuff/interface/circuito","Condensado","Secreção/turbulência"],
+      exp:["Checar persistência vs episódio.","Integrar com auto-disparo em Assincronias."]
+    }
+  ];
+
+  function runMecMotor(){
+    const ctxSel = $("mecContext");
+    const out = $("mecOut");
+    const box = $("mecExpand");
+    const btn = $("btnMecExpand");
+    const txt = $("mecExpandText");
+    if(!ctxSel || !out || !box || !btn || !txt) return;
+
+    const ctx = ctxSel.value;
+    const picked = $$("input.mec:checked").map(x=>x.value);
+
+    box.style.display="none";
+    btn.style.display="none";
+    txt.innerHTML="";
+
+    if(picked.length===0){
+      out.textContent="Selecione ao menos 1 achado e rode novamente.";
+      return;
+    }
+
+    const hits = MEC_RULES.filter(r => r.matchAny.some(k => picked.includes(k)));
+
+    let lines=[];
+    lines.push(`Contexto: ${ctx || "não informado"}`);
+    lines.push(`Achados: ${picked.join(", ")}`);
+    lines.push("");
+
+    hits.forEach((r,i)=>{
+      lines.push(`(${i+1}) ${r.title}`);
+      lines.push(`Fisiologia: ${r.phys}`);
+      lines.push(`Hipóteses:`);
+      r.hypos.forEach(h=>lines.push(`- ${h}`));
+      lines.push("");
+    });
+
+    if(picked.includes("met_asynchrony_suspect")){
+      lines.push("Observação: padrão sugere assincronia coexistente → use “Assincronias”.");
+    }
+
+    out.textContent = lines.join("\n");
+
+    let html = `<div><b>Contexto:</b> ${esc(ctx || "não informado")}</div><div style="height:8px;"></div>`;
+    hits.slice(0,3).forEach((r,idx)=>{
+      html += `<div><b>(${idx+1}) ${esc(r.title)}</b></div>`;
+      html += `<ul>` + r.exp.map(x=>`<li>${esc(x)}</li>`).join("") + `</ul><div style="height:8px;"></div>`;
+    });
+
+    txt.innerHTML = html;
+    btn.style.display="inline-block";
+  }
+
+  function resetChecks(which){
+    if(which==="assin"){
+      $$("input.assin").forEach(x=>x.checked=false);
+      const out = $("assinOut");
+      const btn = $("btnAssinExpand");
+      const box = $("assinExpand");
+      const txt = $("assinExpandText");
+      if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
+      if(btn) btn.style.display="none";
+      if(box) box.style.display="none";
+      if(txt) txt.innerHTML="";
+    }
+    if(which==="mec"){
+      $$("input.mec").forEach(x=>x.checked=false);
+      const out = $("mecOut");
+      const btn = $("btnMecExpand");
+      const box = $("mecExpand");
+      const txt = $("mecExpandText");
+      if(out) out.textContent="Selecione os achados e clique em “Rodar análise”.";
+      if(btn) btn.style.display="none";
+      if(box) box.style.display="none";
+      if(txt) txt.innerHTML="";
+    }
+  }
+
+  /* ===================== WIRING ÚNICO ===================== */
+  function initApp(){
+    // tabs
+    $("tabCasos")?.addEventListener("click", ()=>showTab("casos"));
+    $("tabAssin")?.addEventListener("click", ()=>showTab("assin"));
+    $("tabMec")?.addEventListener("click", ()=>showTab("mec"));
+    $("tabRefs")?.addEventListener("click", ()=>showTab("refs"));
+    $("tabSobre")?.addEventListener("click", ()=>showTab("sobre"));
+
+    // casos
+    $("caseSel")?.addEventListener("change", ()=>{ try{ renderCase(); } catch(e){ showFatal("renderCase():\n"+(e?.stack||e)); } });
+    try { renderCase(); } catch(e){ showFatal("renderCase() inicial:\n"+(e?.stack||e)); }
+
+    // assincronias
+    $("btnAssinRun")?.addEventListener("click", ()=>{ try{ runAssinMotor(); } catch(e){ showFatal("runAssinMotor():\n"+(e?.stack||e)); } });
+    $("btnAssinClear")?.addEventListener("click", ()=>resetChecks("assin"));
+    $("btnAssinExpand")?.addEventListener("click", ()=>{
+      const box = $("assinExpand");
+      if(!box) return;
+      box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+    });
+
+    // mecânica
+    $("btnMecRun")?.addEventListener("click", ()=>{ try{ runMecMotor(); } catch(e){ showFatal("runMecMotor():\n"+(e?.stack||e)); } });
+    $("btnMecClear")?.addEventListener("click", ()=>resetChecks("mec"));
+    $("btnMecExpand")?.addEventListener("click", ()=>{
+      const box = $("mecExpand");
+      if(!box) return;
+      box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+    });
+
+    // rodapé ano
+    const yearNow = $("yearNow");
+    if(yearNow) yearNow.textContent = new Date().getFullYear();
+
+    // Estado inicial (mantém Casos como padrão)
+    showTab("casos");
+  }
+
+  function wireSplash(){
+    const b = $("btnEnterSplash");
+    if(b){
+      // remove inline inconsistentes (se existirem) sem mudar função
+      b.onclick = null;
+      b.addEventListener("click", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+      b.addEventListener("touchend", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+    }
+  }
+
+  /* ---------- Bootstrap único ---------- */
+  function boot(){
+    try{
+      wireSplash();
+      // Se o usuário fechar splash, initApp acontece dentro de enterApp().
+      // Mas, para evitar “app morto” quando splash é removido manualmente, fazemos um init leve aqui também:
+      if(!booted){
+        // não inicializa tudo para não romper o "Compacto primeiro" (mantém navegação funcionando, etc.)
+        // a inicialização completa ocorre ao entrar
+      }
+    }catch(e){
+      showFatal("Falha no boot():\n" + (e?.stack || e));
+    }
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+  window.addEventListener("error", (ev)=>{
+    const msg = (ev?.error?.stack) ? ev.error.stack : (ev?.message || "Erro desconhecido");
+    showFatal(String(msg));
+  });
+
 })();
-  </script>
+</script>
 </body>
 </html>
 
+  
