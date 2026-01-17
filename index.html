@@ -1,3 +1,4 @@
+<!-- ===================== PARTE 1/4 ===================== -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -54,9 +55,9 @@
       background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,.78));
       box-shadow: var(--shadow);
       padding: 26px 22px;
-      position:relative;
+      position: relative;
       z-index: 10000;
-      pointer-events:auto;
+      pointer-events: auto;
     }
     .splashTop{
       display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
@@ -303,13 +304,13 @@
     }
     .note b{ color: var(--text); }
 
-    .imgBox{
+    .figureBox{
       border:1px solid var(--line);
       background: var(--panel2);
       border-radius: 14px;
       padding: 10px 12px;
     }
-    .imgBox img{
+    .figureBox img{
       width:100%;
       height:auto;
       display:block;
@@ -334,7 +335,7 @@
           </div>
         </div>
         <div class="splashBtns">
-          <button class="btn primary" id="btnEnterSplash" type="button" onclick="enterApp()">Entrar</button>
+          <button class="btn primary" id="btnEnterSplash" type="button">Entrar</button>
         </div>
       </div>
 
@@ -348,7 +349,6 @@
           <span class="pill">SARA: calculadoras</span>
           <span class="pill">Assincronias</span>
           <span class="pill">Mecânica</span>
-          <span class="pill">Evidências</span>
         </div>
       </div>
     </div>
@@ -378,6 +378,387 @@
   </header>
 
   <main class="wrap">
+<!-- ===================== PARTE 1/4 ===================== -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SyncVent — Ventilação Mecânica (educacional)</title>
+
+  <style>
+    :root{
+      --bg:#f6f8ff;
+      --panel:#ffffff;
+      --panel2:#f2f5ff;
+      --text:#0b1220;
+      --muted:#41516b;
+      --line:#d9e2f3;
+      --chip:#eef3ff;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --shadow: 0 18px 45px rgba(18,36,80,.12);
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Splash */
+    #splash{
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(800px 500px at 20% 10%, rgba(37,99,235,.20), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(37,99,235,.12), transparent 55%),
+        var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      transition: opacity .35s ease;
+      pointer-events:auto;
+    }
+    #splash.hide{ opacity:0; pointer-events:none; }
+
+    .splashCard{
+      width:min(980px, 92vw);
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 10px);
+      background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,.78));
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      position: relative;
+      z-index: 10000;
+      pointer-events: auto;
+    }
+    .splashTop{
+      display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:42px; height:42px; border-radius:12px;
+      background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.35));
+      box-shadow: 0 10px 22px rgba(37,99,235,.18);
+    }
+    .brand h1{ margin:0; font-size:22px; letter-spacing:.2px; }
+    .brand .tag{ margin-top:2px; color: var(--muted); font-size:13px; }
+
+    .btn{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor:pointer;
+      transition: transform .05s ease, background .15s ease, border .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ border-color: rgba(37,99,235,.55); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      border-color: rgba(37,99,235,.65);
+      color:#fff;
+    }
+
+    .splashBody{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    .splashBody p{ margin:0; color: var(--muted); line-height:1.5; font-size:14px; }
+    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:flex-start; }
+    .pill{
+      background: rgba(37,99,235,.10);
+      border:1px solid rgba(37,99,235,.28);
+      color: var(--text);
+      font-size:12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    @media (max-width: 860px){
+      .splashBody{ grid-template-columns: 1fr; }
+      .pillRow{ justify-content:flex-start; }
+    }
+
+    /* Header */
+    header{
+      position: sticky;
+      top:0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap{ width:min(1180px, 94vw); margin: 0 auto; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 10px 0;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .leftTop{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .miniLogo{
+      width:28px; height:28px; border-radius:10px;
+      background: linear-gradient(135deg, var(--blue), rgba(37,99,235,.25));
+      box-shadow: 0 8px 18px rgba(37,99,235,.14);
+    }
+    .titleBlock{ display:flex; flex-direction:column; line-height:1.1; }
+    .titleBlock b{ font-size: 14px; letter-spacing:.2px;}
+    .titleBlock span{ font-size: 12px; color: var(--muted); margin-top:3px;}
+
+    nav{ display:flex; gap: 8px; flex-wrap:wrap; align-items:center; }
+    .tab{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 1000;
+      cursor:pointer;
+      font-size: 13px;
+    }
+    .tab.active{
+      background: rgba(37,99,235,.10);
+      border-color: rgba(37,99,235,.40);
+    }
+    .tab.casos{ padding: 10px 16px; font-size: 14px; }
+
+    main{ padding: 16px 0 28px; }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .card h2{ margin:0; font-size: 16px; letter-spacing:.2px; }
+    .sub{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .hr{ height:1px; background: var(--line); margin:12px 0; }
+
+    label{
+      display:block;
+      font-weight: 1000;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom:6px;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+    }
+    input, select, textarea{
+      width:100%;
+      box-sizing:border-box;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      padding: 10px 10px;
+      outline: none;
+      font-weight: 900;
+      font-size: 14px;
+    }
+    .small{ font-size: 12px; color: var(--muted); margin-top:6px; line-height:1.4; }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--muted);
+      font-weight: 1000;
+      font-size: 12px;
+    }
+    .chip b{ color: var(--text); }
+
+    details{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    summary{ cursor:pointer; font-weight: 1000; list-style:none; }
+    summary::-webkit-details-marker{ display:none; }
+    .klist{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color: var(--muted);
+      line-height:1.5;
+      font-size: 13px;
+    }
+    .klist li{ margin: 6px 0; }
+    .klist b{ color: var(--text); }
+
+    a{ color: var(--text); text-decoration: none; border-bottom: 1px dashed rgba(37,99,235,.45); }
+    a:hover{ border-bottom-color: rgba(37,99,235,.85); }
+
+    .footer{
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.45;
+    }
+
+    .mono{ font-family: var(--mono); }
+    .hide{ display:none !important; }
+
+    .checks{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 780px){
+      .checks{ grid-template-columns: 1fr; }
+    }
+    .checkGroup{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .checkGroup h3{ margin:0 0 8px; font-size: 13px; letter-spacing:.2px; }
+    .opt{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 6px 0;
+      border-top: 1px dashed color-mix(in srgb, var(--line) 70%, transparent);
+    }
+    .opt:first-of-type{ border-top: none; }
+    .opt input{ width:auto; margin-top: 3px; }
+    .opt div{ flex:1; }
+    .opt b{ display:block; font-size: 13px; }
+    .opt span{ display:block; color: var(--muted); font-size: 12px; line-height:1.35; margin-top:2px; }
+
+    .outBox{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--panel2) 80%, transparent);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .outBox h3{ margin:0 0 8px; font-size: 13px; }
+    .outBox .txt{
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
+
+    .note{
+      border-left: 4px solid rgba(37,99,235,.55);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(37,99,235,.07);
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
+    .note b{ color: var(--text); }
+
+    .figureBox{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .figureBox img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="splashCard">
+      <div class="splashTop">
+        <div class="brand">
+          <div class="logo"></div>
+          <div>
+            <h1>SyncVent</h1>
+            <div class="tag">Ventilação Mecânica — app educacional (não-prescritor)</div>
+          </div>
+        </div>
+        <div class="splashBtns">
+          <button class="btn primary" id="btnEnterSplash" type="button">Entrar</button>
+        </div>
+      </div>
+
+      <div class="splashBody">
+        <p>
+          Ferramenta educacional para organizar raciocínio por cenários e por leitura de curvas.
+          Não substitui protocolos institucionais nem julgamento clínico.
+        </p>
+        <div class="pillRow">
+          <span class="pill">Casos</span>
+          <span class="pill">SARA: calculadoras</span>
+          <span class="pill">Assincronias</span>
+          <span class="pill">Mecânica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="leftTop">
+          <div class="miniLogo"></div>
+          <div class="titleBlock">
+            <b>SyncVent</b>
+            <span>Compacto primeiro. Expandido só depois da análise.</span>
+          </div>
+        </div>
+
+        <nav>
+          <button class="tab casos active" id="tabCasos" type="button">Casos</button>
+          <button class="tab" id="tabAssin" type="button">Assincronias</button>
+          <button class="tab" id="tabMec" type="button">Mecânica</button>
+          <button class="tab" id="tabRefs" type="button">Evidências</button>
+          <button class="tab" id="tabSobre" type="button">Sobre</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+<!-- ===================== PARTE 2/4 ===================== -->
 
     <!-- ===================== CASOS ===================== -->
     <section id="secCasos">
@@ -426,24 +807,14 @@
 
         <div class="hr"></div>
 
-        <details open>
-          <summary>Gráficos normais (referência visual)</summary>
-          <div class="grid2" style="margin-top:10px;">
-            <div class="imgBox">
-              <label>Normal — PCV</label>
-              <img src="grafico_pcv.png" alt="Gráfico normal PCV" />
-            </div>
-            <div class="imgBox">
-              <label>Normal — VCV</label>
-              <img src="grafico_vcv.png" alt="Gráfico normal VCV" />
-            </div>
+        <div class="grid2">
+          <div class="figureBox">
+            <label>Gráfico normal (referência visual)</label>
+            <img src="grafico_pcv.png" alt="Gráfico normal PCV" />
+            <div class="small">Arquivo: grafico_pcv.png (raiz do repositório)</div>
           </div>
-        </details>
 
-        <div class="hr"></div>
-
-        <div class="row">
-          <div style="flex:1; min-width:240px;">
+          <div class="card" style="box-shadow:none; background: var(--panel2);">
             <label>Contexto (opcional)</label>
             <select id="assinContext">
               <option value="">Sem contexto</option>
@@ -453,8 +824,9 @@
               <option value="obstruct">Obstrutivo (DPOC/asma)</option>
               <option value="lowC">Baixa complacência (SARA/restritiva)</option>
             </select>
-          </div>
-          <div style="flex:1; min-width:240px;">
+
+            <div style="height:10px;"></div>
+
             <label>Ação</label>
             <div class="row">
               <button class="btn primary" id="btnAssinRun" type="button">Rodar análise</button>
@@ -572,396 +944,158 @@
         </div>
       </div>
     </section>
-<!-- ===================== PARTE 2/3 ===================== -->
+<!-- ===================== PARTE 4/4 ===================== -->
 
-    <!-- ===================== EVIDÊNCIAS ===================== -->
-    <section id="secRefs" class="hide">
-      <div class="card">
-        <h2>Evidências (links)</h2>
-        <p class="sub">Links para leitura. O app não fornece conduta.</p>
-
-        <div class="hr"></div>
-
-        <details open>
-          <summary>Casos — SARA / Ventilação protetora</summary>
-          <ul class="klist">
-            <li><b>Global Definition of ARDS</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/">PMC</a></li>
-            <li><b>ESICM ARDS Guidelines 2023</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/">PMC</a></li>
-            <li><b>Protective ventilation (revisões e base)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=lung+protective+ventilation+ARDS+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Casos — Sepse / Choque séptico</summary>
-          <ul class="klist">
-            <li><b>Surviving Sepsis Campaign 2021</b>: <a target="_blank" href="https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021">SCCM</a></li>
-            <li><b>Sepse e VM: revisões</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=sepsis+mechanical+ventilation+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Casos — DPOC / Obstrutivo (auto-PEEP)</summary>
-          <ul class="klist">
-            <li><b>GOLD 2025</b>: <a target="_blank" href="https://goldcopd.org/2025-gold-report/">Site</a></li>
-            <li><b>Auto-PEEP / dinâmica expiratória (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=auto+PEEP+COPD+mechanical+ventilation+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Casos — Desmame / TRE (SBT)</summary>
-          <ul class="klist">
-            <li><b>AARC CPG 2024 — SBT</b>: <a target="_blank" href="https://www.aarc.org/wp-content/uploads/2023/11/CPG2024SpontaneousBreathingTrial.pdf">PDF</a></li>
-            <li><b>ATS/CHEST 2017 — Liberation from MV</b>: <a target="_blank" href="https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf">PDF</a></li>
-            <li><b>Weaning failure / difficult-prolonged weaning (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=difficult+weaning+prolonged+weaning+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Casos — IMT (treino muscular inspiratório) na VM</summary>
-          <ul class="klist">
-            <li><b>Revisão sistemática (PMC)</b>: <a target="_blank" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11815589/">PMC</a></li>
-            <li><b>Inspiratory muscle training + mechanical ventilation</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=inspiratory+muscle+training+mechanical+ventilation+systematic+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Assincronias — visão geral</summary>
-          <ul class="klist">
-            <li><b>Patient–ventilator asynchrony (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=patient+ventilator+asynchrony+review">PubMed (busca)</a></li>
-            <li><b>Ineffective efforts / trigger issues (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=ineffective+effort+ventilator+trigger+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>Mecânica — complacência / resistência / vazamento</summary>
-          <ul class="klist">
-            <li><b>Respiratory mechanics in MV (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=respiratory+mechanics+mechanical+ventilation+review">PubMed (busca)</a></li>
-            <li><b>Compliance and resistance interpretation (revisões)</b>: <a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/?term=airway+resistance+compliance+mechanical+ventilation+review">PubMed (busca)</a></li>
-          </ul>
-        </details>
-
-        <div class="footer">
-          Links externos. Se quiser, eu reorganizo por “Top-5 por assunto” e padronizo o texto, sem alterar o conteúdo clínico.
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== SOBRE ===================== -->
-    <section id="secSobre" class="hide">
-      <div class="card">
-        <h2>Sobre</h2>
-        <p class="sub">SyncVent é educacional e não-prescritor.</p>
-        <div class="hr"></div>
-        <details open>
-          <summary>Uso e limites</summary>
-          <ul class="klist">
-            <li><b>Não-prescritor:</b> não fornece ordens de ajuste.</li>
-            <li><b>Expandido sob demanda:</b> só aparece após a análise compacta.</li>
-            <li><b>Responsabilidade:</b> decisão clínica é do profissional e equipe.</li>
-          </ul>
-        </details>
-      </div>
-    </section>
-
-    <div class="footer" style="margin-top:18px;">
-      <b>© <span id="yearNow"></span> Leticia Moreira — SyncVent.</b><br>
-      Conteúdo e estrutura do app protegidos por direitos autorais. Proibida a reprodução, distribuição ou uso comercial sem autorização expressa da autora.<br>
-      Uso exclusivamente educacional; não fornece prescrição, ordens de ajuste ou conduta.
-    </div>
-
-  </main>
-
-  <script>
-    /* ===================== BOOT + WIRING ÚNICO (robusto) ===================== */
-    (function(){
-      "use strict";
-
-      const $  = (id)=>document.getElementById(id);
-      const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
-      const esc = (s)=> String(s)
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-      function num(v){
-        if(v===null || v===undefined) return NaN;
-        const s = String(v).replace(",", ".").trim();
-        const n = Number(s);
-        return Number.isFinite(n) ? n : NaN;
-      }
-
-      let appBooted = false;
-
-      function enterApp(){
-        const splash = $("splash");
-        if(splash){
-          splash.classList.add("hide");
-          setTimeout(()=>{ splash.style.display="none"; }, 420);
-        }
-        if(!appBooted){
-          appBooted = true;
-          safe(initApp, "initApp()");
-        }
-      }
-      window.enterApp = enterApp;
-
-      function showTab(which){
-        const secCasos = $("secCasos");
-        const secAssin = $("secAssin");
-        const secMec   = $("secMec");
-        const secRefs  = $("secRefs");
-        const secSobre = $("secSobre");
-
-        if(secCasos) secCasos.classList.toggle("hide", which!=="casos");
-        if(secAssin) secAssin.classList.toggle("hide", which!=="assin");
-        if(secMec)   secMec.classList.toggle("hide", which!=="mec");
-        if(secRefs)  secRefs.classList.toggle("hide", which!=="refs");
-        if(secSobre) secSobre.classList.toggle("hide", which!=="sobre");
-
-        $("tabCasos")?.classList.toggle("active", which==="casos");
-        $("tabAssin")?.classList.toggle("active", which==="assin");
-        $("tabMec")?.classList.toggle("active", which==="mec");
-        $("tabRefs")?.classList.toggle("active", which==="refs");
-        $("tabSobre")?.classList.toggle("active", which==="sobre");
-
-        window.scrollTo({ top:0, behavior:"smooth" });
-      }
-
-      /* ---------- error isolation ---------- */
-      function showFatal(msg){
-        // overlay simples; não muda conteúdo do app, só evita “morrer”
-        let box = $("errBox");
-        if(!box){
-          box = document.createElement("div");
-          box.id = "errBox";
-          box.style.cssText = "position:fixed;inset:12px;z-index:99999;background:rgba(255,255,255,.98);border:1px solid #d9e2f3;border-radius:14px;box-shadow:0 18px 45px rgba(18,36,80,.16);padding:12px;overflow:auto;font-family:ui-sans-serif,system-ui;color:#0b1220";
-          box.innerHTML = `
-            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
-              <b>Erro de JavaScript (modo seguro)</b>
-              <button id="errClose" style="border:1px solid #d9e2f3;background:#fff;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer;">Fechar</button>
-            </div>
-            <div style="height:10px;"></div>
-            <pre id="errText" style="margin:0;white-space:pre-wrap;line-height:1.35;font-size:12px;color:#41516b;"></pre>
-          `;
-          document.body.appendChild(box);
-          $("errClose")?.addEventListener("click", ()=> box.remove());
-        }
-        $("errText").textContent = msg;
-      }
-
-      function safe(fn, label){
-        try{ fn(); } catch(e){ showFatal(label + ":\n" + (e?.stack || e)); }
-      }
-
-      function wireSplash(){
-        const b = $("btnEnterSplash");
-        if(!b) return;
-        // remove inline inconsistentes e garante click/touch
-        b.onclick = null;
-        b.addEventListener("click", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
-        b.addEventListener("touchend", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
-      }
-
-      /* ---------- Evidências por caso (render no fim do caso) ---------- */
-      const EVID_BY_CASE = {
-        sara: [
-          {t:"Global Definition of ARDS", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10870872/"},
-          {t:"ESICM ARDS Guidelines 2023", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/"},
-          {t:"Protective ventilation (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=lung+protective+ventilation+ARDS+review"}
-        ],
-        sepse: [
-          {t:"Surviving Sepsis Campaign 2021", u:"https://www.sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-guidelines-2021"},
-          {t:"Sepse e VM (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=sepsis+mechanical+ventilation+review"}
-        ],
-        dpoc: [
-          {t:"GOLD 2025", u:"https://goldcopd.org/2025-gold-report/"},
-          {t:"Auto-PEEP / DPOC (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=auto+PEEP+COPD+mechanical+ventilation+review"}
-        ],
-        restritiva: [
-          {t:"ESICM ARDS Guidelines 2023 (contexto de baixa complacência)", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10354163/"},
-          {t:"Restrictive lung disease + MV (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=restrictive+lung+disease+mechanical+ventilation+review"}
-        ],
-        cardiaca: [
-          {t:"ESC Guidelines (HF) — página oficial", u:"https://www.escardio.org/Guidelines"},
-          {t:"Cardiogenic pulmonary edema + NIV/MV (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=cardiogenic+pulmonary+edema+noninvasive+ventilation+review"}
-        ],
-        obeso: [
-          {t:"ERS/ATS Statements — página oficial", u:"https://www.thoracic.org/statements/"},
-          {t:"OHS / obesity + mechanical ventilation (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=obesity+hypoventilation+syndrome+mechanical+ventilation+review"}
-        ],
-        neuro: [
-          {t:"ATS/CHEST 2017 — Liberation from MV", u:"https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf"},
-          {t:"Neuromuscular disease + weaning (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=neuromuscular+disease+weaning+mechanical+ventilation+review"}
-        ],
-        neurocrit: [
-          {t:"Neurocritical Care Society — página oficial", u:"https://www.neurocriticalcare.org/"},
-          {t:"Brain injury + ventilation + asynchrony (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=brain+injury+mechanical+ventilation+asynchrony+review"}
-        ],
-        trauma: [
-          {t:"ATS/CHEST 2017 — Liberation from MV", u:"https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf"},
-          {t:"Trauma + mechanical ventilation (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=trauma+mechanical+ventilation+review"}
-        ],
-        tb: [
-          {t:"WHO Tuberculosis — página oficial", u:"https://www.who.int/teams/global-tuberculosis-programme"},
-          {t:"Tuberculosis + ICU mechanical ventilation (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=tuberculosis+ICU+mechanical+ventilation+review"}
-        ],
-        pneumo: [
-          {t:"BTS Pleural Disease Guideline — página oficial", u:"https://www.brit-thoracic.org.uk/quality-improvement/guidelines/pleural-disease/"},
-          {t:"Pneumothorax + positive pressure ventilation (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=pneumothorax+positive+pressure+ventilation+review"}
-        ],
-        desmame: [
-          {t:"AARC CPG 2024 — SBT", u:"https://www.aarc.org/wp-content/uploads/2023/11/CPG2024SpontaneousBreathingTrial.pdf"},
-          {t:"ATS/CHEST 2017 — Liberation from MV", u:"https://www.thoracic.org/statements/resources/cc/weaning-rehab-protocols-CLT.pdf"},
-          {t:"Difficult/prolonged weaning (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=difficult+weaning+prolonged+weaning+review"}
-        ],
-        imt: [
-          {t:"Revisão sistemática (PMC) — IMT em VM", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC11815589/"},
-          {t:"IMT + MV (busca)", u:"https://pubmed.ncbi.nlm.nih.gov/?term=inspiratory+muscle+training+mechanical+ventilation+systematic+review"}
-        ]
-      };
-
-      function renderEvidenceForCase(v){
-        const arr = EVID_BY_CASE[v];
-        if(!arr || !arr.length) return "";
-        return `
-          <details open style="margin-top:10px;">
-            <summary>Evidências (links)</summary>
-            <ul class="klist">
-              ${arr.map(x => `<li><b>${esc(x.t)}</b>: <a target="_blank" href="${esc(x.u)}">Abrir</a></li>`).join("")}
-            </ul>
-          </details>
-        `;
-      }
-
-      /* ---------- Conteúdo Casos + EDU (será completado na PARTE 3/3 com CASES/EDU/motores) ---------- */
-
-      // Marcadores globais para a PARTE 3/3
-      window.__SV = {
-        $, $$, esc, num, safe, showTab, renderEvidenceForCase
-      };
-
-      function boot(){
-        wireSplash();
-        const yearNow = $("yearNow");
-        if(yearNow) yearNow.textContent = new Date().getFullYear();
-        // Estado inicial: Casos
-        showTab("casos");
-      }
-
-      if(document.readyState === "loading"){
-        document.addEventListener("DOMContentLoaded", boot);
-      }else{
-        boot();
-      }
-    })();
-  </script>
-
-<!-- A PARTE 3/3 CONTINUA A PARTIR DAQUI -->
-<!-- ===================== PARTE 3/3 ===================== -->
 <script>
+/* ===================== SyncVent — Wiring final (único) + isolamento de erros ===================== */
 (function(){
   "use strict";
 
-  const { $, $$, esc, num, safe, showTab, renderEvidenceForCase } = window.__SV;
+  const $  = (id)=>document.getElementById(id);
+  const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 
-  /* ===================== CASOS ===================== */
-  const CASES = {
-    sara:{ title:"SARA (ARDS)", lead:"Triagem educacional + calculadoras.", body:"<p class='sub'>Use as calculadoras acima.</p>" },
-    sepse:{ title:"Sepse / Choque séptico", lead:"Drive elevado e risco de assincronia.", body:"" },
-    dpoc:{ title:"DPOC / Obstrutivo", lead:"Auto-PEEP e expiração incompleta.", body:"" },
-    restritiva:{ title:"Restritiva", lead:"Baixa complacência.", body:"" },
-    cardiaca:{ title:"Cardíaca", lead:"Integração hemodinâmica.", body:"" },
-    obeso:{ title:"Obesidade / OHS", lead:"Parede torácica e esforço.", body:"" },
-    neuro:{ title:"Neuromuscular", lead:"Fraqueza e esforço sem disparo.", body:"" },
-    neurocrit:{ title:"Neurocrítico", lead:"Estabilidade e sincronia.", body:"" },
-    trauma:{ title:"Trauma", lead:"Fenótipo misto.", body:"" },
-    tb:{ title:"Tuberculose", lead:"Hipoxemia grave.", body:"" },
-    pneumo:{ title:"Pneumotórax", lead:"Mudança abrupta de mecânica.", body:"" },
-    desmame:{ title:"Desmame / TRE", lead:"Processo estruturado.", body:"" },
-    imt:{ title:"IMT na VM", lead:"Treino sem trigger.", body:"" }
-  };
-
-  const EDU_BY_CASE = {
-    sara:"<p class='small'>Interpretar por curvas e contexto.</p>",
-    sepse:"<p class='small'>Drive elevado pode gerar assincronia.</p>",
-    dpoc:"<p class='small'>Fluxo expiratório não zerar é achado-chave.</p>",
-    restritiva:"<p class='small'>Padrões dependem do modo.</p>",
-    cardiaca:"<p class='small'>Avaliar tendência clínica.</p>",
-    obeso:"<p class='small'>Pressões refletem parede torácica.</p>",
-    neuro:"<p class='small'>Fraqueza favorece esforço sem disparo.</p>",
-    neurocrit:"<p class='small'>Evitar instabilidade ventilatória.</p>",
-    trauma:"<p class='small'>Dor e choque alteram drive.</p>",
-    tb:"<p class='small'>Hipoxemia e esforço elevado.</p>",
-    pneumo:"<p class='small'>Mudanças abruptas exigem avaliação clínica.</p>",
-    desmame:"<p class='small'>Observar conforto e sincronia.</p>",
-    imt:"<p class='small'>Monitorar tolerância ao esforço.</p>"
-  };
-
-  function renderCase(){
-    const sel = $("caseSel");
-    const area = $("caseArea");
-    if(!sel || !area) return;
-    const v = sel.value;
-    if(!v){ area.innerHTML=""; return; }
-
-    const c = CASES[v];
-    area.innerHTML = `
-      <div class="card" style="box-shadow:none;background:var(--panel2);">
-        <h2>${esc(c.title)}</h2>
-        <p class="sub">${esc(c.lead)}</p>
-        <div class="hr"></div>
-        ${c.body || ""}
-        <div class="hr"></div>
-        ${EDU_BY_CASE[v] || ""}
-        ${renderEvidenceForCase(v)}
-      </div>
-    `;
-  }
-
-  /* ===================== ASSINCRONIAS ===================== */
-  function runAssinMotor(){
-    const out = $("assinOut");
-    if(!out) return;
-    const picked = $$("input.assin:checked").map(x=>x.value);
-    if(!picked.length){
-      out.textContent="Selecione ao menos um achado.";
-      return;
+  function showFatal(msg){
+    let box = $("sv_errBox");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "sv_errBox";
+      box.style.cssText =
+        "position:fixed;inset:12px;z-index:99999;background:rgba(255,255,255,.98);" +
+        "border:1px solid #d9e2f3;border-radius:14px;box-shadow:0 18px 45px rgba(18,36,80,.16);" +
+        "padding:12px;overflow:auto;font-family:ui-sans-serif,system-ui;color:#0b1220";
+      box.innerHTML =
+        '<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">' +
+          '<b>Erro de JavaScript (modo seguro)</b>' +
+          '<button id="sv_errClose" style="border:1px solid #d9e2f3;background:#fff;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer;">Fechar</button>' +
+        '</div>' +
+        '<div style="height:10px;"></div>' +
+        '<pre id="sv_errText" style="margin:0;white-space:pre-wrap;line-height:1.35;font-size:12px;color:#41516b;"></pre>';
+      document.body.appendChild(box);
+      $("sv_errClose").addEventListener("click", ()=> box.remove());
     }
-    out.textContent =
-      "Achados:\n- " + picked.join("\n- ");
-    $("btnAssinExpand").style.display="inline-block";
+    $("sv_errText").textContent = msg;
   }
 
-  /* ===================== MECÂNICA ===================== */
-  function runMecMotor(){
-    const out = $("mecOut");
-    if(!out) return;
-    const picked = $$("input.mec:checked").map(x=>x.value);
-    if(!picked.length){
-      out.textContent="Selecione ao menos um achado.";
-      return;
+  function safe(fn, label){
+    try{ fn(); } catch(e){ showFatal(label + ":\n" + (e?.stack || e)); }
+  }
+
+  // ====== Splash: ENTRAR (único) ======
+  let _booted = false;
+  function enterApp(){
+    const splash = $("splash");
+    if(splash){
+      splash.classList.add("hide");
+      setTimeout(()=>{ splash.style.display="none"; }, 420);
     }
-    out.textContent =
-      "Achados:\n- " + picked.join("\n- ");
-    $("btnMecExpand").style.display="inline-block";
+    if(!_booted){
+      _booted = true;
+      safe(initApp, "initApp()");
+    }
+  }
+  window.enterApp = enterApp;
+
+  // ====== Tabs ======
+  function showTab(which){
+    const secCasos = $("secCasos");
+    const secAssin = $("secAssin");
+    const secMec   = $("secMec");
+    const secRefs  = $("secRefs");
+    const secSobre = $("secSobre");
+
+    if(secCasos) secCasos.classList.toggle("hide", which!=="casos");
+    if(secAssin) secAssin.classList.toggle("hide", which!=="assin");
+    if(secMec)   secMec.classList.toggle("hide", which!=="mec");
+    if(secRefs)  secRefs.classList.toggle("hide", which!=="refs");
+    if(secSobre) secSobre.classList.toggle("hide", which!=="sobre");
+
+    $("tabCasos")?.classList.toggle("active", which==="casos");
+    $("tabAssin")?.classList.toggle("active", which==="assin");
+    $("tabMec")?.classList.toggle("active", which==="mec");
+    $("tabRefs")?.classList.toggle("active", which==="refs");
+    $("tabSobre")?.classList.toggle("active", which==="sobre");
+
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+  window.showTab = showTab;
+
+  // ====== Hooks esperados (devem existir nas partes anteriores) ======
+  // renderCase()
+  // runAssinMotor()
+  // runMecMotor()
+  // resetChecks(which)
+
+  function initApp(){
+    // Tabs
+    $("tabCasos")?.addEventListener("click", ()=>showTab("casos"));
+    $("tabAssin")?.addEventListener("click", ()=>showTab("assin"));
+    $("tabMec")?.addEventListener("click", ()=>showTab("mec"));
+    $("tabRefs")?.addEventListener("click", ()=>showTab("refs"));
+    $("tabSobre")?.addEventListener("click", ()=>showTab("sobre"));
+
+    // Casos
+    $("caseSel")?.addEventListener("change", ()=> safe(window.renderCase, "renderCase()"));
+
+    // Assincronias
+    $("btnAssinRun")?.addEventListener("click", ()=> safe(window.runAssinMotor, "runAssinMotor()"));
+    $("btnAssinClear")?.addEventListener("click", ()=> safe(()=>window.resetChecks?.("assin"), "resetChecks('assin')"));
+    $("btnAssinExpand")?.addEventListener("click", ()=>{
+      const box = $("assinExpand");
+      if(!box) return;
+      box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+    });
+
+    // Mecânica
+    $("btnMecRun")?.addEventListener("click", ()=> safe(window.runMecMotor, "runMecMotor()"));
+    $("btnMecClear")?.addEventListener("click", ()=> safe(()=>window.resetChecks?.("mec"), "resetChecks('mec')"));
+    $("btnMecExpand")?.addEventListener("click", ()=>{
+      const box = $("mecExpand");
+      if(!box) return;
+      box.style.display = (box.style.display==="none" || box.style.display==="") ? "block" : "none";
+    });
+
+    // Ano no rodapé
+    const y = $("yearNow");
+    if(y) y.textContent = new Date().getFullYear();
+
+    // Estado inicial
+    showTab("casos");
+    safe(window.renderCase, "renderCase() inicial");
   }
 
-  function resetChecks(which){
-    $$("input."+which).forEach(x=>x.checked=false);
+  function boot(){
+    // Splash button wiring (remove inline/duplicado)
+    const b = $("btnEnterSplash");
+    if(b){
+      b.onclick = null;
+      b.addEventListener("click", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+      b.addEventListener("touchend", (e)=>{ e.preventDefault(); enterApp(); }, {passive:false});
+    }
+
+    // Ano no rodapé mesmo antes de entrar
+    const y = $("yearNow");
+    if(y) y.textContent = new Date().getFullYear();
+
+    // Tabs respondem mesmo antes de entrar (opcional)
+    $("tabCasos")?.addEventListener("click", ()=>showTab("casos"));
+    $("tabAssin")?.addEventListener("click", ()=>showTab("assin"));
+    $("tabMec")?.addEventListener("click", ()=>showTab("mec"));
+    $("tabRefs")?.addEventListener("click", ()=>showTab("refs"));
+    $("tabSobre")?.addEventListener("click", ()=>showTab("sobre"));
+
+    showTab("casos");
   }
 
-  /* ===================== WIRING FINAL ===================== */
-  function wireFinal(){
-    $("caseSel")?.addEventListener("change", renderCase);
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 
-    $("btnAssinRun")?.addEventListener("click", runAssinMotor);
-    $("btnAssinClear")?.addEventListener("click", ()=>resetChecks("assin"));
-
-    $("btnMecRun")?.addEventListener("click", runMecMotor);
-    $("btnMecClear")?.addEventListener("click", ()=>resetChecks("mec"));
-  }
-
-  wireFinal();
+  window.addEventListener("error", (ev)=>{
+    const msg = ev?.error?.stack ? ev.error.stack : (ev?.message || "Erro desconhecido");
+    showFatal(String(msg));
+  });
 
 })();
 </script>
-<!-- ===================== FIM DO INDEX ===================== -->
+
 </body>
 </html>
