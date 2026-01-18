@@ -1050,7 +1050,9 @@ Toda decisão clínica deve ser individualizada pelo profissional responsável.
 const $=id=>document.getElementById(id),$$=s=>[...document.querySelectorAll(s)];
 function showTab(t){["Casos","Assin","Mec","Sobre"].forEach(x=>{$("sec"+x).classList.toggle("hide",x!==t);$("tab"+x).classList.toggle("active",x===t)})}
 ["tabCasos","tabAssin","tabMec","tabSobre"].forEach((id,i)=>$(id).onclick=()=>showTab(["Casos","Assin","Mec","Sobre"][i]));
-$("btnEnter").onclick=()=>$("splash").classList.add("hide");
+document.addEventListener("DOMContentLoaded", function() {
+    $("btnEnter").onclick=()=>$("splash").classList.add("hide");
+});
 
 function closeSplash(){
 $("modalSplash").classList.remove("show");
