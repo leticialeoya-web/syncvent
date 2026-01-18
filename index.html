@@ -1265,25 +1265,60 @@ $("pfOut").innerHTML=`<b>P/F = ${pf.toFixed(0)}</b><br><span style="color:${s};f
 };
 
 const CASE_DATA={
+    $("calcPF").onclick=()=>{
+const p=+$("pao2").value,f=+$("fio2").value;
+if(!p||!f){$("pfOut").innerHTML="<span style='color:#F59E0B'>Preencha PaO₂ e FiO₂</span>";return}
+const pf=p/f;
+let c,s;
+if(pf<100){c="Grave";s="#DC2626"}
+else if(pf<200){c="Moderada";s="#F59E0B"}
+else if(pf<300){c="Leve";s="#F59E0B"}
+else{c="Normal (sem SARA)";s="#059669"}
+$("pfOut").innerHTML=`<b>P/F = ${pf.toFixed(0)}</b><br><span style="color:${s};font-weight:600">${c}</span><br><small>Berlim: Grave &lt;100, Moderada 100-200, Leve 200-300</small>`;
+};
+
+const CASE_DATA={
 sara:`<h3>SARA (ARDS)</h3>
-<h4>Achados frequentemente observados:</h4>
+
+<h4>Achados frequentemente observados nas curvas ventilatórias:</h4>
 <ul class="small">
-<li><b>Baixa complacência:</b> Valores típicos 20-40 mL/cmH₂O (vs normal 50-100). Alça P×V verticalizada, grandes variações de pressão para pequenos volumes</li>
-<li><b>Driving Pressure elevada:</b> Frequentemente &gt;15 cmH₂O. Preditor de mortalidade mais robusto que Vt ou Pplatô isolados</li>
-<li><b>Assincronias:</b> Double triggering, reverse triggering comuns. Associação com mortalidade descrita em coorte de 2022</li>
-<li><b>Heterogeneidade pulmonar:</b> Alça P×V com ponto de inflexão inferior ("joelho") e superior ("bico"). Recrutabilidade variável entre fenótipos</li>
+<li><b>Baixa complacência pulmonar:</b> Valores típicos 20-40 mL/cmH₂O (vs normal 50-100 mL/cmH₂O). Alça Pressão×Volume verticalizada, com grandes variações de pressão para pequenos volumes correntes. Complacência &lt;30 mL/cmH₂O sugere SARA moderada a grave segundo critérios de Berlim</li>
+<li><b>Driving Pressure elevada (ΔP):</b> Frequentemente &gt;15 cmH₂O. Representa a pressão necessária para insuflar os alvéolos efetivamente recrutados. Preditor de mortalidade mais robusto que volume corrente ou pressão de platô isolados</li>
+<li><b>Assincronias paciente-ventilador:</b> Double triggering, reverse triggering e esforços inefetivos são comuns. Associação com aumento de mortalidade descrita em coorte prospectiva multicêntrica de 2022</li>
+<li><b>Heterogeneidade pulmonar:</b> Alça P×V apresenta ponto de inflexão inferior ("joelho" de recrutamento) e superior ("bico" de sobredistensão). Recrutabilidade variável entre fenótipos inflamatório vs focal</li>
+<li><b>Mechanical Power elevado:</b> Energia transferida do ventilador aos pulmões frequentemente &gt;17 J/min. Integra volume corrente, driving pressure, frequência respiratória e fluxo. Conceito unificador da lesão pulmonar induzida por ventilação</li>
 </ul>
+
 <h4>Evidências científicas atuais (2020-2024):</h4>
 <ul class="small">
-<li><b>Ventilação protetora (ARDSNet):</b> VT 6 mL/kg peso predito, Pplatô ≤30 cmH₂O, ΔP &lt;15 cmH₂O (Amato NEJM 2015; Costa ICM 2021). Redução de mortalidade de 22% mantém-se como padrão-ouro<br>
-<span>Ref: ARDSNet NEJM 2000; Amato NEJM 2015</span></li>
-<li><b>Posição prona (≥16h/dia):</b> Redução de mortalidade em 50% (NNT=6) em SARA grave (P/F &lt;150). Melhora oxigenação, homogeneidade e mecânica<br>
-<span>Ref: Guérin NEJM 2013; Bloomfield Cochrane 2015</span></li>
-<li><b>PEEP moderada a alta:</b> Tabelas PEEP/FiO₂ (ARDSNet, ExPress). Titulação individualizada (decremental, driving pressure, ultrassom, Pes) sem benefício universal mas racional em fenótipos específicos<br>
-<span>Ref: Briel JAMA 2010; Cavalcanti ART trial JAMA 2017</span></li>
-<li><b>Bloqueio neuromuscular precoce:</b> Controverso após ROSE trial (2019) não mostrar benefício vs sedação profunda. Restrito a assincronia grave refratária<br>
-<span>Ref: Moss ROSE NEJM 2019; National Heart Lung Blood Institute PETAL</span></li>
+<li><b>Ventilação protetora (ARDSNet):</b> Volume corrente 6 mL/kg peso predito, pressão de platô ≤30 cmH₂O, driving pressure &lt;15 cmH₂O (Amato NEJM 2015; Costa ICM 2021). Redução de mortalidade de 22% (31% vs 39.8%) mantém-se como padrão-ouro após 24 anos de publicação<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: ARDSNet NEJM 2000; Amato NEJM 2015; Costa Intensive Care Med 2021</span></li>
+
+<li><b>Posição prona (≥16h/dia):</b> Redução de mortalidade em 50% (NNT=6) em SARA grave (P/F &lt;150 com PEEP ≥5 e FiO₂ ≥0.6). Melhora oxigenação, homogeneidade de ventilação e mecânica pulmonar. Benefício máximo se iniciada precocemente (&lt;48h de IOT)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Guérin PROSEVA NEJM 2013; Bloomfield Cochrane 2015; Munshi Lancet Respir Med 2017</span></li>
+
+<li><b>PEEP moderada a alta:</b> Uso de tabelas PEEP/FiO₂ (ARDSNet baixa, ExPress alta). Titulação individualizada por método decremental, driving pressure, ultrassom pulmonar ou pressão esofágica. Ensaios clínicos não mostraram benefício universal de PEEP alta, mas racional fisiológico em fenótipos hipoxêmicos e recrutáveis<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Briel meta-análise JAMA 2010; Cavalcanti ART trial JAMA 2017; Chiumello Crit Care 2024</span></li>
+
+<li><b>Bloqueio neuromuscular (BNM) precoce:</b> Controverso após ROSE trial (2019) não demonstrar benefício de cisatracúrio precoce vs sedação profunda sem BNM. Uso atualmente restrito a assincronia grave refratária, hipoxemia refratária pré-prona, ou ECMO<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Moss ROSE NEJM 2019; National Heart Lung Blood Institute PETAL Network</span></li>
+
+<li><b>Oxigenação por membrana extracorpórea (ECMO):</b> EOLIA trial (2018) não atingiu significância estatística (p=0.09), mas tendência a benefício. CESAR trial mostrou benefício. Meta-análise 2023 sugere redução de mortalidade em centros experientes para SARA muito grave (P/F &lt;80, Murray &gt;3)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Combes EOLIA NEJM 2018; Peek CESAR Lancet 2009; Munshi meta-análise Lancet 2023</span></li>
+
+<li><b>Corticosteroides:</b> Dexametasona 20mg/dia por 5 dias seguido de desmame mostrou redução de mortalidade em COVID-19 SARA (RECOVERY 2021). Uso em SARA não-COVID permanece controverso; metilprednisolona em SARA persistente (dia 7-14) pode ter benefício<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: RECOVERY Collaborative Group NEJM 2021; Villar Intensive Care Med 2020</span></li>
+
+<li><b>Fenótipos (medicina de precisão):</b> Calfee identificou fenótipo hiperinflamatório (33% casos) vs hipoinflamatório, com mortalidade 44% vs 23%. Re-análise de trials (HARP-2, FACTT) sugere resposta diferencial: hiperinflamatório beneficia-se de PEEP alta e fluidos restritivos. <b>Limitação prática:</b> biomarcadores não disponíveis rotineiramente<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Calfee Crit Care Med 2014; Famous Lancet Respir Med 2017; Sinha AJRCCM 2020</span></li>
+
+<li><b>Vt ultra-protetor (&lt;6 mL/kg):</b> Estratégia de VT 3-4 mL/kg com ECCO₂R em SARA grave não demonstrou benefício em mortalidade (REST trial 2024), mas permanece opção de resgate<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: REST trial JAMA 2024; Bein NEJM 2013</span></li>
+
+<li><b>Monitorização de mecânica avançada:</b> Pressão esofágica (Pes) para calcular Ptp não mostrou benefício em mortalidade (EPVent-2 2019), mas pode guiar PEEP em obesidade/parede rígida. Estudo LIVE 2024 mostrou que P/V dinâmica prediz resposta ao recrutamento melhor que P/V estática<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Talmor EPVent JAMA 2019; Chiumello Crit Care 2024</span></li>
 </ul>
+
 <div class="hr"></div>
 <h4>Calculadora educacional P/F (Classificação de Berlim)</h4>
 <label>PaO₂ (mmHg)</label>
@@ -1291,112 +1326,213 @@ sara:`<h3>SARA (ARDS)</h3>
 <label>FiO₂ (fração decimal, ex: 0.6 para 60%)</label>
 <input id="fio2" type="number" step="0.01" placeholder="Ex: 0.6">
 <button class="btn primary" id="calcPF">Calcular P/F</button>
-<div id="pfOut" class="small"></div>`,
+<div id="pfOut" class="small"></div>
+`,
 sepse:`<h3>Sepse / Choque séptico</h3>
+
 <h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Drive respiratório aumentado:</b> Deflexões P×T profundas (&gt;10 cmH₂O), duplos disparos, esforços inefetivos. Causas: acidose metabólica, febre, ansiedade, inflamação sistêmica</li>
-<li><b>Variabilidade extrema:</b> FR 30-40/min com volumes irregulares. Ventilação-minuto pode exceder 15-20 L/min em compensação de acidose láctica</li>
-<li><b>Interação cardiopulmonar:</b> Delta-PP &gt;13% ou SVV &gt;13% sugerem responsividade a volume. Disfunção VD em ~25% dos casos graves</li>
+<li><b>Drive respiratório aumentado:</b> Deflexões P×T profundas (&gt;10 cmH₂O), duplos disparos, esforços inefetivos. Causas multifatoriais: acidose metabólica compensatória, febre, ansiedade, dor, inflamação sistêmica</li>
+<li><b>Variabilidade extrema:</b> FR 30-40/min com volumes irregulares. Ventilação-minuto pode exceder 15-20 L/min em compensação de acidose láctica. P0.1 frequentemente &gt;4-5 cmH₂O indicando drive central elevado</li>
+<li><b>Interação cardiopulmonar:</b> Delta-PP &gt;13% ou SVV &gt;13% sugerem responsividade a volume. Oscilações em curvas podem preceder hipotensão. Disfunção VD (cor pulmonale) em ~25% dos casos graves</li>
+<li><b>Dinâmica temporal bifásica:</b> Fase 1 (0-12h): melhora rápida com ressuscitação adequada. Fase 2 (&gt;24-48h): se piora, sugere SARA secundária, sobrecarga hídrica ou complicação infecciosa</li>
 </ul>
+
 <h4>Evidências científicas atuais:</h4>
 <ul class="small">
-<li><b>Surviving Sepsis Campaign 2021:</b> Ressuscitação guiada por metas nas primeiras 6h. Balanço hídrico restritivo após estabilização reduz tempo de VM<br>
-<span>Ref: Evans Crit Care Med 2021; CLASSIC trial NEJM 2022</span></li>
-<li><b>Sedação leve e despertar diário:</b> Interrupção diária de sedação reduz 3.8 dias de VM (Girard 2008). Sedação profunda aumenta risco de delirium (OR 2.3)<br>
-<span>Ref: Girard Lancet 2008; Devlin PADIS Guidelines 2018</span></li>
-<li><b>Ventilação protetora mesmo sem SARA:</b> VT baixo (6-8 mL/kg) reduz incidência de SARA e mortalidade hospitalar (OR 0.66)<br>
-<span>Ref: Simonis JAMA 2018; Neto Lancet Respir Med 2020</span></li>
-</ul>`,
+<li><b>Surviving Sepsis Campaign 2021 (Atualização):</b> Ressuscitação guiada por metas nas primeiras 6h. Balanço hídrico restritivo após estabilização hemodinâmica reduz tempo de VM e melhora oxigenação sem impacto em mortalidade<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Evans Crit Care Med 2021; FACTT NEJM 2006; CLASSIC trial NEJM 2022</span></li>
+
+<li><b>Sedação leve e despertar diário:</b> Interrupção diária de sedação associada a redução de 3.8 dias de VM (Girard 2008). Sedação profunda prolongada aumenta risco de delirium (OR 2.3) e fraqueza adquirida na UTI. Protocolo PAD Bundle (Pain-Agitation-Delirium) recomendado<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Girard Lancet 2008; SCCM Guidelines 2018; Shehabi SPICE III JAMA 2019; Devlin PADIS Guidelines 2018</span></li>
+
+<li><b>Manejo de acidose metabólica:</b> Drive ventilatório elevado é compensação fisiológica apropriada. Bicarbonatoterapia não demonstrou benefício em pH &gt;7.15 (BICAR-ICU 2018). Permitir hipercapnia moderada (PaCO₂ 50-60) se pH &gt;7.20-7.25 descrito como aceitável<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Jaber BICAR-ICU JAMA 2018; Jung Chest 2019</span></li>
+
+<li><b>Disfunção diafragmática induzida por VM (VIDD):</b> Inatividade completa &gt;18-24h inicia atrofia (redução 6% espessura/dia). Associada a desmame prolongado e maior mortalidade 90d. NAVA e PAV+ podem preservar atividade diafragmática<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Levine NEJM 2008; Goligher NEJM 2015; Dres AJRCCM 2017; Schepens Crit Care 2019</span></li>
+
+<li><b>Ventilação protetora mesmo sem SARA:</b> Meta-análise 2020 sugere VT baixo (6-8 mL/kg) em pacientes sem SARA reduz incidência de SARA e mortalidade hospitalar (OR 0.66)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Simonis JAMA 2018; Neto meta-análise Lancet Respir Med 2020</span></li>
+</ul>
+`,
 dpoc:`<h3>DPOC exacerbado</h3>
+
 <h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Expiração prolongada:</b> Constante de tempo (τ) &gt;0.8-1.2s. Necessita 3-5 constantes para esvaziamento 95%</li>
-<li><b>Auto-PEEP:</b> 8-15 cmH₂O comuns em exacerbações graves. PEEPi &gt;50% da PEEP total associa-se a maior trabalho respiratório</li>
-<li><b>Resistência aumentada:</b> Ppico-Pplatô 15-25 cmH₂O. Resistência inspiratória pode alcançar 20-30 cmH₂O/L/s</li>
+<li><b>Expiração prolongada:</b> Constante de tempo (τ = R × C) frequentemente &gt;0.8-1.2s. Necessita 3-5 constantes (2.4-6s) para esvaziamento 95%. FR alta impede esvaziamento completo</li>
+<li><b>Auto-PEEP (PEEPi):</b> Medidas de 8-15 cmH₂O comuns em exacerbações graves. PEEPi &gt;50% da PEEP total associa-se a maior trabalho respiratório e falência de desmame. Esforços inefetivos &gt;10% dos ciclos predizem falha de VNI</li>
+<li><b>Hiperinsuflação dinâmica:</b> EELV (volume expiratório final) pode exceder 120-150% do previsto. Capacidade inspiratória &lt;25% CVF prediz fadiga iminente</li>
+<li><b>Resistência aumentada:</b> Ppico-Pplatô tipicamente 15-25 cmH₂O. Resistência inspiratória (Rinsp) pode alcançar 20-30 cmH₂O/L/s em broncoespasmo grave</li>
 </ul>
+
 <h4>Evidências científicas atuais:</h4>
 <ul class="small">
-<li><b>VNI como primeira linha:</b> Meta-análise Cochrane 2023 (41 RCTs) demonstra NNT=10 para prevenir IOT. Falha em 15-30% (preditores: pH &lt;7.25, APACHE &gt;29)<br>
-<span>Ref: Osadnik Cochrane 2023; Rochwerg BMJ 2021</span></li>
-<li><b>PEEPe otimizada:</b> Titulação a 80-85% da PEEPi reduz trabalho de disparo em 40% sem aumentar hiperinsuflação<br>
-<span>Ref: Marini Respir Care 2012; Nava Chest 1997</span></li>
-<li><b>Desmame e extubação:</b> Extubação para VNI reduz reintubação de 25% para 15% (NNT=10) se PaCO₂ &gt;45<br>
-<span>Ref: Burns AJRCCM 2013; Rochwerg JAMA 2017</span></li>
-</ul>`,
+<li><b>VNI como primeira linha (Grau A):</b> Meta-análise Cochrane 2023 (41 RCTs, n=2483) demonstra NNT=10 para prevenir IOT, NNT=20 para prevenir morte. BiPAP superior a CPAP. Falha de VNI em 15-30% (preditores: pH &lt;7.25, APACHE &gt;29, FR &gt;35)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Osadnik Cochrane 2023; Rochwerg BMJ Clinical Guidelines 2021; Scala ERJ 2022</span></li>
+
+<li><b>PEEPe (PEEP extrínseca) otimizada:</b> Titulação a 80-85% da PEEPi medida reduz trabalho de disparo sem aumentar hiperinsuflação. Estudo fisiológico demonstrou redução de 40% no trabalho respiratório. <b>Atenção:</b> PEEPe excessiva (&gt;PEEPi) piora hiperinsuflação<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Marini Respir Care 2012; Tobin AJRCCM 2001; Nava Chest 1997</span></li>
+
+<li><b>Estratégia ventilatória protetora:</b> VT 6-8 mL/kg, FR 10-15/min para maximizar Texp. Hipercapnia permissiva (pH &gt;7.25) geralmente bem tolerada. Estudo de coorte 2021 mostrou que Pplatô &gt;30 associa-se a maior mortalidade mesmo em DPOC<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Acute Respiratory Failure in COPD group ICM 2021; Diaz ERJ 2005</span></li>
+
+<li><b>Desmame e extubação:</b> Protocolos de desmame reduzem tempo de VM em 25%. Extubação para VNI reduz reintubação de 25% para 15% (NNT=10) especialmente se PaCO₂ &gt;45 ou bicarbonato &gt;30<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Blackwood Cochrane 2014; Burns AJRCCM 2013; Girault AJRCCM 2011; Rochwerg JAMA 2017</span></li>
+
+<li><b>Broncodilatação agressiva:</b> Salbutamol nebulizado 2.5-5mg 4/4h + ipratrópio 500mcg 6/6h. Resposta pode levar 48-72h. Corticóide sistêmico (metilprednisolona 40mg) por 5 dias reduz falha de tratamento (NNT=10)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Walters Cochrane 2018; Leuppi JAMA 2013</span></li>
+</ul>
+`,
 rest:`<h3>Doença restritiva (Fibrose, Obesidade grave)</h3>
 <h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Baixa complacência:</b> Alça P×V verticalizada; Cstat &lt;30-40 mL/cmH₂O (obesidade) ou &lt;20 (fibrose)</li>
-<li><b>Volumes:</b> VT &lt;6 mL/kg PBW mesmo com pressões elevadas</li>
+<li><b>Baixa complacência:</b> Alça P×V verticalizada; Cstat descrita &lt;30-40 mL/cmH₂O (obesidade) ou &lt;20 (fibrose)</li>
+<li><b>Volumes:</b> VT frequentemente &lt;6 mL/kg PBW mesmo com pressões elevadas</li>
 <li><b>Driving Pressure:</b> Valores &gt;15 cmH₂O típicos neste contexto</li>
+<li><b>FR compensatória:</b> Drive aumentado observado para manter ventilação-minuto adequada</li>
 </ul>
 <h4>Conceitos da literatura:</h4>
 <ul class="small">
-<li><b>Obesidade:</b> Cálculo de VT por peso predito (PBW), não peso real</li>
-<li><b>Fibrose pulmonar:</b> Tolerância a hipercapnia permissiva (pH &gt;7.25)</li>
-<li><b>Mecânica de parede:</b> Pressão esofágica auxilia na distinção rigidez pulmonar vs torácica</li>
+<li><b>Obesidade:</b> Diretrizes recomendam cálculo de VT por peso predito (PBW), não peso real</li>
+<li><b>Fibrose pulmonar:</b> Literatura descreve tolerância a hipercapnia permissiva (pH &gt;7.25) em contexto de hipoxemia refratária</li>
+<li><b>Mecânica de parede:</b> Pressão esofágica (Pes) pode auxiliar na distinção entre rigidez pulmonar vs torácica</li>
+<li><b>Desmame:</b> Observações clínicas descrevem desmame prolongado; IMT descrito como potencialmente benéfico</li>
 </ul>`,
 cardiaca:`<h3>Edema cardiogênico</h3>
 <h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Complacência:</b> Variação rápida possível; melhora em 6-12h com diurese</li>
-<li><b>Autociclagem:</b> Batimentos cardíacos podem gerar auto-disparos</li>
-<li><b>Resposta à PEEP:</b> Melhora acentuada de oxigenação com PEEP 10-12 cmH₂O</li>
+<li><b>Complacência:</b> Variação rápida possível; melhora em 6-12h com diurese pode diferenciar de SARA</li>
+<li><b>Autociclagem:</b> Batimentos cardíacos podem gerar auto-disparos; oscilações rítmicas em P×T</li>
+<li><b>Esforços:</b> Dispneia e ortopneia associadas a drive instável, duplos disparos</li>
+<li><b>Resposta à PEEP:</b> Melhora acentuada de oxigenação com PEEP 10-12 cmH₂O descrita em edema hidrostático</li>
 </ul>
 <h4>Conceitos da literatura:</h4>
 <ul class="small">
-<li><b>VNI (3CPO, Gray):</b> CPAP/BiPAP reduz IOT (NNT ~13) e mortalidade</li>
-<li><b>PEEP e pós-carga:</b> PEEP reduz pós-carga VE, benefício em disfunção sistólica</li>
+<li><b>VNI (3CPO, Gray):</b> RCTs mostraram CPAP/BiPAP associado a redução de IOT (NNT ~13) e mortalidade vs O₂ convencional</li>
+<li><b>PEEP e pós-carga:</b> Fisiologia descreve PEEP reduzindo pós-carga VE (pressão transmural), benefício em disfunção sistólica</li>
+<li><b>Diferencial SARA:</b> Uso de biomarcadores (BNP/NT-proBNP) e ecocardiografia; sobreposição ~30% descrita</li>
+<li><b>Desmame:</b> TRE pode desencadear edema flash por aumento de retorno venoso e pós-carga</li>
 </ul>`,
-obeso:`<h3>Obesidade / SHO</h3>
-<h4>Achados observados:</h4>
+obeso:`<h3>Obesidade / Síndrome hipoventilação-obesidade</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Complacência de parede:</b> Pplatô elevado, mas Pes pode revelar Ptp normal</li>
-<li><b>Atelectasia:</b> Melhora com PEEP adequada ou pronação</li>
-<li><b>Auto-PEEP:</b> PEEPi &gt;3-5 cmH₂O por compressão abdominal</li>
+<li><b>Complacência de parede:</b> Pplatô elevado, mas Pes pode revelar pressão transpulmonar (Ptp) dentro da normalidade</li>
+<li><b>Atelectasia:</b> Baixa complacência em decúbito dorsal; descrita melhora com PEEP adequada ou pronação</li>
+<li><b>Auto-PEEP:</b> Compressão abdominal sobre diafragma; PEEPi &gt;3-5 cmH₂O observada</li>
+<li><b>Dessaturação:</b> CRF reduzida associada a hipoxemia rápida em apneia/desconexão</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>PEEP:</b> Literatura descreve necessidade de PEEP 10-15 cmH₂O para reverter atelectasia; monitorização hemodinâmica importante</li>
+<li><b>Posição:</b> Reverse Trendelenburg 25-30° descrito como melhora de mecânica respiratória</li>
+<li><b>Extubação:</b> Estudos sugerem VNI profilática pós-extubação pode reduzir reintubação (evidência moderada)</li>
+<li><b>Desmame:</b> Alta demanda metabólica observada; IMT descrito como potencial acelerador</li>
 </ul>`,
-neuro:`<h3>Doença neuromuscular</h3>
-<h4>Achados observados:</h4>
+neuro:`<h3>Doença neuromuscular (Guillain-Barré, Miastenia, ELA)</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Esforço:</b> Deflexões P×T superficiais (&lt;2-3 cmH₂O)</li>
-<li><b>Variabilidade:</b> Ventilação passiva predominante</li>
+<li><b>Esforço:</b> Deflexões P×T superficiais (&lt;2-3 cmH₂O), disparos atrasados ou ausentes</li>
+<li><b>Variabilidade:</b> Ventilação passiva predominante, volumes monótonos em modo controlado</li>
+<li><b>Ciclagem (PSV):</b> Fraqueza muscular dificulta ciclagem por fluxo, resultando em ciclagem tardia</li>
+<li><b>Complacência:</b> Alça P×V preservada inicialmente até instalação de fadiga/atelectasia</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Critérios IOT:</b> Literatura descreve CVF &lt;20 mL/kg, PImáx &lt;-30 cmH₂O, PaCO₂ &gt;50 progressiva</li>
+<li><b>Modo ventilatório:</b> Conceito de manter atividade mínima para prevenir atrofia diafragmática</li>
+<li><b>Desmame:</b> Critérios clássicos (PImáx &gt;-30, RSBI &lt;105) aplicam-se; progressão gradual descrita como essencial</li>
+<li><b>Traqueostomia:</b> Consideração em Guillain-Barré com VM prevista &gt;7 dias; facilita desmame e comunicação</li>
 </ul>`,
-neurocrit:`<h3>Paciente neurocrítico</h3>
-<h4>Achados observados:</h4>
+neurocrit:`<h3>Paciente neurocrítico (TCE, AVE, HSA)</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Drive:</b> Variabilidade extrema (padrões Cheyne-Stokes, respiração atáxica)</li>
-<li><b>Reverse triggering:</b> Comum em sedação profunda</li>
+<li><b>Drive:</b> Variabilidade extrema FR/VT (padrões Cheyne-Stokes em HSA, respiração atáxica em lesões de tronco)</li>
+<li><b>Auto-disparo:</b> Pode ser cardiogênico (taquicardia) ou por oscilação de PIC</li>
+<li><b>Reverse triggering:</b> Descrito como comum em sedação profunda + VM controlada</li>
+<li><b>Padrões neurogênicos:</b> Respiração central, atáxica podem ser identificados em F×T</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>PaCO₂:</b> Diretrizes sugerem alvo 35-40 mmHg; hiperventilação reservada para herniação iminente (hipocapnia prolongada associada a pior outcome)</li>
+<li><b>Sincronia e PIC:</b> Assincronias (tosse, duplo disparo) descritas como aumentando PIC transitoriamente</li>
+<li><b>PEEP:</b> PEEP 5-10 geralmente descrita como segura; PEEP &gt;15 pode elevar PIC se complacência cerebral baixa</li>
+<li><b>Desmame:</b> Despertar controlado; extubação descrita quando Glasgow ≥8-10 e reflexos preservados</li>
 </ul>`,
-trauma:`<h3>Trauma torácico</h3>
-<h4>Achados observados:</h4>
+trauma:`<h3>Trauma torácico (contusão, fraturas costais)</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Dor:</b> Limitação ventilatória por dor, tosse ineficaz</li>
-<li><b>Contusão:</b> Baixa complacência em áreas afetadas</li>
+<li><b>Dor limitante:</b> Ventilação superficial, tosse ineficaz, retenção de secreções. Curvas F×T com volumes reduzidos</li>
+<li><b>Contusão pulmonar:</b> Baixa complacência regional, infiltrado progressivo 24-48h. Alça P×V pode mostrar recrutamento heterogêneo</li>
+<li><b>Pneumotórax / hemotórax:</b> Vazamento aéreo persistente se dreno inadequado. Assimetria de expansão pode gerar padrão bifásico</li>
+<li><b>Flail chest:</b> Movimento paradoxal da parede torácica; curva P×T com oscilações irregulares se respiração espontânea presente</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Analgesia multimodal:</b> Bloqueio paravertebral, epidural torácica ou analgesia controlada pelo paciente (PCA). Melhora mecânica ventilatória e reduz incidência de pneumonia</li>
+<li><b>Ventilação protetora:</b> VT baixo mesmo sem SARA estabelecida. Evidência de benefício em trauma torácico isolado</li>
+<li><b>PEEP cautelosa:</b> Em pneumotórax, PEEP pode aumentar vazamento. Monitorização rigorosa de drenagem necessária</li>
+<li><b>Fixação cirúrgica (flail):</b> Estudos recentes sugerem benefício de fixação precoce em casos selecionados vs manejo conservador</li>
 </ul>`,
-tb:`<h3>Tuberculose</h3>
-<h4>Achados observados:</h4>
+tb:`<h3>Tuberculose disseminada / SARA tuberculosa</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Cavitação:</b> Vazamentos de ar podem ocorrer</li>
-<li><b>Consolidação:</b> Baixa complacência regional</li>
+<li><b>Infiltrado bilateral:</b> SARA pode ocorrer por TB miliar ou reação paradoxal ao tratamento (IRIS)</li>
+<li><b>Cavitação:</b> Risco de pneumotórax espontâneo ou fístula broncopleural. Vazamento aéreo pode ser observado</li>
+<li><b>Baixa complacência:</b> Fibrose e consolidação extensas. Mecânica similar a outras causas de SARA</li>
+<li><b>Hemoptise:</b> Pode causar oscilações abruptas em SpO₂ e necessidade de aspiração frequente</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Terapia anti-TB:</b> Rifampicina, isoniazida, pirazinamida, etambutol (RIPE). Ajuste de dose se insuficiência renal/hepática</li>
+<li><b>Corticosteroides:</b> Dexametasona adjuvante em TB disseminada/meníngea. Benefício em SARA por TB menos estabelecido</li>
+<li><b>Isolamento respiratório:</b> Precauções de aerossóis obrigatórias. Filtros HEPA nos circuitos se VM prolongada</li>
+<li><b>Mortalidade:</b> SARA por TB miliar tem mortalidade ~50-70%, superior a outras etiologias de SARA</li>
 </ul>`,
-pneumo:`<h3>Pneumotórax</h3>
-<h4>Achados observados:</h4>
+pneumo:`<h3>Pneumotórax em ventilação mecânica</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>Vazamento:</b> Volume expirado &lt; inspirado</li>
-<li><b>Pressões:</b> Ppico elevado com baixo volume corrente</li>
+<li><b>Aumento súbito de Ppico:</b> Pressão de pico eleva-se abruptamente. Pplatô também sobe se pneumotórax hipertensivo</li>
+<li><b>Vazamento:</b> Volume expirado persistentemente menor que inspirado. Diferença Vi-Ve &gt;100 mL sugere fístula broncopleural</li>
+<li><b>Assimetria:</b> Curvas de fluxo podem mostrar padrão bifásico se pneumotórax unilateral extenso</li>
+<li><b>Auto-PEEP paradoxal:</b> Fluxo expiratório não-zerado apesar de tempo expiratório adequado</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Drenagem torácica:</b> Indicação absoluta em pneumotórax &gt;20% ou sintomático em VM. Sistema de selo d'água ou válvula unidirecional</li>
+<li><b>Redução de pressões:</b> Objetivo Pplatô &lt;25 cmH₂O, PEEP mínima necessária. Considerar hipercapnia permissiva</li>
+<li><b>Fístula broncopleural persistente:</b> Se vazamento &gt;200 mL/min por &gt;7 dias, considerar broncoscopia com válvula endobrônquica ou cirurgia</li>
+<li><b>VNI como bridge:</b> Após resolução, VNI pode facilitar transição e evitar reintubação</li>
 </ul>`,
-desmame:`<h3>Desmame / TRE</h3>
-<h4>Achados observados:</h4>
+desmame:`<h3>Desmame ventilatório e teste de respiração espontânea (TRE)</h3>
+<h4>Achados frequentemente observados:</h4>
 <ul class="small">
-<li><b>RSBI:</b> Índice de respiração rápida e superficial (FR/Vt)</li>
-<li><b>Drive:</b> P0.1 para avaliação de drive respiratório</li>
+<li><b>RSBI (Rapid Shallow Breathing Index):</b> FR/VT. Valores &lt;105 ciclos/min/L predizem sucesso. RSBI &gt;105 associa-se a 95% de falha de desmame</li>
+<li><b>P0.1 (Pressão de oclusão):</b> Medida de drive inspiratório central. P0.1 &lt;6 cmH₂O sugere drive adequado mas não excessivo. Valores &gt;6 podem indicar fadiga iminente</li>
+<li><b>Variabilidade de VT/FR:</b> Respiração irregular durante TRE (coeficiente de variação &gt;20%) prediz falha</li>
+<li><b>Esforço inspiratório:</b> Swing de Pes &gt;15 cmH₂O ou P0.1 &gt;6 durante TRE indica carga excessiva</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Critérios de prontidão:</b> PaO₂/FiO₂ &gt;150, PEEP ≤8, ausência de vasopressores (ou dose baixa estável), drive preservado, sem sedação contínua</li>
+<li><b>TRE (Tubo-T ou PSV 5-8):</b> Duração 30-120min. Monitorar FR, VT, SpO₂, FC, PA, sinais de desconforto. Critérios de falha: FR &gt;35, SpO₂ &lt;90%, FC &gt;140 ou variação &gt;20%, sudorese, agitação</li>
+<li><b>Protocolos de desmame:</b> Reduzem tempo de VM em ~25% vs abordagem não-protocolizada. Avaliação diária de prontidão é fundamental</li>
+<li><b>Extubação para VNI:</b> Reduz reintubação em populações de alto risco (DPOC, hipercapnia crônica, &gt;65 anos, ICC)</li>
+<li><b>Traqueostomia precoce:</b> Meta-análise 2023 não mostrou benefício consistente em mortalidade. Individualizar decisão (VM prevista &gt;14-21 dias, desmame prolongado esperado)</li>
 </ul>`,
-imt:`<h3>IMT na VM</h3>
-<h4>Conceito:</h4>
+imt:`<h3>Treinamento muscular inspiratório (IMT) na ventilação mecânica</h3>
+<h4>Fundamentos fisiológicos:</h4>
 <ul class="small">
-<li><b>Treinamento muscular:</b> Exercícios resistidos para diafragma</li>
-<li><b>Evidências:</b> Pode acelerar desmame em pacientes selecionados</li>
+<li><b>Atrofia diafragmática:</b> VM passiva induz atrofia rápida (6%/dia nas primeiras 72h). Fibras tipo I e II afetadas. Espessura diafragmática pode reduzir 50% em 7 dias</li>
+<li><b>Disfunção contrátil:</b> Perda de força mesmo após curtos períodos de VM. Lesão oxidativa, proteólise, apoptose celular descritas</li>
+<li><b>Treinamento resistido:</b> Dispositivos inspiratórios (Threshold IMT, POWERbreathe) fornecem carga resistiva progressiva. Protocolos típicos: 30% da PImáx, 5-10min, 2x/dia</li>
+</ul>
+<h4>Evidências científicas:</h4>
+<ul class="small">
+<li><b>Meta-análise 2020 (Vorona):</b> IMT associado a redução de tempo de desmame (diferença média -2.4 dias) e menor falha de extubação. Benefício maior em desmame difícil/prolongado</li>
+<li><b>Indicações potenciais:</b> Fraqueza muscular respiratória documentada (PImáx &lt;-30 cmH₂O), desmame prolongado (&gt;7 dias), falha prévia de TRE por fadiga</li>
+<li><b>Contraindicações:</b> Instabilidade hemodinâmica, hipoxemia refratária, pneumotórax não-drenado, agitação severa</li>
+<li><b>Limitações:</b> Necessita paciente cooperativo. Estudos com amostras pequenas. Heterogeneidade de protocolos dificulta padronização</li>
 </ul>`
 };
 
