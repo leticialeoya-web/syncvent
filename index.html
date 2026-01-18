@@ -1174,6 +1174,71 @@ refs:[
 {authors:"Gutierrez G, Ballarino GR, Turkan H, et al.",title:"Automatic detection of patient-ventilator asynchrony by spectral analysis of airflow",journal:"Critical Care",year:"2021",volume:"25",pages:"314",doi:"10.1186/s13054-021-03735-6"}
 ]
 }
+        exp_prolonged:{
+title:"Expiração Prolongada",
+text:"Expiração lenta com cauda prolongada indica aumento da constante de tempo (R×C), comum em obstrução de vias aéreas ou hiperinsuflação dinâmica. Associa-se a auto-PEEP e aumento do trabalho respiratório.",
+refs:[
+{authors:"Marini JJ, Gattinoni L",title:"Dynamic hyperinflation and auto-PEEP",journal:"Intensive Care Medicine",year:"2023",pages:"1091–1104"},
+{authors:"Tobin MJ",title:"Principles and practice of mechanical ventilation",journal:"McGraw-Hill",year:"2013"}
+]
+},
+
+exp_biphasic:{
+title:"Expiração Bifásica",
+text:"Padrão bifásico na curva de fluxo expiratório sugere heterogeneidade regional de constantes de tempo, frequentemente observada em DPOC, asma ou obstrução segmentar.",
+refs:[
+{authors:"Pesenti A, Rossi N",title:"Respiratory mechanics in obstructive lung disease",journal:"European Respiratory Journal",year:"2018"}
+]
+},
+
+active_exp:{
+title:"Esforço Expiratório Ativo",
+text:"Aumento abrupto do fluxo expiratório indica contração ativa da musculatura expiratória, associada a desconforto, hipercapnia ou ventilação excessiva.",
+refs:[
+{authors:"Aliverti A",title:"Active expiration during mechanical ventilation",journal:"Critical Care",year:"2020"}
+]
+},
+
+double_peak_insp:{
+title:"Duplo Pico Inspiratório",
+text:"Dois picos de fluxo durante a mesma inspiração indicam esforço inspiratório variável ou competição paciente–ventilador, frequentemente associado a ciclagem inadequada.",
+refs:[
+{authors:"Pham T et al.",title:"Asynchrony consequences for patient outcomes",journal:"Intensive Care Medicine",year:"2023"}
+]
+},
+
+flow_reversal:{
+title:"Reversão de Fluxo Inspiratório",
+text:"Reversão momentânea do fluxo durante a inspiração sugere esforço expiratório ativo ou ciclagem muito tardia, aumentando risco de assincronia complexa.",
+refs:[
+{authors:"Holanda MA et al.",title:"Patient-ventilator asynchrony",journal:"Jornal Brasileiro de Pneumologia",year:"2021"}
+]
+},
+
+pv_beak:{
+title:"Bico de Pato (Sobredistensão)",
+text:"Curvatura acentuada no topo da alça P×V indica sobredistensão alveolar, associada a volutrauma e maior risco de VILI.",
+refs:[
+{authors:"Gattinoni L et al.",title:"Ventilator-induced lung injury",journal:"Lancet",year:"2018"}
+]
+},
+
+pv_lower_infl:{
+title:"Ponto de Inflexão Inferior",
+text:"Presença de joelho inferior na alça P×V sugere recrutamento alveolar progressivo, indicando áreas colapsadas sendo abertas durante a inspiração.",
+refs:[
+{authors:"Suter PM et al.",title:"Optimum end-expiratory airway pressure",journal:"Chest",year:"1975"}
+]
+},
+
+pv_hysteresis:{
+title:"Histerese Aumentada",
+text:"Separação ampla entre ramos inspiratório e expiratório indica perda de energia e heterogeneidade pulmonar, comum em SARA.",
+refs:[
+{authors:"Chiumello D et al.",title:"Lung hysteresis in ARDS",journal:"Critical Care",year:"2020"}
+]
+}
+
 };
 
 const MEC_DATA={
@@ -1229,6 +1294,78 @@ refs:[
 {authors:"Akoumianaki E, Vaporidi K, Georgopoulos D",title:"The injurious effects of elevated or nonelevated respiratory rate during mechanical ventilation",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2024",volume:"209",pages:"367-383",doi:"10.1164/rccm.202304-0738CI"}
 ]
 }
+    ppico_low:{
+title:"Pressão de Pico Muito Baixa",
+text:"Pressão de pico muito baixa pode indicar vazamento no sistema, desconexão parcial ou esforço inspiratório insuficiente.",
+refs:[
+{authors:"MacIntyre NR",title:"Patient-ventilator interactions",journal:"Respiratory Care",year:"2011"}
+]
+},
+
+peep_high:{
+title:"PEEP Total Elevada",
+text:"PEEP total elevada resulta da soma da PEEP extrínseca com auto-PEEP, aumentando o trabalho inspiratório e dificultando o disparo.",
+refs:[
+{authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure",journal:"Am Rev Respir Dis",year:"1982"}
+]
+},
+
+compliance_high:{
+title:"Complacência Muito Alta",
+text:"Complacência elevada sugere pulmões hipercomplacentes, como em enfisema, com risco aumentado de hiperinsuflação.",
+refs:[
+{authors:"West JB",title:"Respiratory physiology",journal:"Lippincott Williams & Wilkins",year:"2012"}
+]
+},
+
+tau_high:{
+title:"Constante de Tempo Elevada",
+text:"Constante de tempo prolongada indica dificuldade de esvaziamento pulmonar, comum em obstrução de vias aéreas.",
+refs:[
+{authors:"Tobin MJ",title:"Principles and practice of mechanical ventilation",journal:"McGraw-Hill",year:"2013"}
+]
+},
+
+mv_low:{
+title:"Volume-Minuto Baixo",
+text:"Volume-minuto reduzido pode levar à hipoventilação alveolar e hipercapnia, especialmente em pacientes com drive reduzido.",
+refs:[
+{authors:"Marini JJ",title:"Ventilatory management of acute hypercapnia",journal:"Critical Care",year:"2019"}
+]
+},
+
+flow_peak_low:{
+title:"Pico de Fluxo Inspiratório Baixo",
+text:"Pico de fluxo baixo sugere limitação do fornecimento ventilatório frente à demanda do paciente, aumentando o trabalho respiratório.",
+refs:[
+{authors:"Telias I, Brochard L",title:"Monitoring respiratory drive",journal:"Intensive Care Medicine",year:"2022"}
+]
+},
+
+pv_shift:{
+title:"Alça P×V Deslocada",
+text:"Deslocamento da alça P×V para a direita sugere auto-PEEP ou hiperinsuflação dinâmica.",
+refs:[
+{authors:"Lucangelo U et al.",title:"Respiratory mechanics derived from ventilator signals",journal:"Respiratory Care",year:"2005"}
+]
+},
+
+flatten:{
+title:"Achatamento Terminal da Curva",
+text:"Achatamento progressivo indica perda de complacência ao final da inspiração, sugerindo aproximação da sobredistensão.",
+refs:[
+{authors:"Gattinoni L",title:"Physiology of lung stress and strain",journal:"Intensive Care Medicine",year:"2016"}
+]
+},
+
+p_saw:{
+title:"Padrão Dente de Serra",
+text:"Oscilações regulares na curva de pressão indicam secreção, condensação no circuito ou interação cardiogênica.",
+refs:[
+{authors:"Kondili E et al.",title:"Patient-ventilator interaction",journal:"Br J Anaesth",year:"2003"}
+]
+}
+
 };
 
 $("btnAssinRun").onclick=()=>{
