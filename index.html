@@ -1540,10 +1540,20 @@ imt:`<h3>Treinamento muscular inspiratório (IMT) na ventilação mecânica</h3>
 </ul>`
 };
 
-$("caseSel").onchange=e=>{
-const v=e.target.value;
-$("caseArea").innerHTML=v?`<div class="txt">${CASE_DATA[v]||"Caso não encontrado"}</div>`:'<div class="txt">Selecione um caso acima.</div>';
-};
+document.addEventListener("DOMContentLoaded", function () {
+  const sel = $("caseSel");
+  if (!sel) return;
+
+  sel.onchange = function (e) {
+    const v = e.target.value;
+    $("caseArea").innerHTML = v
+      ? `<div class="txt">${CASE_DATA[v] || "Caso não encontrado"}</div>`
+      : '<div class="txt">Selecione um caso acima.</div>';
+
+    bindCalcPF();
+  };
+});
+
 
 showTab("Casos");
 $("yearNow").textContent=new Date().getFullYear();
