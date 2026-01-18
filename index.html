@@ -1262,17 +1262,23 @@ $("btnMecClear").onclick=()=>{
 $$(".mec").forEach(c=>c.checked=false);
 $("mecOut").textContent="Selecione os achados visuais e clique em 'Interpretar achados'.";
 };
-    $("calcPF").onclick=()=>{
-const p=+$("pao2").value,f=+$("fio2").value;
-if(!p||!f){$("pfOut").innerHTML="<span style='color:#F59E0B'>Preencha PaO₂ e FiO₂</span>";return}
-const pf=p/f;
-let c,s;
-if(pf<100){c="Grave";s="#DC2626"}
-else if(pf<200){c="Moderada";s="#F59E0B"}
-else if(pf<300){c="Leve";s="#F59E0B"}
-else{c="Normal (sem SARA)";s="#059669"}
-$("pfOut").innerHTML=`<b>P/F = ${pf.toFixed(0)}</b><br><span style="color:${s};font-weight:600">${c}</span><br><small>Berlim: Grave &lt;100, Moderada 100-200, Leve 200-300</small>`;
-};
+    function bindCalcPF(){
+  const btn = $("calcPF");
+  if(!btn) return;
+
+  btn.onclick = () => {
+    const p = +$("pao2").value, f = +$("fio2").value;
+    if(!p || !f){ $("pfOut").innerHTML="<span style='color:#F59E0B'>Preencha PaO₂ e FiO₂</span>"; return; }
+    const pf = p/f;
+    let c,s;
+    if(pf<100){c="Grave";s="#DC2626"}
+    else if(pf<200){c="Moderada";s="#F59E0B"}
+    else if(pf<300){c="Leve";s="#F59E0B"}
+    else{c="Normal (sem SARA)";s="#059669"}
+    $("pfOut").innerHTML=`<b>P/F = ${pf.toFixed(0)}</b><br><span style="color:${s};font-weight:600">${c}</span><br><small>Berlim: Grave &lt;100, Moderada 100-200, Leve 200-300</small>`;
+  };
+}
+
 
 const CASE_DATA={
   
