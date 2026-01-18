@@ -1,724 +1,1523 @@
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const $ = id => document.getElementById(id);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-  /* ================= SPLASH ================= */
-  $("btnEnter").addEventListener("click", () => {
-    $("splash").classList.add("hide");
-    setTimeout(() => $("splash").style.display = "none", 300);
-  });
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SyncVent</title>
+<style>
+/* ==================== DESIGN PROFISSIONAL CLÍNICO ==================== */
+:root{
+--primary:#2C5282;
+--primary-light:#4A90B8;
+--primary-dark:#1A365D;
+--accent:#059669;
+--bg-dark:#0F1419;
+--bg-medium:#1A202C;
+--card:#FFFFFF;
+--text-primary:#1A202C;
+--text-secondary:#4A5568;
+--text-tertiary:#718096;
+--border:#E2E8F0;
+--border-medium:#CBD5E0;
+--shadow:0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.06);
+--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+--radius:4px;
+--radius-md:6px;
+}
 
-  /* ================= TABS ================= */
-  function showTab(which){
-    ["Casos","Assin","Mec","Sobre"].forEach(t=>{
-      $("sec"+t).classList.add("hide");
-      $("tab"+t).classList.remove("active");
-    });
-    $("sec"+which).classList.remove("hide");
-    $("tab"+which).classList.add("active");
-    window.scrollTo({top:0});
-  }
-  $("tabCasos").onclick = () => showTab("Casos");
-  $("tabAssin").onclick = () => showTab("Assin");
-  $("tabMec").onclick   = () => showTab("Mec");
-  $("tabSobre").onclick = () => showTab("Sobre");
+*{margin:0;padding:0;box-sizing:border-box}
 
-  /* ================= CASOS ================= */
-  const CASES = {
-    sara: `
-      <h3>SARA (ARDS)</h3>
-      <p class="sub">
-        Insuficiência respiratória hipoxêmica associada à redução de complacência e heterogeneidade pulmonar.
-      </p>
-      <ul class="sub">
-        <li>Curvas refletem mecânica global e podem mascarar comportamento regional.</li>
-        <li>Variabilidade ciclo a ciclo sugere instabilidade alveolar.</li>
-        <li>Interpretação deve considerar drive e esforço.</li>
-      </ul>
+body{
+font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+background:var(--bg-dark);
+color:#E2E8F0;
+line-height:1.6;
+-webkit-font-smoothing:antialiased;
+font-size:15px;
+}
 
-      <div class="hr"></div>
+/* ==================== SPLASH ==================== */
+#splash{
+position:fixed;
+inset:0;
+background:linear-gradient(180deg,#1A365D 0%,#0F1419 100%);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
+transition:opacity 0.3s;
+padding:2rem;
+}
 
-      <h4>Calculadora educacional P/F</h4>
-      <label>PaO₂ (mmHg)</label>
-      <input id="pao2">
-      <label>FiO₂ (fração)</label>
-      <input id="fio2">
-      <button class="btn primary" id="calcPF">Calcular</button>
-      <div id="pfOut" class="sub"></div>
-    `,
-    sepse: `
-      <h3>Sepse / Choque séptico</h3>
-      <ul class="sub">
-        <li>Drive respiratório frequentemente elevado.</li>
-        <li>Interação cardiopulmonar influencia curvas.</li>
-        <li>Evolução dinâmica exige análise seriada.</li>
-      </ul>
-    `,
-    dpoc: `
-      <h3>DPOC</h3>
-      <ul class="sub">
-        <li>Resistência elevada e expiração prolongada.</li>
-        <li>Auto-PEEP favorece esforço inefetivo.</li>
-        <li>Empilhamento é frequente.</li>
-      </ul>
-    `,
-    restritiva: `
-      <h3>Doença restritiva</h3>
-      <ul class="sub">
-        <li>Baixa complacência com pressões elevadas.</li>
-        <li>Volume reduzido para mesma variação de pressão.</li>
-      </ul>
-    `,
-    cardiaca: `
-      <h3>Edema cardiogênico</h3>
-      <ul class="sub">
-        <li>Hipoxemia com mecânica variável.</li>
-        <li>Curvas mudam rapidamente conforme congestão.</li>
-      </ul>
-    `,
-    obeso: `
-      <h3>Obesidade / OHS</h3>
-      <ul class="sub">
-        <li>Complacência de parede reduzida.</li>
-        <li>Atelectasia dependente.</li>
-      </ul>
-    `,
-    neuro: `
-      <h3>Neuromuscular</h3>
-      <ul class="sub">
-        <li>Esforço fraco e disparos perdidos.</li>
-        <li>Baixa variabilidade ventilatória.</li>
-      </ul>
-    `,
-    neurocrit: `
-      <h3>Neurocrítico</h3>
-      <ul class="sub">
-        <li>Drive instável.</li>
-        <li>Auto-disparo e reverse triggering possíveis.</li>
-      </ul>
-    `,
-    trauma: `
-      <h3>Trauma</h3>
-      <ul class="sub">
-        <li>Dor e lesão de parede alteram curvas.</li>
-        <li>Grande variabilidade interindividual.</li>
-      </ul>
-    `,
-    tb: `
-      <h3>Tuberculose</h3>
-      <ul class="sub">
-        <li>Heterogeneidade marcada.</li>
-        <li>Secreção interfere no fluxo.</li>
-      </ul>
-    `,
-    pneumo: `
-      <h3>Pneumotórax</h3>
-      <ul class="sub">
-        <li>Mudanças abruptas de pressão/volume.</li>
-        <li>Curvas não confirmam diagnóstico isoladamente.</li>
-      </ul>
-    `,
-    desmame: `
-      <h3>Desmame / TRE</h3>
-      <ul class="sub">
-        <li>Fadiga progressiva altera sincronia.</li>
-        <li>Obstrução limita tolerância.</li>
-      </ul>
-    `,
-    imt: `
-      <h3>IMT na VM</h3>
-      <ul class="sub">
-        <li>Consistência do esforço é central.</li>
-        <li>Fadiga aparece como irregularidade.</li>
-      </ul>
-    `
-  };
+#splash.hide{opacity:0;pointer-events:none}
 
-  $("caseSel").onchange = () => {
-    $("caseArea").innerHTML = CASES[$("caseSel").value] || "";
-    if($("calcPF")){
-      $("calcPF").onclick = () => {
-        const pa = Number($("pao2").value);
-        const fi = Number($("fio2").value);
-        if(pa>0 && fi>0){
-          const pf = pa/fi;
-          $("pfOut").textContent = "P/F = " + pf.toFixed(0);
-        }
-      };
-    }
-  };
+#splash h1{
+font-size:clamp(2rem,6vw,2.75rem);
+font-weight:600;
+color:#FFFFFF;
+margin-bottom:0.75rem;
+letter-spacing:-0.025em;
+}
 
-  /* ================= ASSINCRONIAS ================= */
-  $("btnAssinRun").onclick = () => {
-    const ach = $$(".assin:checked").map(c=>c.value);
-    if(!ach.length){
-      $("assinOut").textContent = "Nenhum achado selecionado.";
-      return;
-    }
-    $("assinOut").textContent =
-      "Achados:\n• " + ach.join("\n• ") +
-      "\n\nInterpretação educacional: interação paciente–ventilador alterada.";
-    $("btnAssinExpand").style.display = "inline-block";
-    $("assinExpand").innerHTML = ach.map(a=>`
-      <div class="note">
-        <b>${a}</b><br>
-        • Significado fisiológico do achado.<br>
-        • Curva complementar para confirmar.<br>
-        • Hipóteses interpretativas possíveis.<br>
-        • Situações em que pode enganar.
-      </div>
-    `).join("");
-  };
-  $("btnAssinExpand").onclick = () => $("assinExpand").classList.toggle("hide");
-  $("btnAssinClear").onclick = () => {
-    $$(".assin").forEach(c=>c.checked=false);
-    $("assinOut").textContent = "";
-    $("assinExpand").innerHTML = "";
-    $("btnAssinExpand").style.display="none";
-  };
+#splash p{
+color:#A0AEC0;
+font-size:1rem;
+margin-bottom:2rem;
+font-weight:400;
+}
 
-  /* ================= MECÂNICA ================= */
-  $("btnMecRun").onclick = () => {
-    const ach = $$(".mec:checked").map(c=>c.value);
-    if(!ach.length){
-      $("mecOut").textContent = "Nenhum achado selecionado.";
-      return;
-    }
-    $("mecOut").textContent =
-      "Achados:\n• " + ach.join("\n• ") +
-      "\n\nInterpretação educacional: alterações de mecânica ventilatória.";
-    $("btnMecExpand").style.display="inline-block";
-    $("mecExpand").innerHTML = ach.map(a=>`
-      <div class="note">
-        <b>${a}</b><br>
-        • Relação pressão–fluxo–volume.<br>
-        • Mecanismo fisiológico provável.<br>
-        • Hipóteses interpretativas.<br>
-        • Limitações do achado.
-      </div>
-    `).join("");
-  };
-  $("btnMecExpand").onclick = () => $("mecExpand").classList.toggle("hide");
-  $("btnMecClear").onclick = () => {
-    $$(".mec").forEach(c=>c.checked=false);
-    $("mecOut").textContent = "";
-    $("mecExpand").innerHTML = "";
-    $("btnMecExpand").style.display="none";
-  };
+#splash>div{
+max-width:600px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.12);
+padding:1.25rem;
+border-radius:var(--radius-md);
+margin-bottom:2rem;
+}
 
-  showTab("Casos");
-});
-</script>
+#splash>div b{
+color:#FFFFFF;
+font-weight:500;
+}
 
-</main>
-</body>
-</html>
-<!-- ===================== ASSINCRONIAS ===================== -->
+#splash .btn{
+background:#FFFFFF;
+color:var(--primary-dark);
+padding:0.875rem 2rem;
+font-size:0.9375rem;
+font-weight:500;
+}
+
+/* ==================== HEADER ==================== */
+header{
+background:var(--card);
+border-bottom:1px solid var(--border);
+padding:0.875rem 0;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:var(--shadow);
+}
+
+nav{
+display:flex;
+gap:0.5rem;
+max-width:1400px;
+margin:0 auto;
+padding:0 1rem;
+overflow-x:auto;
+scrollbar-width:none;
+}
+
+nav::-webkit-scrollbar{display:none}
+
+.tab{
+padding:0.625rem 1.125rem;
+background:transparent;
+border:1px solid transparent;
+color:var(--text-secondary);
+cursor:pointer;
+border-radius:var(--radius);
+transition:all 0.15s ease;
+font-size:0.875rem;
+font-weight:500;
+white-space:nowrap;
+}
+
+.tab:hover{
+background:#F7FAFC;
+color:var(--primary);
+}
+
+.tab.active{
+background:var(--primary);
+color:#FFFFFF;
+box-shadow:var(--shadow);
+}
+
+/* ==================== MAIN ==================== */
+main{
+max-width:1400px;
+margin:0 auto;
+padding:1.5rem 1rem 3rem;
+}
+
+section.hide{display:none}
+
+/* ==================== CARDS ==================== */
+.card{
+background:var(--card);
+color:var(--text-primary);
+border:1px solid var(--border);
+border-radius:var(--radius-md);
+padding:1.75rem;
+margin-bottom:1.25rem;
+box-shadow:var(--shadow);
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+h2{
+color:var(--primary);
+font-size:1.75rem;
+font-weight:600;
+margin-bottom:0.5rem;
+letter-spacing:-0.015em;
+}
+
+h3{
+color:var(--text-primary);
+font-size:1.25rem;
+font-weight:600;
+margin:1.5rem 0 0.75rem;
+}
+
+h4{
+color:var(--text-primary);
+font-size:1.0625rem;
+font-weight:600;
+margin:1.25rem 0 0.625rem;
+}
+
+.sub{
+color:var(--text-secondary);
+font-size:0.9375rem;
+margin-bottom:1.25rem;
+}
+
+.small{
+font-size:0.9375rem;
+color:var(--text-primary);
+line-height:1.7;
+}
+
+.small li{
+margin-bottom:0.75rem;
+}
+
+.small b{
+color:var(--primary-dark);
+font-weight:600;
+}
+
+.small span{
+display:block;
+margin-top:0.375rem;
+padding:0.625rem 0.75rem;
+background:#F7FAFC;
+border-left:3px solid var(--accent);
+border-radius:var(--radius);
+font-size:0.8125rem;
+color:var(--text-tertiary);
+font-style:normal;
+}
+
+ul.small{list-style:none}
+ul.small li:before{
+content:"•";
+color:var(--primary);
+font-weight:bold;
+margin-right:0.625rem;
+}
+
+.hr{
+height:1px;
+background:var(--border);
+margin:1.5rem 0;
+}
+
+/* ==================== FORMS ==================== */
+label{
+display:block;
+color:var(--text-primary);
+font-size:0.875rem;
+font-weight:500;
+margin:1rem 0 0.375rem;
+}
+
+input,select{
+width:100%;
+padding:0.75rem 0.875rem;
+background:var(--card);
+border:1px solid var(--border-medium);
+border-radius:var(--radius);
+color:var(--text-primary);
+font-size:0.9375rem;
+transition:border-color 0.15s;
+}
+
+input:focus,select:focus{
+outline:none;
+border-color:var(--primary);
+box-shadow:0 0 0 3px rgba(44,82,130,0.1);
+}
+
+input::placeholder{
+color:#A0AEC0;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn{
+padding:0.75rem 1.5rem;
+background:#F7FAFC;
+color:var(--text-primary);
+border:1px solid var(--border);
+border-radius:var(--radius);
+cursor:pointer;
+font-size:0.875rem;
+font-weight:500;
+transition:all 0.15s;
+min-height:40px;
+}
+
+.btn:hover{
+background:#EDF2F7;
+border-color:var(--border-medium);
+}
+
+.btn.primary{
+background:var(--primary);
+color:#FFFFFF;
+border-color:var(--primary);
+}
+
+.btn.primary:hover{
+background:var(--primary-dark);
+}
+
+/* ==================== CHECKBOX GROUPS ==================== */
+.checkGroup{
+background:#FAFBFC;
+border:1px solid var(--border);
+border-radius:var(--radius-md);
+padding:1rem;
+margin-bottom:1rem;
+}
+
+.checkGroup h3{
+margin-top:0;
+font-size:1rem;
+color:var(--primary);
+padding-bottom:0.625rem;
+border-bottom:1px solid var(--border);
+margin-bottom:0.75rem;
+font-weight:600;
+}
+
+.opt{
+display:flex;
+gap:0.75rem;
+padding:0.625rem 0.75rem;
+border-radius:var(--radius);
+margin-bottom:0.375rem;
+background:var(--card);
+border:1px solid var(--border);
+transition:all 0.15s;
+}
+
+.opt:hover{
+border-color:var(--primary-light);
+box-shadow:var(--shadow);
+}
+
+.opt input[type="checkbox"]{
+width:18px;
+height:18px;
+min-width:18px;
+margin-top:0.125rem;
+cursor:pointer;
+accent-color:var(--primary);
+}
+
+.opt b{
+color:var(--text-primary);
+font-size:0.9375rem;
+font-weight:500;
+line-height:1.5;
+display:block;
+margin-bottom:0.25rem;
+}
+
+.opt span{
+color:var(--text-secondary);
+font-size:0.8125rem;
+line-height:1.5;
+}
+
+/* ==================== OUTPUT BOX ==================== */
+.outBox{
+background:#FAFBFC;
+border:1px solid var(--border);
+border-radius:var(--radius-md);
+padding:1.5rem;
+margin-top:1.5rem;
+}
+
+.outBox h3{
+margin-top:0;
+color:var(--primary);
+font-size:1.125rem;
+margin-bottom:1rem;
+}
+
+.txt{
+background:var(--card);
+padding:1rem;
+border-radius:var(--radius);
+border-left:3px solid var(--accent);
+font-family:'SF Mono',Monaco,Consolas,'Liberation Mono','Courier New',monospace;
+font-size:0.875rem;
+line-height:1.7;
+color:var(--text-primary);
+max-height:500px;
+overflow-y:auto;
+white-space:pre-wrap;
+}
+
+/* ==================== NOTES ==================== */
+.note{
+background:#F0FDF4;
+border:1px solid #86EFAC;
+border-left:3px solid var(--accent);
+padding:1rem;
+border-radius:var(--radius-md);
+margin-bottom:1rem;
+font-size:0.9375rem;
+color:var(--text-primary);
+}
+
+.warning{
+background:#FFFBEB;
+border:1px solid #FDE68A;
+border-left:3px solid #F59E0B;
+padding:1rem;
+border-radius:var(--radius-md);
+margin-bottom:1rem;
+font-size:0.9375rem;
+color:var(--text-primary);
+}
+
+.note b,.warning b{
+font-weight:600;
+display:block;
+margin-bottom:0.5rem;
+}
+
+/* ==================== MODAL ==================== */
+.modal-overlay{
+position:fixed;
+inset:0;
+background:rgba(15,20,25,0.92);
+z-index:9998;
+display:none;
+align-items:center;
+justify-content:center;
+padding:1rem;
+overflow-y:auto;
+}
+
+.modal-overlay.show{display:flex}
+
+.modal-content{
+background:var(--card);
+border-radius:var(--radius-md);
+max-width:1000px;
+width:100%;
+max-height:90vh;
+overflow-y:auto;
+box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+.modal-header{
+position:sticky;
+top:0;
+background:var(--primary);
+color:#FFFFFF;
+padding:1.25rem 1.5rem;
+border-bottom:1px solid rgba(255,255,255,0.1);
+z-index:10;
+}
+
+.modal-header h2{
+color:#FFFFFF;
+margin:0;
+font-size:1.375rem;
+font-weight:600;
+}
+
+.modal-close{
+position:absolute;
+top:1.125rem;
+right:1.25rem;
+background:rgba(255,255,255,0.15);
+border:none;
+color:#FFFFFF;
+width:32px;
+height:32px;
+border-radius:var(--radius);
+cursor:pointer;
+font-size:1.25rem;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:background 0.15s;
+}
+
+.modal-close:hover{
+background:rgba(255,255,255,0.25);
+}
+
+.modal-body{
+padding:1.75rem;
+}
+
+/* ==================== ROW ==================== */
+.row{
+display:grid;
+grid-template-columns:1fr;
+gap:1rem;
+}
+
+@media(min-width:768px){
+.row{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(min-width:1200px){
+.row{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width:767px){
+header{padding:0.75rem 0}
+main{padding:1rem 0.75rem 2rem}
+.card{padding:1.25rem}
+h2{font-size:1.5rem}
+.btn{width:100%;margin-bottom:0.5rem}
+.modal-body{padding:1.25rem}
+}
+
+/* ==================== UTILITIES ==================== */
+:focus-visible{
+outline:2px solid var(--primary);
+outline-offset:2px;
+}
+</style>
+</head>
+<body>
+<div id="splash">
+<h1>SyncVent</h1>
+<p>Análise educacional de curvas ventilatórias</p>
+<div style="max-width:600px;background:rgba(255,255,255,0.1);padding:1rem;border-radius:8px;margin-bottom:1.5rem;font-size:0.85rem;line-height:1.5">
+<b style="color:#00ff88">⚠️ Ferramenta exclusivamente educacional</b><br>
+NÃO prescreve condutas. Apresenta conceitos e evidências científicas publicadas.<br>
+Toda decisão clínica deve ser individualizada pelo profissional responsável pelo profissional responsável.
+</div>
+<button class="btn primary" id="btnEnter">Entrar</button>
+</div>
+<header><nav>
+<button class="tab active" id="tabCasos">Casos Clínicos</button>
+<button class="tab" id="tabAssin">Assincronias</button>
+<button class="tab" id="tabMec">Mecânica</button>
+<button class="tab" id="tabSobre">Sobre</button>
+</nav></header>
+<main>
+<section id="secCasos">
+<div class="card">
+<h2>Casos Clínicos</h2>
+<p class="sub">Contextos fisiopatológicos comuns em UTI. Cada caso apresenta achados típicos nas curvas e conceitos da literatura científica.</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid #ffaa00;padding:0.8rem;border-radius:6px;margin-bottom:1rem;font-size:0.85rem">
+<b>Finalidade educacional:</b> As informações descrevem achados observados e conceitos de estudos científicos. NÃO prescrevem ou recomendam condutas terapêuticas específicas.
+</div>
+<div class="hr"></div>
+<label>Selecione um caso</label>
+<select id="caseSel">
+<option value="">Escolha...</option>
+<option value="sara">SARA (ARDS)</option>
+<option value="sepse">Sepse / Choque séptico</option>
+<option value="dpoc">DPOC exacerbado</option>
+<option value="rest">Doença restritiva</option>
+<option value="cardiaca">Edema cardiogênico</option>
+<option value="obeso">Obesidade / SHO</option>
+<option value="neuro">Neuromuscular</option>
+<option value="neurocrit">Neurocrítico</option>
+<option value="trauma">Trauma torácico</option>
+<option value="tb">Tuberculose</option>
+<option value="pneumo">Pneumotórax</option>
+<option value="desmame">Desmame / TRE</option>
+<option value="imt">IMT na VM</option>
+</select>
+<div id="caseArea" style="margin-top:1.5rem"><div class="txt">Selecione um caso acima.</div></div>
+</div>
+</section>
 <section id="secAssin" class="hide">
-  <div class="card">
-    <h2>Assincronias — selecione o que você vê</h2>
-    <p class="sub">Rodar análise gera saída compacta. “Expandido” aparece após rodar e lista blocos por achado selecionado.</p>
+<div class="card">
+<h2>Assincronias — O que você vê na curva?</h2>
+<p class="sub">Selecione as alterações <b>visuais</b> que você observa nas curvas. O sistema interpreta o achado de forma educacional.</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid #ffaa00;padding:0.8rem;border-radius:6px;margin-bottom:1rem;font-size:0.85rem">
+<b>Uso educacional:</b> As interpretações apresentam mecanismos fisiológicos e conceitos da literatura. NÃO constituem prescrição ou recomendação de ajuste ventilatório.
+</div>
+<div class="hr"></div>
+<div class="row">
+<button class="btn primary" id="btnAssinRun">Interpretar achados</button>
+<button class="btn" id="btnAssinClear">Limpar</button>
+</div>
+<div class="hr"></div>
+<div class="row" style="gap:12px">
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Pressão × tempo</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="trig_delay">
+<div><b>Deflexão negativa antes do ciclo iniciar</b><span>Pressão cai, depois sobe (esforço antes da resposta).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="double_trig">
+<div><b>Dois picos consecutivos sem expiração entre eles</b><span>Ciclos "colados", pausa mínima.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="auto_trig">
+<div><b>Ciclos iniciam sem deflexão negativa prévia</b><span>Curva sobe direto, sem "puxada".</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="reverse_trig">
+<div><b>Deflexões negativas repetitivas durante/após insuflação</b><span>Esforços rítmicos "dentro" da inspiração.</span></div>
+</div>
 
-    <div class="hr"></div>
+<div class="opt">
+<input type="checkbox" class="assin" value="p_overshoot">
+<div><b>Pico de pressão ultrapassa alvo (overshoot PSV)</b><span>Pressão sobe acima do PS, depois estabiliza.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="p_undershoot">
+<div><b>Pressão não atinge alvo (undershoot PSV)</b><span>Pico fica abaixo do PS programado.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="p_plateau_absent">
+<div><b>Ausência de platô de pressão (VCV)</b><span>Curva não "achata", continua subindo/caindo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="p_oscillations">
+<div><b>Oscilações rítmicas durante ciclo</b><span>Ondas regulares sobrepostas (cardiogênicas).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="p_negative_exp">
+<div><b>Pressão negativa durante expiração</b><span>Curva cai abaixo do zero na expiração.</span></div>
+</div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Fluxo × tempo</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="concave">
+<div><b>Curva inspiratória côncava ("barriguda")</b><span>Fluxo não mantém platô, cai progressivamente.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="early_cycle">
+<div><b>Fluxo inspiratório cortado antes de zerar</b><span>Corte abrupto com fluxo ainda alto.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="late_cycle">
+<div><b>Platô inspiratório prolongado em fluxo baixo</b><span>Fluxo "arrasta" antes de ciclar.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="notch">
+<div><b>Entalhes/oscilações na inspiração</b><span>Picos e vales durante o fluxo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="exp_incomplete">
+<div><b>Fluxo expiratório não retorna a zero</b><span>Ainda positivo quando próximo ciclo inicia.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="ineff">
+<div><b>Deflexão na expiração sem disparo</b><span>Perturbação visível, mas ciclo não inicia.</span></div>
+</div>
 
-    <div class="row">
-      <div style="flex:1;min-width:260px;">
-        <label>Contexto (opcional)</label>
-        <select id="assinContext">
-          <option value="">Sem contexto</option>
-          <option value="control">Controlado / mandatória</option>
-          <option value="assist">Assistido (A/C, PSV)</option>
-          <option value="wean">Desmame</option>
-          <option value="obstruct">Obstrutivo</option>
-          <option value="lowC">Baixa complacência</option>
-        </select>
-      </div>
-      <div class="row" style="align-self:flex-end;">
-        <button class="btn primary" id="btnAssinRun" type="button">Rodar análise</button>
-        <button class="btn" id="btnAssinClear" type="button">Limpar</button>
-      </div>
-    </div>
+<div class="opt">
+<input type="checkbox" class="assin" value="exp_prolonged">
+<div><b>Cauda expiratória muito prolongada</b><span>Decaimento lento, "arrasta" até próximo ciclo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="exp_biphasic">
+<div><b>Expiração bifásica (duas fases)</b><span>Mudança de inclinação no meio da expiração.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="active_exp">
+<div><b>Elevação do fluxo expiratório ativo</b><span>Fluxo aumenta durante expiração (esforço exp).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="double_peak_insp">
+<div><b>Duplo pico inspiratório (M-shape)</b><span>Dois picos de fluxo na mesma inspiração.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="flow_reversal">
+<div><b>Reversão de fluxo durante inspiração</b><span>Fluxo fica brevemente negativo na inspiração.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="insp_plateau">
+<div><b>Platô inspiratório (fluxo constante)</b><span>Fluxo mantém-se constante (onda quadrada).</span></div>
+</div>
+</div>
+</div>
+<div class="row" style="gap:12px;margin-top:12px">
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Volume × tempo</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="stack">
+<div><b>Volume não retorna ao baseline</b><span>Curva "sobe escada" ciclo a ciclo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="vt_var">
+<div><b>Altura dos picos muito variável</b><span>Volumes oscilam &gt;20% sem mudança de modo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="leak">
+<div><b>Diferença Vinsp ≠ Vexp persistente</b><span>Alça não fecha no mesmo ponto.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="noise">
+<div><b>Serrilhado/"tremor" na curva</b><span>Ruído de alta frequência sobreposto.</span></div>
+</div>
 
-    <div class="hr"></div>
+<div class="opt">
+<input type="checkbox" class="assin" value="v_slope_slow">
+<div><b>Rampa volumétrica muito lenta</b><span>Volume sobe devagar, inclinação suave.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="v_plateau">
+<div><b>Platô volumétrico inspiratório</b><span>Volume para de subir antes do fim inspiração.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="v_scooped">
+<div><b>Curva volumétrica "escavada"</b><span>Concavidade na rampa inspiratória.</span></div>
+</div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Alça P×V</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="beak">
+<div><b>"Bico de pato" no ramo superior</b><span>Achatamento súbito no final da inspiração.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="hyst">
+<div><b>Alça expiratória muito abaixo da inspiratória</b><span>Área grande entre ramos (histerese).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="open_loop">
+<div><b>Alça não fecha (pontos separados)</b><span>Início ≠ fim.</span></div>
+</div>
 
-    <div class="row" style="gap:12px;">
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Pressão × tempo (disparo/início)</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="lower_inflection">
+<div><b>Ponto de inflexão inferior ("joelho")</b><span>Mudança de inclinação no ramo inferior.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="pv_steep">
+<div><b>Alça muito verticalizada</b><span>Sobe "em pé", pouco volume/muita pressão.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="pv_flat">
+<div><b>Alça muito horizontal</b><span>Sobe "deitada", muito volume/pouca pressão.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="pv_sigmoid">
+<div><b>Formato sigmóide (S)</b><span>Curva em S com inflexões superior e inferior.</span></div>
+</div>
 
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_pt_trigger_delay" value="pt_trigger_delay">
-          <div><b>Atraso de disparo</b><span>Esforço visível antecede o início do ciclo.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_pt_double_trigger" value="pt_double_trigger">
-          <div><b>Duplo disparo</b><span>Dois ciclos quase colados; expiração mínima.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_pt_auto_trigger" value="pt_auto_trigger">
-          <div><b>Auto-disparo (suspeita)</b><span>Início sem padrão consistente de esforço.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_pt_reverse_trigger" value="pt_reverse_trigger">
-          <div><b>Reverse triggering (suspeita)</b><span>Esforço repetitivo após ciclo mecânico.</span></div>
-        </div>
-      </div>
-
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Fluxo × tempo (inspiração/ciclagem)</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_ft_starvation" value="ft_starvation">
-          <div><b>Concavidade inspiratória</b><span>Demanda &gt; entrega (mismatch).</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_ft_early_cycle" value="ft_early_cycle">
-          <div><b>Ciclagem precoce</b><span>Inspiração termina com esforço persistente.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_ft_late_cycle" value="ft_late_cycle">
-          <div><b>Ciclagem tardia</b><span>Ventilador mantém inspiração após relaxamento.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_ft_notching" value="ft_notching">
-          <div><b>Entalhes/irregularidade na inspiração</b><span>Esforços adicionais, tosse ou variabilidade.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="gap:12px;margin-top:12px;">
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Expiração (fluxo)</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_exp_incomplete" value="exp_incomplete">
-          <div><b>Expiração incompleta</b><span>Fluxo expiratório não retorna a zero.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_ft_ineffective" value="ft_ineffective">
-          <div><b>Esforço inefetivo</b><span>Esforço visível sem disparo do ventilador.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_leak_suspect" value="leak_suspect">
-          <div><b>Suspeita de vazamento</b><span>Discrepância persistente de volumes/alarmes compatíveis.</span></div>
-        </div>
-      </div>
-
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Volume × tempo</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_vt_stacking" value="vt_stacking">
-          <div><b>Empilhamento</b><span>Volume não retorna ao baseline antes do próximo ciclo.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_vt_variable" value="vt_variable">
-          <div><b>Variabilidade grande de VT</b><span>Variação ampla ciclo a ciclo sem mudança evidente do cenário.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="assin" id="a_artifact_noise" value="artifact_noise">
-          <div><b>Ruído/serrilhado</b><span>Tosse, secreção, condensado ou artefato.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hr"></div>
-
-    <div class="outBox">
-      <h3>Resultado – Assincronias (compacto)</h3>
-      <div class="txt" id="assinOut">Selecione os achados e clique em “Rodar análise”.</div>
-
-      <button class="btn" id="btnAssinExpand" style="margin-top:10px;display:none;" type="button">
-        Expandido (por achado)
-      </button>
-
-      <div id="assinExpand" class="hide" style="margin-top:10px;"></div>
-    </div>
-  </div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Alça Fluxo × Volume</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_exp_scoop">
+<div><b>"Escavação" no ramo expiratório</b><span>Concavidade expiratória (obstrução via aérea).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_insp_scoop">
+<div><b>"Escavação" no ramo inspiratório</b><span>Concavidade inspiratória (flow starvation).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_asymmetric">
+<div><b>Assimetria acentuada insp/exp</b><span>Ramos com formatos muito diferentes.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_shift">
+<div><b>Deslocamento lateral da alça</b><span>Alça não centralizada no zero de volume.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_open">
+<div><b>Alça não fecha (extremidades separadas)</b><span>Vazamento ou erro de medição.</span></div>
+</div>
+</div>
+</div>
+<div class="hr"></div>
+<div class="outBox">
+<h3>Interpretação</h3>
+<div class="txt" id="assinOut">Selecione os achados visuais e clique em "Interpretar achados".</div>
+</div>
+</div>
 </section>
-
-<!-- ===================== MECÂNICA ===================== -->
 <section id="secMec" class="hide">
-  <div class="card">
-    <h2>Mecânica — selecione o que você vê</h2>
-    <p class="sub">Achados descritivos (pressão/fluxo/volume). “Expandido” aparece após rodar e lista blocos por achado selecionado.</p>
+<div class="card">
+<h2>Mecânica — O que você vê na curva?</h2>
+<p class="sub">Selecione as alterações <b>visuais</b> que você observa. O sistema interpreta os achados de mecânica de forma educacional.</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid #ffaa00;padding:0.8rem;border-radius:6px;margin-bottom:1rem;font-size:0.85rem">
+<b>Uso educacional:</b> As interpretações apresentam conceitos fisiológicos e abordagens descritas na literatura. NÃO constituem prescrição ou indicação de conduta.
+</div>
+<div class="hr"></div>
+<div class="row">
+<button class="btn primary" id="btnMecRun">Interpretar achados</button>
+<button class="btn" id="btnMecClear">Limpar</button>
+</div>
+<div class="hr"></div>
+<div class="row" style="gap:12px">
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Pressão</h3>
+<div class="opt">
+<input type="checkbox" class="mec" value="ppeak_high">
+<div><b>Ppico muito elevado (&gt;30 cmH₂O)</b><span>Pressão sobe muito para volume pequeno.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pplat_high">
+<div><b>Pplatô elevado (&gt;28-30 cmH₂O)</b><span>Pressão de pausa acima do alvo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="dp_high">
+<div><b>Driving Pressure alta (&gt;15 cmH₂O)</b><span>Grande diferença Pplatô - PEEP.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="flatten">
+<div><b>Achatamento progressivo no fim da inspiração</b><span>Curva "quebra" ou achata antes do fim.</span></div>
+</div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Fluxo</h3>
+<div class="opt">
+<input type="checkbox" class="mec" value="exp_slow">
+<div><b>Expiração prolongada (não zera rápido)</b><span>Decaimento lento, "arrasta".</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="flow_notzero">
+<div><b>Fluxo expiratório positivo no final</b><span>Não zera, interceptado.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="resist">
+<div><b>Grande diferença Ppico - Pplatô (&gt;10)</b><span>Resistência aumentada.</span></div>
+</div>
 
-    <div class="hr"></div>
+<div class="opt">
+<input type="checkbox" class="mec" value="flow_peak_low">
+<div><b>Pico de fluxo inspiratório baixo</b><span>Fluxo máximo reduzido, curva "murcha".</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="flow_asym">
+<div><b>Assimetria acentuada insp/exp</b><span>Fluxo insp e exp com formas muito diferentes.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="exp_concave">
+<div><b>Expiração côncava</b><span>Curva expiratória com concavidade.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="tau_high">
+<div><b>Constante de tempo elevada (τ &gt;1s)</b><span>Tempo para 63% do volume expirar &gt;1s.</span></div>
+</div>
+</div>
+</div>
+<div class="row" style="gap:12px;margin-top:12px">
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Volume e Alça P×V</h3>
+<div class="opt">
+<input type="checkbox" class="mec" value="vt_low">
+<div><b>Volume corrente baixo (&lt;6 mL/kg)</b><span>Pico volumétrico muito baixo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pv_steep">
+<div><b>Alça P×V muito verticalizada</b><span>Sobe "em pé" (baixa complacência).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pv_flat">
+<div><b>Alça P×V muito horizontal</b><span>Sobe "deitada" (alta complacência).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="lowerinfl">
+<div><b>Ponto de inflexão inferior visível</b><span>"Joelho" no ramo inspiratório inferior.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="upperinfl">
+<div><b>Ponto de inflexão superior visível</b><span>"Bico" no ramo superior.</span></div>
+</div>
 
-    <div class="row">
-      <div style="flex:1;min-width:260px;">
-        <label>Contexto (opcional)</label>
-        <select id="mecContext">
-          <option value="">Sem contexto</option>
-          <option value="lowC">Baixa complacência</option>
-          <option value="obstruct">Resistência aumentada</option>
-          <option value="neuro">Drive baixo</option>
-          <option value="wean">Desmame</option>
-        </select>
-      </div>
-      <div class="row" style="align-self:flex-end;">
-        <button class="btn primary" id="btnMecRun" type="button">Rodar análise</button>
-        <button class="btn" id="btnMecClear" type="button">Limpar</button>
-      </div>
-    </div>
+<div class="opt">
+<input type="checkbox" class="mec" value="vt_high">
+<div><b>Volume corrente alto (&gt;8-10 mL/kg)</b><span>VT acima do alvo protetivo.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="mv_low">
+<div><b>Volume-minuto baixo</b><span>Ventilação total insuficiente.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="mv_high">
+<div><b>Volume-minuto alto</b><span>Ventilação total excessiva.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pv_concave_insp">
+<div><b>Ramo inspiratório côncavo (P×V)</b><span>Curva para baixo (compliance ↓ progressiva).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pv_convex_insp">
+<div><b>Ramo inspiratório convexo (P×V)</b><span>Curva para cima (compliance ↑ progressiva).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="pv_shift">
+<div><b>Alça P×V deslocada horizontalmente</b><span>Não inicia em zero de pressão (auto-PEEP).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="compliance_calc">
+<div><b>Complacência muito baixa (&lt;20 mL/cmH₂O)</b><span>Relação ΔV/ΔP muito reduzida.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="compliance_high">
+<div><b>Complacência muito alta (&gt;80 mL/cmH₂O)</b><span>Relação ΔV/ΔP muito elevada.</span></div>
+</div>
 
-    <div class="hr"></div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Alça Fluxo × Volume</h3>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_exp_scoop">
+<div><b>"Escavação" no ramo expiratório</b><span>Concavidade expiratória (obstrução via aérea).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_insp_scoop">
+<div><b>"Escavação" no ramo inspiratório</b><span>Concavidade inspiratória (flow starvation).</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_asymmetric">
+<div><b>Assimetria acentuada insp/exp</b><span>Ramos com formatos muito diferentes.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_shift">
+<div><b>Deslocamento lateral da alça</b><span>Alça não centralizada no zero de volume.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="assin" value="fv_open">
+<div><b>Alça não fecha (extremidades separadas)</b><span>Vazamento ou erro de medição.</span></div>
+</div>
 
-    <div class="row" style="gap:12px;">
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Pressão</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_low_comp" value="low_comp">
-          <div><b>Baixa complacência</b><span>Pequeno ΔV para grande ΔP (rigidez).</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_end_insp_flat" value="end_insp_flat">
-          <div><b>Achatamento no fim da inspiração</b><span>Redução progressiva de complacência (sugestivo).</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_effort_noise" value="effort_noise">
-          <div><b>Ondulações/deflexões</b><span>Esforço/tosse/artefato interferindo na curva.</span></div>
-        </div>
-      </div>
-
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Fluxo</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_exp_slow" value="exp_slow">
-          <div><b>Expiração lenta</b><span>Tempo constante elevado / resistência aumentada.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_exp_not_zero" value="exp_not_zero">
-          <div><b>Fluxo expiratório não zera</b><span>Aprisionamento dinâmico/expiração incompleta.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_flow_irregular" value="flow_irregular">
-          <div><b>Serrilhado</b><span>Secreção/condensado/artefato.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="gap:12px;margin-top:12px;">
-      <div class="checkGroup" style="flex:1;min-width:300px;">
-        <h3>Volume</h3>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_vt_low" value="vt_low">
-          <div><b>Baixa excursão volumétrica</b><span>Descrição a integrar com pressão/fluxo.</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_vt_variable" value="vt_variable">
-          <div><b>Variabilidade grande</b><span>Variação ampla ciclo a ciclo (drive/mecânica/assistência).</span></div>
-        </div>
-
-        <div class="opt">
-          <input type="checkbox" class="mec" id="m_vt_leak" value="vt_leak">
-          <div><b>Discrepância insp/exp</b><span>Suspeita de vazamento/medição.</span></div>
-        </div>
-      </div>
-
-      <div class="outBox" style="flex:1;min-width:300px;">
-        <h3>Resultado – Mecânica (compacto)</h3>
-        <div class="txt" id="mecOut">Selecione os achados e clique em “Rodar análise”.</div>
-
-        <button class="btn" id="btnMecExpand" style="margin-top:10px;display:none;" type="button">
-          Expandido (por achado)
-        </button>
-
-        <div id="mecExpand" class="hide" style="margin-top:10px;"></div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="checkGroup" style="flex:1;min-width:300px">
+<h3>Valores Numéricos / Alarmes</h3>
+<div class="opt">
+<input type="checkbox" class="mec" value="peep_high">
+<div><b>PEEP total elevada (&gt;15-20 cmH₂O)</b><span>PEEP programada + auto-PEEP alta.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="fr_high">
+<div><b>Frequência respiratória alta (&gt;30/min)</b><span>Taquipneia persistente.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="fr_low">
+<div><b>Frequência respiratória baixa (&lt;8/min)</b><span>Bradipneia marcada.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="ti_long">
+<div><b>Tempo inspiratório prolongado (&gt;1.5s)</b><span>Inspiração muito longa.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="ie_inverted">
+<div><b>Relação I:E invertida (&gt;1:1)</b><span>Tempo inspiratório ≥ tempo expiratório.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="alarm_ppeak">
+<div><b>Alarme de Ppico disparando</b><span>Pressão excede limiteconfigurado.</span></div>
+</div>
+<div class="opt">
+<input type="checkbox" class="mec" value="alarm_vmin">
+<div><b>Alarme de volume-minuto baixo</b><span>Ventilação abaixo do mínimo.</span></div>
+</div>
+</div>
+</div>
+<div class="hr"></div>
+<div class="outBox">
+<h3>Interpretação</h3>
+<div class="txt" id="mecOut">Selecione os achados visuais e clique em "Interpretar achados".</div>
+</div>
+</div>
 </section>
-
-<!-- ===================== SOBRE ===================== -->
 <section id="secSobre" class="hide">
-  <div class="card">
-    <h2>Sobre</h2>
-    <p class="sub">
-      SyncVent é uma ferramenta educacional para leitura de curvas e organização de raciocínio clínico.
-      Não prescreve conduta, ajuste ou titulação.
-    </p>
+<div class="card">
+<h2>Sobre o SyncVent</h2>
+<p class="sub">
+SyncVent é uma ferramenta <b>estritamente educacional</b> para leitura de curvas ventilatórias e organização de raciocínio clínico.
+</p>
 
-    <div class="hr"></div>
+<div class="hr"></div>
 
-    <div class="note">
-      <b>Escopo</b><br>
-      • Achados observáveis → interpretação → hipóteses.<br>
-      • Integração de pressão, fluxo, volume e contexto.<br>
-      • Uso educacional.
-    </div>
+<div class="note" style="border-left-color:#ffaa00">
+<b>⚠️ AVISO IMPORTANTE — USO EDUCACIONAL</b><br><br>
+Este aplicativo NÃO prescreve, NÃO recomenda e NÃO indica condutas, ajustes ventilatórios ou titulações.<br><br>
+As informações apresentadas:<br>
+• Descrevem achados observados nas curvas<br>
+• Apresentam conceitos da literatura científica<br>
+• Organizam raciocínio clínico de forma educacional<br>
+• NÃO substituem avaliação clínica individualizada<br>
+• NÃO substituem julgamento do profissional assistente<br><br>
+<b>Toda decisão terapêutica deve ser tomada pelo profissional de saúde responsável, considerando o contexto clínico completo do paciente.</b>
+</div>
 
-    <div style="margin-top:10px;color:var(--muted);font-size:12px;">
-      © <span id="yearNow"></span> — SyncVent
-    </div>
-  </div>
+<div class="hr"></div>
+
+<div class="note">
+<b>Escopo educacional</b><br>
+• Achados visuais observáveis nas curvas → interpretação fisiológica → hipóteses clínicas<br>
+• Integração de pressão, fluxo, volume e alça P×V<br>
+• Conceitos baseados em evidências científicas publicadas<br>
+• Organização sistemática de raciocínio para fins de aprendizado
+</div>
+
+<div class="hr"></div>
+
+<div class="note">
+<b>Fonte das evidências</b><br>
+As informações sobre estudos clínicos citam ensaios randomizados controlados (RCTs), metanálises, diretrizes e revisões sistemáticas publicadas em periódicos peer-reviewed. Referências incluem (exemplos): PROSEVA, ART, LUNG SAFE, EPVent-2, FACTT, revisões Cochrane, SCCM Guidelines, entre outros.
+</div>
+
+<div style="margin-top:1.5rem;padding:1.5rem;background:#f0f7fa;border:2px solid var(--accent);border-radius:8px">
+<h4 style="margin-top:0;color:var(--accent)">Direitos Autorais e Propriedade Intelectual</h4>
+<div style="color:var(--text);font-size:0.9rem;line-height:1.7">
+<p><b>© 2025 Leticia Moreira. Todos os direitos reservados.</b></p>
+
+<p>Este aplicativo, incluindo seu conteúdo educacional, estrutura lógica, algoritmos de interpretação, organização didática e design de interface, constitui obra intelectual original protegida por direitos autorais conforme Lei nº 9.610/98 (Lei de Direitos Autorais).</p>
+
+<p><b>Autoria:</b><br>
+Leticia Moreira<br>
+Fisioterapeuta, Especialista em Terapia Intensiva</p>
+
+<p><b>Uso autorizado:</b> Uso pessoal para fins exclusivamente educacionais, consulta individual para aprendizado, estudo acadêmico sem fins comerciais.</p>
+
+<p><b>Uso NÃO autorizado:</b> Reprodução total ou parcial, distribuição, uso comercial, modificação, remoção de créditos de autoria, incorporação em outros sistemas sem autorização expressa.</p>
+
+<p><b>Para uso acadêmico, citar como:</b><br>
+<i>Moreira L. SyncVent: Sistema Educacional de Análise de Curvas Ventilatórias. Versão 1.0. 2025.</i></p>
+
+<p style="font-size:0.85rem;color:var(--muted);margin-top:1rem">
+A violação de direitos autorais constitui crime previsto no artigo 184 do Código Penal Brasileiro, sujeitando o infrator a sanções civis e penais.
+</p>
+</div>
+</div>
+<div style="margin-top:0.5rem;color:var(--muted);font-size:12px;text-align:center">
+Versão 1.0 — Janeiro <span id="yearNow"></span>
+</div>
+</div>
 </section>
-<!-- ===================== SCRIPT ÚNICO ===================== -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const $ = id => document.getElementById(id);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-  /* ===== SPLASH ===== */
-  $("btnEnter").addEventListener("click", () => {
-    $("splash").classList.add("hide");
-    setTimeout(() => $("splash").style.display = "none", 300);
-  });
-
-  /* ===== TABS ===== */
-  function showTab(which){
-    ["Casos","Assin","Mec","Sobre"].forEach(k=>{
-      $("sec"+k).classList.add("hide");
-      $("tab"+k).classList.remove("active");
-    });
-    $("sec"+which).classList.remove("hide");
-    $("tab"+which).classList.add("active");
-    window.scrollTo({top:0});
-  }
-  $("tabCasos").onclick = () => showTab("Casos");
-  $("tabAssin").onclick = () => showTab("Assin");
-  $("tabMec").onclick   = () => showTab("Mec");
-  $("tabSobre").onclick = () => showTab("Sobre");
-
-  /* ===== CASOS ===== */
-  const CASES = {
-    sara: `
-      <h3>SARA (ARDS)</h3>
-      <p class="sub">
-        Síndrome caracterizada por hipoxemia, redução de complacência e heterogeneidade pulmonar.
-        As curvas refletem a mecânica global e devem ser interpretadas com cautela.
-      </p>
-      <ul class="small">
-        <li>Variabilidade ciclo a ciclo pode indicar instabilidade alveolar.</li>
-        <li>Pressões elevadas para pequenas variações de volume são frequentes.</li>
-        <li>Esforço excessivo pode agravar lesão pulmonar.</li>
-      </ul>
-
-      <div class="hr"></div>
-      <h4>Calculadora educacional P/F</h4>
-      <label>PaO₂ (mmHg)</label>
-      <input id="pao2" type="number">
-      <label>FiO₂ (fração)</label>
-      <input id="fio2" type="number" step="0.01">
-      <button class="btn primary" id="calcPF">Calcular</button>
-      <div id="pfOut" class="small"></div>
-    `,
-    sepse: `
-      <h3>Sepse / Choque séptico</h3>
-      <ul class="small">
-        <li>Drive respiratório frequentemente elevado.</li>
-        <li>Interação cardiopulmonar pode distorcer curvas.</li>
-        <li>Alterações rápidas exigem leitura seriada.</li>
-      </ul>
-    `,
-    dpoc: `
-      <h3>DPOC</h3>
-      <ul class="small">
-        <li>Expiração prolongada e aprisionamento aéreo.</li>
-        <li>Auto-PEEP favorece esforços inefetivos.</li>
-        <li>Empilhamento volumétrico é comum.</li>
-      </ul>
-    `,
-    restritiva: `
-      <h3>Doença restritiva</h3>
-      <ul class="small">
-        <li>Baixa complacência global.</li>
-        <li>Volume reduzido para a mesma variação de pressão.</li>
-      </ul>
-    `,
-    cardiaca: `
-      <h3>Edema cardiogênico</h3>
-      <ul class="small">
-        <li>Mecânica pode variar rapidamente.</li>
-        <li>Hipoxemia nem sempre acompanha rigidez acentuada.</li>
-      </ul>
-    `,
-    obeso: `
-      <h3>Obesidade / OHS</h3>
-      <ul class="small">
-        <li>Complacência de parede torácica reduzida.</li>
-        <li>Atelectasia dependente frequente.</li>
-      </ul>
-    `,
-    neuro: `
-      <h3>Neuromuscular</h3>
-      <ul class="small">
-        <li>Esforço fraco e atrasos de disparo.</li>
-        <li>Baixa variabilidade ventilatória.</li>
-      </ul>
-    `,
-    neurocrit: `
-      <h3>Neurocrítico</h3>
-      <ul class="small">
-        <li>Drive respiratório instável.</li>
-        <li>Auto-disparo e reverse triggering podem ocorrer.</li>
-      </ul>
-    `,
-    trauma: `
-      <h3>Trauma</h3>
-      <ul class="small">
-        <li>Dor e lesão de parede alteram curvas.</li>
-        <li>Grande variabilidade interindividual.</li>
-      </ul>
-    `,
-    tb: `
-      <h3>Tuberculose</h3>
-      <ul class="small">
-        <li>Heterogeneidade pulmonar importante.</li>
-        <li>Secreção interfere na leitura do fluxo.</li>
-      </ul>
-    `,
-    pneumo: `
-      <h3>Pneumotórax</h3>
-      <ul class="small">
-        <li>Alterações abruptas de pressão/volume.</li>
-        <li>Curvas não confirmam diagnóstico isoladamente.</li>
-      </ul>
-    `,
-    desmame: `
-      <h3>Desmame / TRE</h3>
-      <ul class="small">
-        <li>Fadiga progressiva altera sincronia.</li>
-        <li>Obstrução limita tolerância.</li>
-      </ul>
-    `,
-    imt: `
-      <h3>IMT na VM</h3>
-      <ul class="small">
-        <li>Consistência do esforço é central.</li>
-        <li>Fadiga aparece como irregularidade das curvas.</li>
-      </ul>
-    `
-  };
-
-  $("caseSel").addEventListener("change", () => {
-    const v = $("caseSel").value;
-    $("caseArea").innerHTML = CASES[v] || '<div class="txt">Selecione um caso.</div>';
-
-    if ($("calcPF")) {
-      $("calcPF").onclick = () => {
-        const pa = Number($("pao2").value);
-        const fi = Number($("fio2").value);
-        if (pa > 0 && fi > 0) {
-          $("pfOut").textContent = "P/F = " + Math.round(pa / fi);
-        }
-      };
-    }
-  });
-
-  /* ===== ASSINCRONIAS — MOTOR ===== */
-  const ASSIN_TEXT = {
-    pt_trigger_delay: "Atraso entre esforço neural e resposta mecânica, sugerindo dificuldade de disparo.",
-    pt_double_trigger: "Dois ciclos consecutivos indicam tempo inspiratório neural maior que o mecânico.",
-    pt_auto_trigger: "Disparo sem esforço consistente sugere sensibilidade excessiva ou artefato.",
-    pt_reverse_trigger: "Ciclo mecânico precede esforço neural, compatível com acoplamento reverso.",
-    ft_starvation: "Concavidade inspiratória indica demanda maior que fluxo ofertado.",
-    ft_early_cycle: "Ciclagem precoce ocorre quando esforço persiste após término mecânico.",
-    ft_late_cycle: "Ciclagem tardia prolonga inspiração além do relaxamento neural.",
-    ft_notching: "Entalhes sugerem esforços adicionais ou interferência.",
-    exp_incomplete: "Fluxo expiratório não zera, sugerindo aprisionamento aéreo.",
-    ft_ineffective: "Esforço não resulta em disparo, frequentemente associado a auto-PEEP.",
-    leak_suspect: "Discrepância de volumes sugere vazamento ou erro de leitura.",
-    vt_stacking: "Empilhamento volumétrico por expiração insuficiente.",
-    vt_variable: "Variabilidade ampla pode refletir drive instável.",
-    artifact_noise: "Ruído por tosse, secreção ou condensado."
-  };
-
-  $("btnAssinRun").onclick = () => {
-    const sel = $$(".assin:checked").map(c => c.value);
-    if (!sel.length) {
-      $("assinOut").textContent = "Nenhum achado selecionado.";
-      return;
-    }
-    $("assinOut").textContent =
-      "Achados identificados:\n• " + sel.join("\n• ");
-    $("btnAssinExpand").style.display = "inline-block";
-    $("assinExpand").innerHTML = sel.map(a => `
-      <div class="note">
-        <b>${a}</b><br>
-        ${ASSIN_TEXT[a] || "Descrição fisiológica do achado."}
-        <ul class="small">
-          <li>Confirmar em curvas complementares.</li>
-          <li>Integrar com contexto clínico.</li>
-          <li>Reconhecer limitações e armadilhas.</li>
-        </ul>
-      </div>
-    `).join("");
-  };
-  $("btnAssinExpand").onclick = () => $("assinExpand").classList.toggle("hide");
-  $("btnAssinClear").onclick = () => {
-    $$(".assin").forEach(c => c.checked = false);
-    $("assinOut").textContent = "";
-    $("assinExpand").innerHTML = "";
-    $("btnAssinExpand").style.display = "none";
-  };
-
-  /* ===== MECÂNICA — MOTOR ===== */
-  const MEC_TEXT = {
-    low_comp: "Rigidez pulmonar com grande variação de pressão para pequeno volume.",
-    end_insp_flat: "Redução progressiva de complacência no final da inspiração.",
-    effort_noise: "Deflexões sugerem esforço ou artefato.",
-    exp_slow: "Expiração lenta por resistência aumentada.",
-    exp_not_zero: "Fluxo não zera indicando aprisionamento.",
-    flow_irregular: "Serrilhado por secreção ou condensado.",
-    vt_low: "Baixa excursão volumétrica integrada a pressão/fluxo.",
-    vt_variable: "Variabilidade ampla reflete drive ou mecânica instável.",
-    vt_leak: "Discrepância sugere vazamento."
-  };
-
-  $("btnMecRun").onclick = () => {
-    const sel = $$(".mec:checked").map(c => c.value);
-    if (!sel.length) {
-      $("mecOut").textContent = "Nenhum achado selecionado.";
-      return;
-    }
-    $("mecOut").textContent =
-      "Achados identificados:\n• " + sel.join("\n• ");
-    $("btnMecExpand").style.display = "inline-block";
-    $("mecExpand").innerHTML = sel.map(a => `
-      <div class="note">
-        <b>${a}</b><br>
-        ${MEC_TEXT[a] || "Descrição fisiológica do achado."}
-        <ul class="small">
-          <li>Relacionar pressão, fluxo e volume.</li>
-          <li>Considerar contexto ventilatório.</li>
-          <li>Reconhecer limitações.</li>
-        </ul>
-      </div>
-    `).join("");
-  };
-  $("btnMecExpand").onclick = () => $("mecExpand").classList.toggle("hide");
-  $("btnMecClear").onclick = () => {
-    $$(".mec").forEach(c => c.checked = false);
-    $("mecOut").textContent = "";
-    $("mecExpand").innerHTML = "";
-    $("btnMecExpand").style.display = "none";
-  };
-
-  /* ===== INICIAL ===== */
-  showTab("Casos");
-  $("yearNow").textContent = new Date().getFullYear();
-});
-</script>
+<!-- Modal para análises detalhadas -->
+<div class="modal-overlay" id="modalAnalise">
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="modalTitle">Análise Detalhada</h2>
+<button class="modal-close" onclick="fecharModal()">×</button>
+</div>
+<div class="modal-body" id="modalBody">
+<!-- Conteúdo será inserido dinamicamente -->
+</div>
+</div>
+</div>
 
 </main>
+<script>
+const $=id=>document.getElementById(id);
+const $$=sel=>Array.from(document.querySelectorAll(sel));
+$("btnEnter").onclick=()=>{$("splash").classList.add("hide");setTimeout(()=>$("splash").style.display="none",300)};
+function showTab(t){["Casos","Assin","Mec","Sobre"].forEach(k=>{$("sec"+k).classList.add("hide");$("tab"+k).classList.remove("active")});$("sec"+t).classList.remove("hide");$("tab"+t).classList.add("active");window.scrollTo({top:0})}
+$("tabCasos").onclick=()=>
+// Controle de Modal
+function abrirModal(caso){
+const modal=$("#modalAnalise");
+const title=$("#modalTitle");
+const body=$("#modalBody");
+title.textContent=CASOS_TITULOS[caso];
+body.innerHTML=CASOS_COMPLETOS[caso];
+modal.classList.add("show");
+document.body.style.overflow="hidden";
+}
+
+function fecharModal(){
+const modal=$("#modalAnalise");
+modal.classList.remove("show");
+document.body.style.overflow="";
+}
+
+// Fechar ao clicar fora
+$("#modalAnalise")?.addEventListener("click",e=>{
+if(e.target.id==="modalAnalise")fecharModal();
+});
+
+// Fechar com ESC
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape"&&$("#modalAnalise").classList.contains("show"))fecharModal();
+});
+
+// Títulos dos casos
+const CASOS_TITULOS={
+sara:"SARA (ARDS) - Análise Detalhada",
+sepse:"Sepse / Choque Séptico - Análise Detalhada",
+dpoc:"DPOC Exacerbado - Análise Detalhada",
+desmame:"Desmame Ventilatório - Análise Detalhada"
+};
+
+// Conteúdo completo dos casos (será preenchido)
+const CASOS_COMPLETOS={};
+
+// Popular análises detalhadas
+CASOS_COMPLETOS.sara=`
+<h3>Achados frequentes nas curvas:</h3>
+<ul class="small">
+<li><b>Alça P×V verticalizada:</b> Complacência reduzida (tipicamente 20-40 mL/cmH₂O). "Bico de pato" superior sugere sobredistensão progressiva. Ponto de inflexão inferior (LIP) tornou-se menos relevante clinicamente para ajuste de PEEP</li>
+<li><b>Driving Pressure (ΔP):</b> Diferença Pplatô-PEEP frequentemente >15 cmH₂O. Meta-análise de 2021 demonstrou que cada 1 cmH₂O de aumento no ΔP associa-se a 2.6% de aumento na mortalidade
+<span>Ref: Amato NEJM 2015; Costa LIVE study Intensive Care Med 2021; Goligher JAMA 2021</span></li>
+<li><b>Heterogeneidade pulmonar:</b> Variabilidade volume-tempo reflete distribuição heterogênea de recrutamento. Fenótipo focal vs difuso impacta resposta ao recrutamento</li>
+<li><b>Pressão de distensão (stress):</b> Pplatô >28-30 cmH₂O associado a pior desfecho. Conceito de strain (ΔV/FRC) como preditor de VILI ganha relevância</li>
+<li><b>Esforço inspiratório (P-SILI):</b> Deflexões >10 cmH₂O ou pressão muscular (Pmus) >15 cmH₂O associadas a agravamento em estudos de coorte recentes
+<span>Ref: Yoshida AJRCCM 2013; Brochard ICM 2017; Goligher AJRCCM 2020; Spinelli ERJ 2023</span></li>
+</ul>
+
+<h3>Evidências científicas atuais (2020-2024):</h3>
+<ul class="small">
+<li><b>Ventilação Protetora (consolidado):</b> VT 4-6 mL/kg PBW, Pplatô <28-30 cmH₂O permanecem pilares. Meta-análise Cochrane 2023 reforça redução de 9% mortalidade absoluta vs ventilação tradicional
+<span>Ref: ARDSNet NEJM 2000 (clássico); Petrucci Cochrane 2023 (atualização)</span></li>
+
+<li><b>PEEP - Estratégia por tabelas ARDSNet (padrão-ouro atual):</b> Tabelas PEEP/FiO₂ (lower vs higher) demonstram segurança. PEEP alta não reduziu mortalidade em população geral mas melhora oxigenação. Meta-análise individual (IPD) de Brower 2021 sugere benefício em subgrupo moderado-grave (PaO₂/FiO₂ <200)
+<span>Ref: ARDSNet ALVEOLI NEJM 2004; Cavalcanti ART JAMA 2017; Brower IPD meta-analysis Intensive Care Med 2021</span></li>
+
+<li><b>Driving Pressure como alvo terciário:</b> DP estratificado por quartis mostrou associação independente com mortalidade em análise secundária multicêntrica (Amato 2015). Estudo LIVE 2021 demonstrou que redução de DP (via VT ou PEEP) associa-se a menor inflamação pulmonar. <b>Limitação:</b> ainda não há RCT prospectivo usando DP como alvo primário
+<span>Ref: Amato NEJM 2015; Costa LIVE study Intensive Care Med 2021; Goligher JAMA 2021</span></li>
+
+<li><b>P-SILI (Patient Self-Inflicted Lung Injury - conceito emergente):</b> Esforços inspiratórios vigorosos geram pressões transpulmonares elevadas (Ptp >20-25 cmH₂O) mesmo com ventilação "protetora". Estudos observacionais 2020-2023 associam ΔPes >15 cmH₂O ou P0.1 >3.5 com piora de SARA. Sedação profunda precoce ou BNM podem ser necessários em casos selecionados
+<span>Ref: Yoshida AJRCCM 2013; Brochard ICM 2017; Goligher AJRCCM 2020; Spinelli ERJ 2023</span></li>
+
+<li><b>Pronação (indicação consolidada):</b> Em SARA moderada-grave (PaO₂/FiO₂ <150) com FiO₂ ≥60% e PEEP ≥5, sessões ≥16h demonstraram redução de mortalidade 28d de 32.8% vs 16% (NNT=6). Meta-análise 2023 confirma benefício robusto (RR 0.74, IC95% 0.56-0.99)
+<span>Ref: PROSEVA NEJM 2013; Guérin meta-análise Crit Care 2014; Ehrmann Cochrane 2023</span></li>
+
+<li><b>Fenótipos (medicina de precisão):</b> Calfee identificou fenótipo hiperinflamatório (33% casos) vs hipoinflamatório, com mortalidade 44% vs 23%. Re-análise de trials (HARP-2, FACTT) sugere resposta diferencial: hiperinflamatório beneficia-se de PEEP alta e fluidos restritivos. <b>Limitação prática:</b> biomarcadores não disponíveis rotineiramente
+<span>Ref: Calfee Crit Care Med 2014; Famous Lancet Respir Med 2017; Sinha AJRCCM 2020</span></li>
+
+<li><b>VT ultra-protetor (<6 mL/kg):</b> Estratégia de VT 3-4 mL/kg com ECCO₂R em SARA grave não demonstrou benefício em mortalidade (REST trial 2024), mas permanece opção de resgate
+<span>Ref: REST trial JAMA 2024; Bein NEJM 2013</span></li>
+
+<li><b>Monitorização de mecânica avançada:</b> Pressão esofágica (Pes) para calcular Ptp não mostrou benefício em mortalidade (EPVent-2 2019), mas pode guiar PEEP em obesidade/parede rígida. Estudo LIVE 2024 mostrou que P/V dinâmica prediz resposta ao recrutamento melhor que P/V estática
+<span>Ref: Talmor EPVent JAMA 2019; Chiumello Crit Care 2024</span></li>
+</ul>
+`;
+
+CASOS_COMPLETOS.sepse=`
+<h3>Achados frequentes:</h3>
+<ul class="small">
+<li><b>Drive respiratório aumentado:</b> Deflexões P×T profundas (>10 cmH₂O), duplos disparos, esforços inefetivos. Causas multifatoriais: acidose metabólica compensatória, febre, ansiedade, dor, inflamação sistêmica</li>
+<li><b>Variabilidade extrema:</b> FR 30-40/min com volumes irregulares. Ventilação-minuto pode exceder 15-20 L/min em compensação de acidose láctica. P0.1 frequentemente >4-5 cmH₂O indicando drive central elevado</li>
+<li><b>Interação cardiopulmonar:</b> Delta-PP >13% ou SVV >13% sugerem responsividade a volume. Oscilações em curvas podem preceder hipotensão. Disfunção VD (cor pulmonale) em ~25% dos casos graves</li>
+<li><b>Dinâmica temporal bifásica:</b> Fase 1 (0-12h): melhora rápida com ressuscitação adequada. Fase 2 (>24-48h): se piora, sugere SARA secundária, sobrecarga hídrica ou complicação infecciosa</li>
+</ul>
+
+<h3>Evidências atuais:</h3>
+<ul class="small">
+<li><b>Surviving Sepsis Campaign 2021:</b> Ressuscitação guiada por metas nas primeiras 6h. Balanço hídrico restritivo após estabilização hemodinâmica reduz tempo de VM e melhora oxigenação sem impacto em mortalidade
+<span>Ref: Evans Crit Care Med 2021; FACTT NEJM 2006; CLASSIC trial NEJM 2022</span></li>
+
+<li><b>Sedação leve e despertar diário:</b> Interrupção diária de sedação associada a redução de 3.8 dias de VM (Girard 2008). Sedação profunda prolongada aumenta risco de delirium (OR 2.3) e fraqueza adquirida na UTI. Protocolo PAD Bundle (Pain-Agitation-Delirium) recomendado
+<span>Ref: Girard Lancet 2008; SCCM Guidelines 2018; Shehabi SPICE III JAMA 2019; Devlin PADIS Guidelines 2018</span></li>
+
+<li><b>Manejo de acidose metabólica:</b> Drive ventilatório elevado é compensação fisiológica apropriada. Bicarbonatoterapia não demonstrou benefício em pH >7.15 (BICAR-ICU 2018). Permitir hipercapnia moderada (PaCO₂ 50-60) se pH >7.20-7.25 descrito como aceitável
+<span>Ref: Jaber BICAR-ICU JAMA 2018; Jung Chest 2019</span></li>
+
+<li><b>Disfunção diafragmática induzida por VM (VIDD):</b> Inatividade completa >18-24h inicia atrofia (redução 6% espessura/dia). Associada a desmame prolongado e maior mortalidade 90d. NAVA e PAV+ podem preservar atividade diafragmática
+<span>Ref: Levine NEJM 2008; Goligher NEJM 2015; Dres AJRCCM 2017; Schepens Crit Care 2019</span></li>
+
+<li><b>Ventilação protetora mesmo sem SARA:</b> Meta-análise 2020 sugere VT baixo (6-8 mL/kg) em pacientes sem SARA reduz incidência de SARA e mortalidade hospitalar (OR 0.66)
+<span>Ref: Simonis JAMA 2018; Neto meta-análise Lancet Respir Med 2020</span></li>
+</ul>
+`;
+
+CASOS_COMPLETOS.dpoc=`
+<h3>Achados frequentes:</h3>
+<ul class="small">
+<li><b>Expiração prolongada:</b> Constante de tempo (τ = R × C) frequentemente >0.8-1.2s. Necessita 3-5 constantes (2.4-6s) para esvaziamento 95%. FR alta impede esvaziamento completo</li>
+<li><b>Auto-PEEP (PEEPi):</b> Medidas de 8-15 cmH₂O comuns em exacerbações graves. PEEPi >50% da PEEP total associa-se a maior trabalho respiratório e falência de desmame. Esforços inefetivos >10% dos ciclos predizem falha de VNI</li>
+<li><b>Hiperinsuflação dinâmica:</b> EELV (volume expiratório final) pode exceder 120-150% do previsto. Capacidade inspiratória <25% CVF prediz fadiga iminente</li>
+<li><b>Resistência aumentada:</b> Ppico-Pplatô tipicamente 15-25 cmH₂O. Resistência inspiratória (Rinsp) pode alcançar 20-30 cmH₂O/L/s em broncoespasmo grave</li>
+</ul>
+
+<h3>Evidências atuais:</h3>
+<ul class="small">
+<li><b>VNI como primeira linha (Grau A):</b> Meta-análise Cochrane 2023 (41 RCTs, n=2483) demonstra NNT=10 para prevenir IOT, NNT=20 para prevenir morte. BiPAP superior a CPAP. Falha de VNI em 15-30% (preditores: pH <7.25, APACHE >29, FR >35)
+<span>Ref: Osadnik Cochrane 2023; Rochwerg BMJ Clinical Guidelines 2021; Scala ERJ 2022</span></li>
+
+<li><b>PEEPe (PEEP extrínseca) otimizada:</b> Titulação a 80-85% da PEEPi medida reduz trabalho de disparo sem aumentar hiperinsuflação. Estudo fisiológico demonstrou redução de 40% no trabalho respiratório. <b>Atenção:</b> PEEPe excessiva (>PEEPi) piora hiperinsuflação
+<span>Ref: Marini Respir Care 2012; Tobin AJRCCM 2001; Nava Chest 1997</span></li>
+
+<li><b>Estratégia ventilatória protetora:</b> VT 6-8 mL/kg, FR 10-15/min para maximizar Texp. Hipercapnia permissiva (pH >7.25) geralmente bem tolerada. Estudo de coorte 2021 mostrou que Pplatô >30 associa-se a maior mortalidade mesmo em DPOC
+<span>Ref: Acute Respiratory Failure in COPD group ICM 2021; Diaz ERJ 2005</span></li>
+
+<li><b>Desmame e extubação:</b> Protocolos de desmame reduzem tempo de VM em 25%. Extubação para VNI reduz reintubação de 25% para 15% (NNT=10) especialmente se PaCO₂ >45 ou bicarbonato >30
+<span>Ref: Blackwood Cochrane 2014; Burns AJRCCM 2013; Girault AJRCCM 2011; Rochwerg JAMA 2017</span></li>
+
+<li><b>Broncodilatação agressiva:</b> Salbutamol nebulizado 2.5-5mg 4/4h + ipratrópio 500mcg 6/6h. Resposta pode levar 48-72h. Corticóide sistêmico (metilprednisolona 40mg) por 5 dias reduz falha de tratamento (NNT=10)
+<span>Ref: Walters Cochrane 2018; Leuppi JAMA 2013</span></li>
+</ul>
+`;
+
+
+
+showTab("Casos");
+$("tabAssin").onclick=()=>showTab("Assin");
+$("tabMec").onclick=()=>showTab("Mec");
+$("tabSobre").onclick=()=>showTab("Sobre");
+const CASES={
+sara:`<h3>SARA (ARDS)</h3>
+
+<h4>Achados frequentemente observados nas curvas:</h4>
+<ul class="small">
+<li><b>Alça P×V verticalizada:</b> Complacência reduzida (tipicamente 20-40 mL/cmH₂O). "Bico de pato" superior sugere sobredistensão progressiva. Ponto de inflexção inferior (LIP) tornou-se menos relevante clinicamente para ajuste de PEEP</li>
+<li><b>Driving Pressure (ΔP):</b> Diferença Pplatô-PEEP frequentemente &gt;15 cmH₂O. Meta-análise de 2021 demonstrou que cada 1 cmH₂O de aumento no ΔP associa-se a 2.6% de aumento na mortalidade</li>
+<li><b>Heterogeneidade pulmonar:</b> Variabilidade volume-tempo reflete distribuição heterogênea de recrutamento. Fenótipo focal vs difuso impacta resposta ao recrutamento</li>
+<li><b>Pressão de distensão (stress):</b> Pplatô &gt;28-30 cmH₂O associado a pior desfecho. Conceito de strain (ΔV/FRC) como preditor de VILI ganha relevância</li>
+<li><b>Esforço inspiratório (P-SILI):</b> Deflexões &gt;10 cmH₂O ou pressão muscular (Pmus) &gt;15 cmH₂O associadas a agravamento em estudos de coorte recentes</li>
+</ul>
+
+<h4>Evidências científicas atuais (2020-2024):</h4>
+<ul class="small">
+<li><b>Ventilação Protetora (consolidado):</b> VT 4-6 mL/kg PBW, Pplatô &lt;28-30 cmH₂O permanecem pilares. Meta-análise Cochrane 2023 reforça redução de 9% mortalidade absoluta vs ventilação tradicional<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: ARDSNet NEJM 2000 (clássico); Petrucci Cochrane 2023 (atualização)</span></li>
+
+<li><b>PEEP - Estratégia por tabelas ARDSNet (padrão-ouro atual):</b> Tabelas PEEP/FiO₂ (lower vs higher) demonstram segurança. PEEP alta não reduziu mortalidade em população geral mas melhora oxigenação. Meta-análise individual (IPD) de Brower 2021 sugere benefício em subgrupo moderado-grave (PaO₂/FiO₂ &lt;200)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: ARDSNet ALVEOLI NEJM 2004; Cavalcanti ART JAMA 2017; Brower IPD meta-analysis Intensive Care Med 2021</span></li>
+
+<li><b>Driving Pressure como alvo terciário:</b> DP estratificado por quartis mostrou associação independente com mortalidade em análise secundária multicêntrica (Amato 2015). Estudo LIVE 2021 demonstrou que redução de DP (via VT ou PEEP) associa-se a menor inflamação pulmonar. <b>Limitação:</b> ainda não há RCT prospectivo usando DP como alvo primário<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Amato NEJM 2015; Costa LIVE study Intensive Care Med 2021; Goligher JAMA 2021</span></li>
+
+<li><b>P-SILI (Patient Self-Inflicted Lung Injury - conceito emergente):</b> Esforços inspiratórios vigorosos geram pressões transpulmonares elevadas (Ptp &gt;20-25 cmH₂O) mesmo com ventilação "protetora". Estudos observacionais 2020-2023 associam ΔPes &gt;15 cmH₂O ou P0.1 &gt;3.5 com piora de SARA. Sedação profunda precoce ou BNM podem ser necessários em casos selecionados<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Yoshida AJRCCM 2013; Brochard ICM 2017; Goligher AJRCCM 2020; Spinelli ERJ 2023</span></li>
+
+<li><b>Pronação (indicação consolidada):</b> Em SARA moderada-grave (PaO₂/FiO₂ &lt;150) com FiO₂ ≥60% e PEEP ≥5, sessões ≥16h demonstraram redução de mortalidade 28d de 32.8% vs 16% (NNT=6). Meta-análise 2023 confirma benefício robusto (RR 0.74, IC95% 0.56-0.99)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: PROSEVA NEJM 2013; Guérin meta-análise Crit Care 2014; Ehrmann Cochrane 2023</span></li>
+
+<li><b>Fenótipos (medicina de precisão):</b> Calfee identificou fenótipo hiperinflamatório (33% casos) vs hipoinflamatório, com mortalidade 44% vs 23%. Re-análise de trials (HARP-2, FACTT) sugere resposta diferencial: hiperinflamatório beneficia-se de PEEP alta e fluidos restritivos. <b>Limitação prática:</b> biomarcadores não disponíveis rotineiramente<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Calfee Crit Care Med 2014; Famous Lancet Respir Med 2017; Sinha AJRCCM 2020</span></li>
+
+<li><b>Vt ultra-protetor (&lt;6 mL/kg):</b> Estratégia de VT 3-4 mL/kg com ECCO₂R em SARA grave não demonstrou benefício em mortalidade (REST trial 2024), mas permanece opção de resgate<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: REST trial JAMA 2024; Bein NEJM 2013</span></li>
+
+<li><b>Monitorização de mecânica avançada:</b> Pressão esofágica (Pes) para calcular Ptp não mostrou benefício em mortalidade (EPVent-2 2019), mas pode guiar PEEP em obesidade/parede rígida. Estudo LIVE 2024 mostrou que P/V dinâmica prediz resposta ao recrutamento melhor que P/V estática<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Talmor EPVent JAMA 2019; Chiumello Crit Care 2024</span></li>
+</ul>
+
+<div class="hr"></div>
+<h4>Calculadora educacional P/F (Classificação de Berlim)</h4>
+<label>PaO₂ (mmHg)</label>
+<input id="pao2" type="number" placeholder="Ex: 80">
+<label>FiO₂ (fração decimal, ex: 0.6 para 60%)</label>
+<input id="fio2" type="number" step="0.01" placeholder="Ex: 0.6">
+<button class="btn primary" id="calcPF">Calcular P/F</button>
+<div id="pfOut" class="small"></div>
+`,
+sepse:`<h3>Sepse / Choque séptico</h3>
+
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Drive respiratório aumentado:</b> Deflexões P×T profundas (&gt;10 cmH₂O), duplos disparos, esforços inefetivos. Causas multifatoriais: acidose metabólica compensatória, febre, ansiedade, dor, inflamação sistêmica</li>
+<li><b>Variabilidade extrema:</b> FR 30-40/min com volumes irregulares. Ventilação-minuto pode exceder 15-20 L/min em compensação de acidose láctica. P0.1 frequentemente &gt;4-5 cmH₂O indicando drive central elevado</li>
+<li><b>Interação cardiopulmonar:</b> Delta-PP &gt;13% ou SVV &gt;13% sugerem responsividade a volume. Oscilações em curvas podem preceder hipotensão. Disfunção VD (cor pulmonale) em ~25% dos casos graves</li>
+<li><b>Dinâmica temporal bifásica:</b> Fase 1 (0-12h): melhora rápida com ressuscitação adequada. Fase 2 (&gt;24-48h): se piora, sugere SARA secundária, sobrecarga hídrica ou complicação infecciosa</li>
+</ul>
+
+<h4>Evidências científicas atuais:</h4>
+<ul class="small">
+<li><b>Surviving Sepsis Campaign 2021 (Atualização):</b> Ressuscitação guiada por metas nas primeiras 6h. Balanço hídrico restritivo após estabilização hemodinâmica reduz tempo de VM e melhora oxigenação sem impacto em mortalidade<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Evans Crit Care Med 2021; FACTT NEJM 2006; CLASSIC trial NEJM 2022</span></li>
+
+<li><b>Sedação leve e despertar diário:</b> Interrupção diária de sedação associada a redução de 3.8 dias de VM (Girard 2008). Sedação profunda prolongada aumenta risco de delirium (OR 2.3) e fraqueza adquirida na UTI. Protocolo PAD Bundle (Pain-Agitation-Delirium) recomendado<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Girard Lancet 2008; SCCM Guidelines 2018; Shehabi SPICE III JAMA 2019; Devlin PADIS Guidelines 2018</span></li>
+
+<li><b>Manejo de acidose metabólica:</b> Drive ventilatório elevado é compensação fisiológica apropriada. Bicarbonatoterapia não demonstrou benefício em pH &gt;7.15 (BICAR-ICU 2018). Permitir hipercapnia moderada (PaCO₂ 50-60) se pH &gt;7.20-7.25 descrito como aceitável<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Jaber BICAR-ICU JAMA 2018; Jung Chest 2019</span></li>
+
+<li><b>Disfunção diafragmática induzida por VM (VIDD):</b> Inatividade completa &gt;18-24h inicia atrofia (redução 6% espessura/dia). Associada a desmame prolongado e maior mortalidade 90d. NAVA e PAV+ podem preservar atividade diafragmática<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Levine NEJM 2008; Goligher NEJM 2015; Dres AJRCCM 2017; Schepens Crit Care 2019</span></li>
+
+<li><b>Ventilação protetora mesmo sem SARA:</b> Meta-análise 2020 sugere VT baixo (6-8 mL/kg) em pacientes sem SARA reduz incidência de SARA e mortalidade hospitalar (OR 0.66)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Simonis JAMA 2018; Neto meta-análise Lancet Respir Med 2020</span></li>
+</ul>
+`,
+dpoc:`<h3>DPOC exacerbado</h3>
+
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Expiração prolongada:</b> Constante de tempo (τ = R × C) frequentemente &gt;0.8-1.2s. Necessita 3-5 constantes (2.4-6s) para esvaziamento 95%. FR alta impede esvaziamento completo</li>
+<li><b>Auto-PEEP (PEEPi):</b> Medidas de 8-15 cmH₂O comuns em exacerbações graves. PEEPi &gt;50% da PEEP total associa-se a maior trabalho respiratório e falência de desmame. Esforços inefetivos &gt;10% dos ciclos predizem falha de VNI</li>
+<li><b>Hiperinsuflação dinâmica:</b> EELV (volume expiratório final) pode exceder 120-150% do previsto. Capacidade inspiratória &lt;25% CVF prediz fadiga iminente</li>
+<li><b>Resistência aumentada:</b> Ppico-Pplatô tipicamente 15-25 cmH₂O. Resistência inspiratória (Rinsp) pode alcançar 20-30 cmH₂O/L/s em broncoespasmo grave</li>
+</ul>
+
+<h4>Evidências científicas atuais:</h4>
+<ul class="small">
+<li><b>VNI como primeira linha (Grau A):</b> Meta-análise Cochrane 2023 (41 RCTs, n=2483) demonstra NNT=10 para prevenir IOT, NNT=20 para prevenir morte. BiPAP superior a CPAP. Falha de VNI em 15-30% (preditores: pH &lt;7.25, APACHE &gt;29, FR &gt;35)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Osadnik Cochrane 2023; Rochwerg BMJ Clinical Guidelines 2021; Scala ERJ 2022</span></li>
+
+<li><b>PEEPe (PEEP extrínseca) otimizada:</b> Titulação a 80-85% da PEEPi medida reduz trabalho de disparo sem aumentar hiperinsuflação. Estudo fisiológico demonstrou redução de 40% no trabalho respiratório. <b>Atenção:</b> PEEPe excessiva (&gt;PEEPi) piora hiperinsuflação<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Marini Respir Care 2012; Tobin AJRCCM 2001; Nava Chest 1997</span></li>
+
+<li><b>Estratégia ventilatória protetora:</b> VT 6-8 mL/kg, FR 10-15/min para maximizar Texp. Hipercapnia permissiva (pH &gt;7.25) geralmente bem tolerada. Estudo de coorte 2021 mostrou que Pplatô &gt;30 associa-se a maior mortalidade mesmo em DPOC<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Acute Respiratory Failure in COPD group ICM 2021; Diaz ERJ 2005</span></li>
+
+<li><b>Desmame e extubação:</b> Protocolos de desmame reduzem tempo de VM em 25%. Extubação para VNI reduz reintubação de 25% para 15% (NNT=10) especialmente se PaCO₂ &gt;45 ou bicarbonato &gt;30<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Blackwood Cochrane 2014; Burns AJRCCM 2013; Girault AJRCCM 2011; Rochwerg JAMA 2017</span></li>
+
+<li><b>Broncodilatação agressiva:</b> Salbutamol nebulizado 2.5-5mg 4/4h + ipratrópio 500mcg 6/6h. Resposta pode levar 48-72h. Corticóide sistêmico (metilprednisolona 40mg) por 5 dias reduz falha de tratamento (NNT=10)<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Walters Cochrane 2018; Leuppi JAMA 2013</span></li>
+</ul>
+`,
+rest:`<h3>Doença restritiva (Fibrose, Obesidade grave)</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Baixa complacência:</b> Alça P×V verticalizada; Cstat descrita &lt;30-40 mL/cmH₂O (obesidade) ou &lt;20 (fibrose)</li>
+<li><b>Volumes:</b> VT frequentemente &lt;6 mL/kg PBW mesmo com pressões elevadas</li>
+<li><b>Driving Pressure:</b> Valores &gt;15 cmH₂O típicos neste contexto</li>
+<li><b>FR compensatória:</b> Drive aumentado observado para manter ventilação-minuto adequada</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Obesidade:</b> Diretrizes recomendam cálculo de VT por peso predito (PBW), não peso real</li>
+<li><b>Fibrose pulmonar:</b> Literatura descreve tolerância a hipercapnia permissiva (pH &gt;7.25) em contexto de hipoxemia refratária</li>
+<li><b>Mecânica de parede:</b> Pressão esofágica (Pes) pode auxiliar na distinção entre rigidez pulmonar vs torácica</li>
+<li><b>Desmame:</b> Observações clínicas descrevem desmame prolongado; IMT descrito como potencialmente benéfico</li>
+</ul>`,
+cardiaca:`<h3>Edema cardiogênico</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Complacência:</b> Variação rápida possível; melhora em 6-12h com diurese pode diferenciar de SARA</li>
+<li><b>Autociclagem:</b> Batimentos cardíacos podem gerar auto-disparos; oscilações rítmicas em P×T</li>
+<li><b>Esforços:</b> Dispneia e ortopneia associadas a drive instável, duplos disparos</li>
+<li><b>Resposta à PEEP:</b> Melhora acentuada de oxigenação com PEEP 10-12 cmH₂O descrita em edema hidrostático</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>VNI (3CPO, Gray):</b> RCTs mostraram CPAP/BiPAP associado a redução de IOT (NNT ~13) e mortalidade vs O₂ convencional</li>
+<li><b>PEEP e pós-carga:</b> Fisiologia descreve PEEP reduzindo pós-carga VE (pressão transmural), benefício em disfunção sistólica</li>
+<li><b>Diferencial SARA:</b> Uso de biomarcadores (BNP/NT-proBNP) e ecocardiografia; sobreposição ~30% descrita</li>
+<li><b>Desmame:</b> TRE pode desencadear edema flash por aumento de retorno venoso e pós-carga</li>
+</ul>`,
+obeso:`<h3>Obesidade / Síndrome hipoventilação-obesidade</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Complacência de parede:</b> Pplatô elevado, mas Pes pode revelar pressão transpulmonar (Ptp) dentro da normalidade</li>
+<li><b>Atelectasia:</b> Baixa complacência em decúbito dorsal; descrita melhora com PEEP adequada ou pronação</li>
+<li><b>Auto-PEEP:</b> Compressão abdominal sobre diafragma; PEEPi &gt;3-5 cmH₂O observada</li>
+<li><b>Dessaturação:</b> CRF reduzida associada a hipoxemia rápida em apneia/desconexão</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>PEEP:</b> Literatura descreve necessidade de PEEP 10-15 cmH₂O para reverter atelectasia; monitorização hemodinâmica importante</li>
+<li><b>Posição:</b> Reverse Trendelenburg 25-30° descrito como melhora de mecânica respiratória</li>
+<li><b>Extubação:</b> Estudos sugerem VNI profilática pós-extubação pode reduzir reintubação (evidência moderada)</li>
+<li><b>Desmame:</b> Alta demanda metabólica observada; IMT descrito como potencial acelerador</li>
+</ul>`,
+neuro:`<h3>Doença neuromuscular (Guillain-Barré, Miastenia, ELA)</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Esforço:</b> Deflexões P×T superficiais (&lt;2-3 cmH₂O), disparos atrasados ou ausentes</li>
+<li><b>Variabilidade:</b> Ventilação passiva predominante, volumes monótonos em modo controlado</li>
+<li><b>Ciclagem (PSV):</b> Fraqueza muscular dificulta ciclagem por fluxo, resultando em ciclagem tardia</li>
+<li><b>Complacência:</b> Alça P×V preservada inicialmente até instalação de fadiga/atelectasia</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Critérios IOT:</b> Literatura descreve CVF &lt;20 mL/kg, PImáx &lt;-30 cmH₂O, PaCO₂ &gt;50 progressiva</li>
+<li><b>Modo ventilatório:</b> Conceito de manter atividade mínima para prevenir atrofia diafragmática</li>
+<li><b>Desmame:</b> Critérios clássicos (PImáx &gt;-30, RSBI &lt;105) aplicam-se; progressão gradual descrita como essencial</li>
+<li><b>Traqueostomia:</b> Consideração em Guillain-Barré com VM prevista &gt;7 dias; facilita desmame e comunicação</li>
+</ul>`,
+neurocrit:`<h3>Paciente neurocrítico (TCE, AVE, HSA)</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Drive:</b> Variabilidade extrema FR/VT (padrões Cheyne-Stokes em HSA, respiração atáxica em lesões de tronco)</li>
+<li><b>Auto-disparo:</b> Pode ser cardiogênico (taquicardia) ou por oscilação de PIC</li>
+<li><b>Reverse triggering:</b> Descrito como comum em sedação profunda + VM controlada</li>
+<li><b>Padrões neurogênicos:</b> Respiração central, atáxica podem ser identificados em F×T</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>PaCO₂:</b> Diretrizes sugerem alvo 35-40 mmHg; hiperventilação reservada para herniação iminente (hipocapnia prolongada associada a pior outcome)</li>
+<li><b>Sincronia e PIC:</b> Assincronias (tosse, duplo disparo) descritas como aumentando PIC transitoriamente</li>
+<li><b>PEEP:</b> PEEP 5-10 geralmente descrita como segura; PEEP &gt;15 pode elevar PIC se complacência cerebral baixa</li>
+<li><b>Desmame:</b> Despertar controlado; extubação descrita quando Glasgow ≥8-10 e reflexos preservados</li>
+</ul>`,
+trauma:`<h3>Trauma torácico (contusão, fraturas costais)</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Dor/restrição:</b> Esforços superficiais, VT baixos, tosse ineficaz (artefatos em curvas)</li>
+<li><b>Contusão:</b> Complacência reduzida focal; assimetria (se unilateral) pode não ser detectada em curvas globais</li>
+<li><b>Pneumotórax:</b> Mudança abrupta de pressões/volumes pode sugerir complicação</li>
+<li><b>Variabilidade:</b> Ciclos irregulares conforme efetividade da analgesia</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Analgesia multimodal:</b> Estudos mostram bloqueio regional (peridural, paravertebral) associado a menor necessidade de VM vs opioides sistêmicos isolados</li>
+<li><b>VNI:</b> Pode evitar IOT em trauma leve-moderado se FR &lt;35, SpO₂ &gt;90%; contraindicada se instabilidade hemodinâmica</li>
+<li><b>Ventilação protetora:</b> Mesmo sem SARA estabelecida, VT 6-8 mL/kg e PEEP moderada descritos como reduzindo progressão para lesão</li>
+<li><b>Desmame:</b> Controle álgico descrito como preditor crítico de sucesso</li>
+</ul>`,
+tb:`<h3>Tuberculose pulmonar grave</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Heterogeneidade:</b> Cavitações, consolidações, fibrose resultam em complacência regional muito variável</li>
+<li><b>Secreção:</b> Serrilhado intenso em F×T, oscilações por muco móvel</li>
+<li><b>Resistência:</b> Obstrução brônquica por secreção/granulomas; Ppico - Pplatô elevado</li>
+<li><b>Complicações:</b> Pneumotórax/pneumomediastino por ruptura de cavernas causa mudanças abruptas</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>TB-IRIS:</b> Síndrome descrita com piora paradoxal 2-8 semanas pós-início tratamento; novo infiltrado ou derrame</li>
+<li><b>Isolamento:</b> Protocolos recomendam filtro HEPA no circuito expiratório; VM em quarto pressão negativa</li>
+<li><b>Corticoide (CROI):</b> Dexametasona em TB-meningite mostrou redução de mortalidade; evidência fraca em TB-SARA refratária</li>
+<li><b>Desmame:</b> Secreção crônica, cavitações; traqueostomia frequentemente necessária; higiene brônquica intensiva</li>
+</ul>`,
+pneumo:`<h3>Pneumotórax</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Ppico:</b> Aumento súbito sem mudança de Pplatô (se hipertensivo) ou elevação de ambos</li>
+<li><b>Volume:</b> Queda abrupta de VT entregue, alarme de volume-minuto baixo</li>
+<li><b>Auto-PEEP:</b> Pode surgir ou piorar se pneumotórax gera efeito valvular</li>
+<li><b>Alça P×V:</b> Deslocamento para direita/cima (mais pressão, menos volume)</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Limitação das curvas:</b> Imagem (RX/US/TC) permanece gold standard diagnóstico; curvas apenas levantam suspeita</li>
+<li><b>Pneumotórax hipertensivo:</b> Emergência identificada por instabilidade hemodinâmica + dessaturação + Ppico elevado; drenagem antes de imagem</li>
+<li><b>VM pós-drenagem:</b> Literatura descreve redução temporária de PEEP/Ppico; fístula broncopleural pode persistir</li>
+<li><b>Barotrauma em SARA:</b> Incidência 10-15% descrita; Driving Pressure &gt;15 identificado como fator de risco</li>
+</ul>`,
+desmame:`<h3>Desmame ventilatório / TRE</h3>
+
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Fadiga:</b> Progressão de FR↑ e VT↓ ao longo do TRE; padrão rápido e superficial (RSBI &gt;105)</li>
+<li><b>Assincronias:</b> Esforços inefetivos, atrasos de disparo, duplos disparos podem emergir com fadiga</li>
+<li><b>Hipoventilação:</b> Dessaturação ou elevação de PaCO₂ indicam ventilação-minuto insuficiente</li>
+<li><b>Padrão paradoxal:</b> Respiração toracoabdominal descoordenada (correlaciona-se com irregularidade de curvas)</li>
+</ul>
+
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>Protocolos de TRE diário:</b> Implementação de protocolos associada a menor duração de VM<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Ely (NEJM 1996), Girard (Lancet 2008), Blackwood Cochrane (2014)</span></li>
+
+<li><b>Índice de respiração rápida e superficial (RSBI):</b> FR/VT &lt;105 respirações/min/L preditor de sucesso<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Yang RSBI metanálise (Crit Care 2009)</span></li>
+
+<li><b>VNI pós-extubação:</b> Uso profilático em alto risco associado a redução de reintubação<br>
+<span style="font-size:0.8em;color:var(--muted)">Ref: Thille (JAMA 2013), Hernández (AJRCCM 2016)</span></li>
+</ul>
+`,
+imt:`<h3>IMT / Treinamento muscular inspiratório na VM</h3>
+<h4>Achados frequentemente observados:</h4>
+<ul class="small">
+<li><b>Consistência:</b> Deflexões P×T regulares (Pmus alvo descrito 30-40% PImáx); irregularidade crescente sugere fadiga</li>
+<li><b>VT:</b> Manutenção durante sessões indica tolerância; queda progressiva sugere fadiga</li>
+<li><b>Trigger:</b> Disparos sem atraso; demora crescente pode sugerir fraqueza ou ajuste inadequado</li>
+<li><b>Padrão:</b> FR controlada (8-12/min durante treino); taquipneia indica intolerância</li>
+</ul>
+<h4>Conceitos da literatura:</h4>
+<ul class="small">
+<li><b>IMT em desmame difícil (Martin et al):</b> RCT mostrou carga 30-40% PImáx, 5 sessões/semana associada a melhora de PImáx e taxa de desmame</li>
+<li><b>VIDD:</b> Modelos experimentais sugerem inatividade total &gt;18h inicia atrofia; VM controlada prolongada identificada como risco</li>
+<li><b>NAVA:</b> Assistência proporcional descrita como mantendo atividade diafragmática; potencial prevenção de VIDD (evidência emergente)</li>
+<li><b>Monitorização:</b> Pmus (via Pes) descrito como ideal; se indisponível, observar consistência em curvas P×T, ausência de taquipneia</li>
+</ul>`
+};
+$("caseSel").onchange=()=>{const v=$("caseSel").value;$("caseArea").innerHTML=CASES[v]||'<div class="txt">Selecione um caso.</div>'};
+const ASSIN_INTERP={
+trig_delay:"<b>Atraso de disparo:</b> Esforço inspiratório precisa vencer limiar de sensibilidade. Causas descritas: sensibilidade inadequada, auto-PEEP não compensada, vazamento. Otimização de sensibilidade e titulação de PEEPe descritas na literatura (Thille AJRCCM 2006; Marini Respir Care 2012).",
+double_trig:"<b>Duplo disparo:</b> Tempo neural inspiratório excede tempo mecânico. Consequência: VT total elevado. Prolongamento de Timec ou uso de modos proporcionais descritos (Pohlman Crit Care Med 2008; Kondili ICM 2003).",
+auto_trig:"<b>Auto-disparo:</b> Disparo sem esforço do paciente. Causas: sensibilidade excessiva, oscilação cardiogênica, condensado, vazamento. Consequência: hiperventilação, alcalose respiratória. Literatura descreve: ajuste de sensibilidade descrito, manejo de condensado e vazamentos descrito na literatura.",
+reverse_trig:"<b>Reverse triggering:</b> Insuflação mecânica desencadeia esforço neural subsequente. Comum em sedação profunda. Pode gerar empilhamento (se esforço mantém válvula aberta) ou ser benigno se esforço fraco. Literatura descreve: manejo de sedação, transição para modo assistido descritos quando possível, monitorização de pressão transpulmonar.",
+concave:"<b>Flow starvation:</b> Demanda de fluxo excede oferta. Otimização de fluxo, PS e rise time descritos na literatura (Sassoon Chest 2005; MacIntyre Respir Care 2011).",
+early_cycle:"<b>Ciclagem precoce:</b> Ventilador encerra inspiração com esforço persistente. Causas: % ciclagem elevado (PSV), TI curto (VCV), vazamento. Pode levar a duplo disparo. Literatura descreve: ajuste de ciclagem e tempo inspiratório descritos, correção de vazamentos.",
+late_cycle:"<b>Ciclagem tardia:</b> Inspiração mantida após relaxamento. Causas: % ciclagem baixo, vazamento (impede queda de fluxo), TI prolongado. Consequência: insuflação excessiva, desconforto. Literatura descreve: ajuste de ciclagem, manejo de vazamentos descritos, redução de TI.",
+notch:"<b>Entalhes inspiratórios:</b> Irregularidades durante inspiração. Causas: esforços adicionais, tosse, oscilações cardíacas, secreção móvel. Geralmente representa artefato ou sinal de desconforto. Abordagem: manejo de secreções e ajuste ventilatório descritos/sedação se esforços repetidos.",
+exp_incomplete:"<b>Expiração incompleta:</b> Tempo expiratório insuficiente. Prolongamento de Texp e broncodilatação descritos (Leatherman AJRCCM 1996; Tuxen Chest 1987).",
+ineff:"<b>Esforço inefetivo:</b> Esforço não resulta em disparo. Compensação de auto-PEEP com PEEPe descrita (Petrof AJRCCM 1990; Ranieri AJRCCM 1993).",
+stack:"<b>Empilhamento volumétrico:</b> Volume não retorna a baseline entre ciclos. Causas: expiração incompleta, duplo disparo. Consequência: hiperinsuflação dinâmica, auto-PEEP, risco de barotrauma. Abordagem: manejo de tempo expiratório e assincronias descrito.",
+vt_var:"<b>Variabilidade de VT:</b> Drive instável ou mecânica heterogênea. Causas: dor, ansiedade, acidose variável, SARA. Pode indicar desconforto ou instabilidade clínica. Abordagem: abordagem etiológica do drive respiratório instável, otimização de sedação/analgesia.",
+leak:"<b>Discrepância Vinsp/Vexp:</b> Vazamento ou erro de medição. Causas: circuito, cuff, fístula broncopleural. Consequência: volume entregue incerto. Abordagem: verificação de integridade do sistema descrita, imagem se suspeita de fístula.",
+noise:"<b>Ruído/serrilhado:</b> Secreção brônquica, condensado, tosse, artefato. Dificulta leitura de curvas. Abordagem: manejo de via aérea artificial descrito, verificação de sensores.",
+beak:"<b>Bico de pato (UIP):</b> Achatamento súbito no ramo superior da alça P×V. Indica sobredistensão ou redução abrupta de complacência. Sinal de risco de baro/volutrauma. Literatura descreve: ajuste de volume corrente descrito, consideração de redução de PEEP se recrutamento saturado.",
+hyst:"<b>Histerese ampla:</b> Área grande entre ramos inspiratório/expiratório. Representa energia dissipada (resistência, abertura/fechamento cíclico). Causas: resistência elevada, atelectrauma. Literatura descreve: estratégias de recrutamento e broncodilatação descritas.",
+open_loop:"<b>Alça aberta:</b> Pontos inicial/final separados. Indica vazamento ou erro de medição. Dificulta cálculo de complacência. Abordagem: verificação de sistema e calibração descritos.",
+p_overshoot:"<b>Pressure overshoot (PSV):</b> Pico ultrapassa alvo no início da inspiração, depois estabiliza. Ocorre quando fluxo inicial muito alto para complacência/resistência. Literatura descreve: redução de rise time (rampa mais suave), redução de PS se overshoot grande.",
+p_undershoot:"<b>Pressure undershoot (PSV):</b> Pressão não atinge alvo de PS. Causas: vazamento significativo, esforço muito fraco, PS programado incompatível com mecânica. Abordagem: corrigir vazamentos, verificar ajustes.",
+p_plateau_absent:"<b>Ausência de platô (VCV):</b> Em ventilação controlada por volume, ausência de platô sugere esforço ativo contínuo ou vazamento. Platô é essencial para cálculo de complacência estática.",
+p_oscillations:"<b>Oscilações cardíacas:</b> Ondas rítmicas refletem batimentos cardíacos. Mais evidentes em pacientes hipovolêmicos ou com contrações vigorosas. Geralmente benignas, podem auxiliar em avaliação hemodinâmica.",
+p_negative_exp:"<b>Pressão negativa expiratória:</b> Esforço expiratório ativo ou válvula expiratória gerando pressão negativa. Pode indicar esforço expiratório ativo em pacientes com drive elevado.",
+exp_prolonged:"<b>Expiração prolongada:</b> Constante de tempo elevada, típica de resistência aumentada (DPOC, broncoespasmo). Risco de auto-PEEP. Abordagem: broncodilatação, aumento de tempo expiratório.",
+exp_biphasic:"<b>Expiração bifásica:</b> Duas fases distintas na expiração podem refletir heterogeneidade regional de resistência ou complacência. Descrito em DPOC com áreas de aprisionamento.",
+active_exp:"<b>Expiração ativa:</b> Elevação do fluxo expiratório sugere contração ativa de musculatura expiratória. Descrito em drive elevado, dor, ou pacientes com DPOC.",
+double_peak_insp:"<b>Duplo pico inspiratório:</b> Padrão M-shape pode indicar esforços adicionais durante inspiração, glote parcialmente fechada, ou artefato. Correlação clínica.",
+flow_reversal:"<b>Reversão de fluxo inspiratório:</b> Fluxo brevemente negativo durante inspiração. Pode indicar glote fechada, tosse, ou dessincronia complexa. Raramente observado.",
+insp_plateau:"<b>Platô inspiratório (fluxo):</b> Fluxo constante típico de VCV. Em PSV, sugere que demanda foi satisfeita e paciente relaxou antes da ciclagem.",
+v_slope_slow:"<b>Rampa volumétrica lenta:</b> Volume sobe devagar. Pode refletir fluxo baixo programado, resistência elevada, ou complacência muito alta.",
+v_plateau:"<b>Platô volumétrico:</b> Volume para de aumentar antes do fim da inspiração. Pode indicar vazamento, limitação de volume atingida, ou desconexão parcial.",
+v_scooped:"<b>Curva volumétrica escavada:</b> Concavidade na rampa inspiratória similar ao padrão de flow starvation. Reflette aumento progressivo de demanda não atendida.",
+lower_inflection:"<b>Ponto de inflexão inferior (LIP):</b> 'Joelho' no ramo inspiratório inferior representa recrutamento alveolar progressivo. PEEP acima do LIP teoricamente previne desrecrutamento (conceito clássico, menos utilizado atualmente).",
+pv_steep:"<b>Alça P×V verticalizada:</b> Baixa complacência. Pequena variação de volume para grande variação de pressão. Típico de SARA, fibrose, obesidade.",
+pv_flat:"<b>Alça P×V horizontal:</b> Alta complacência. Grande variação de volume para pequena variação de pressão. Típico de enfisema ou pulmão normal.",
+pv_sigmoid:"<b>Alça sigmóide:</b> Formato em S com inflexões inferior e superior. Descrito como padrão 'clássico' de recrutamento seguido de sobredistensão.",
+fv_exp_scoop:"<b>Escavação expiratória (alça F×V):</b> Concavidade no ramo expiratório é achado característico de obstrução de vias aéreas (DPOC, asma). Limitação ao fluxo expiratório.",
+fv_insp_scoop:"<b>Escavação inspiratória (alça F×V):</b> Concavidade inspiratória sugere flow starvation ou obstrução inspiratória (menos comum).",
+fv_asymmetric:"<b>Assimetria F×V:</b> Ramos inspiratório e expiratório com formas diferentes. Pode refletir diferença entre resistência inspiratória e expiratória.",
+fv_shift:"<b>Deslocamento lateral (F×V):</b> Alça não centralizada em zero de volume. Pode indicar vazamento ou medição inadequada de volume basal.",
+fv_open:"<b>Alça F×V aberta:</b> Extremidades não se encontram. Indica vazamento ou discrepância de volumes inspirado/expirado."
+};
+$("btnAssinRun").onclick=()=>{const s=$$(".assin:checked").map(c=>c.value);if(!s.length){$("assinOut").textContent="Nenhum achado selecionado.";return}$("assinOut").innerHTML="<b>Interpretação dos achados:</b><br><br>"+s.map(a=>ASSIN_INTERP[a]||a).join("<br><br>")};
+$("btnAssinClear").onclick=()=>{$$(".assin").forEach(c=>c.checked=false);$("assinOut").textContent="Selecione os achados visuais e clique em 'Interpretar achados'."};
+const MEC_INTERP={
+ppeak_high:"<b>Ppico elevado:</b> Pode refletir resistência aumentada ou complacência reduzida. Avaliação de Pplatô auxilia diferenciação. Se Pplatô normal → resistência predomina (broncoespasmo, secreção, TOT pequeno).",
+pplat_high:"<b>Pplatô elevado:</b> Baixa complacência (SARA, fibrose, obesidade). Associado a risco de barotrauma. Literatura descreve alvo &lt;30 cmH₂O (ARDSNet NEJM 2000; Amato NEJM 1998).",
+dp_high:"<b>Driving Pressure elevada:</b> Marcador prognóstico em SARA. Literatura sugere alvo &lt;15 cmH₂O (Amato NEJM 2015; Costa ICM 2021).",
+flatten:"<b>Achatamento terminal:</b> Sugere redução progressiva de complacência ou sobredistensão. Pode indicar recrutamento insuficiente ou VT/PEEP excessivos.",
+exp_slow:"<b>Expiração lenta:</b> Resistência elevada ou constante de tempo aumentada (DPOC). Risco de auto-PEEP. Abordagem: broncodilatação, aumento de Texp.",
+flow_notzero:"<b>Fluxo expiratório não-zerado:</b> Auto-PEEP, hiperinsuflação dinâmica. Literatura descreve: aumento de Texp, broncodilatação, titulação de PEEPe.",
+resist:"<b>Resistência aumentada:</b> Diferença Ppico-Pplatô &gt;10 cmH₂O. Causas: broncoespasmo, secreção, TOT estreito. Abordagem: broncodilatação, higiene brônquica, consideração de TOT de maior calibre.",
+vt_low:"<b>VT baixo:</b> Pode ser apropriado (ventilação protetora) ou insuficiente. Avaliação de ventilação-minuto e PaCO₂ orienta interpretação. Ajuste individualizado alvo terapêutico.",
+pv_steep:"<b>Alça P×V verticalizada:</b> Baixa complacência (SARA, fibrose, obesidade). Pequeno volume para grande variação de pressão. Princípios de ventilação protetora frequentemente aplicados.",
+pv_flat:"<b>Alça P×V horizontal:</b> Alta complacência (enfisema, pulmão normal). Grande volume com pequena variação de pressão. Atenção para risco de hiperinsuflação.",
+lowerinfl:"<b>Ponto de inflexão inferior:</b> 'Joelho' representa recrutamento alveolar (conceito clássico). PEEP acima deste ponto teoricamente previne desrecrutamento. Uso clínico diminuiu com evidências mais recentes.",
+upperinfl:"<b>Ponto de inflexão superior:</b> 'Bico' indica sobredistensão. Ventilação acima deste ponto pode aumentar risco. Literatura descreve: redução de VT, consideração de redução de PEEP.",
+ppico_low:"<b>Ppico baixo:</b> Pode refletir vazamento significativo, esforço muito fraco (em modos assistidos), ou VT muito baixo. Verificação de circuito e ajustes.",
+p_rise_slow:"<b>Subida lenta de pressão:</b> Rise time prolongado (PSV), fluxo baixo (VCV), ou complacência muito alta. Pode resultar em sensação de flow starvation se rise time inadequado.",
+p_rise_fast:"<b>Subida rápida de pressão:</b> Rise time muito curto (PSV) ou fluxo muito alto (VCV). Pode causar desconforto ou pressure overshoot.",
+p_saw:"<b>Padrão dente de serra:</b> Oscilações regulares podem refletir oscilações cardíacas, ventilação de alta frequência sobreposta, ou artefato eletrônico.",
+flow_peak_low:"<b>Pico de fluxo baixo:</b> Fluxo máximo reduzido. Pode ser apropriado (ajuste intencional) ou refletir limitação (obstrução, fraqueza).",
+flow_asym:"<b>Assimetria de fluxo:</b> Fluxo inspiratório e expiratório muito diferentes em morfologia. Pode refletir diferença de resistência ou modo ventilatório específico.",
+exp_concave:"<b>Expiração côncava:</b> Curva expiratória com concavidade sugere limitação progressiva ao fluxo expiratório (DPOC, broncoespasmo).",
+tau_high:"<b>Constante de tempo elevada:</b> τ = Resistência × Complacência. Valores &gt;1s indicam esvaziamento prolongado. Tempo expiratório adequado descrito como essencial (Marini Chest 1989; Tobin AJRCCM 2001).",
+vt_high:"<b>VT elevado:</b> Volume corrente acima de alvos protetivos (geralmente &gt;8 mL/kg PBW). Associado a risco de VILI em pacientes susceptíveis.",
+mv_low:"<b>Volume-minuto baixo:</b> Ventilação total insuficiente. Pode resultar em hipercapnia. Causas: FR baixa, VT baixo, ou ambos.",
+mv_high:"<b>Volume-minuto alto:</b> Ventilação total excessiva. Pode resultar em hipocapnia, alcalose respiratória. Causas: FR alta, VT alto, ou ambos.",
+pv_concave_insp:"<b>Ramo inspiratório côncavo (P×V):</b> Complacência progressivamente reduzida durante inspiração. Sugere sobredistensão progressiva ou heterogeneidade.",
+pv_convex_insp:"<b>Ramo inspiratório convexo (P×V):</b> Complacência progressivamente aumentada durante inspiração. Sugere recrutamento progressivo.",
+pv_shift:"<b>Alça P×V deslocada:</b> Alça não inicia em zero de pressão. Deslocamento para direita sugere auto-PEEP não compensada.",
+compliance_calc:"<b>Complacência muito baixa:</b> Cst = ΔV/ΔP &lt;20 mL/cmH₂O. Rigidez pulmonar severa (SARA grave, fibrose avançada). Ventilação protetora crítica.",
+compliance_high:"<b>Complacência muito alta:</b> Cst &gt;80 mL/cmH₂O. Típico de enfisema ou pulmão hiperinsuflado. Atenção para hiperinsuflação adicional.",
+peep_high:"<b>PEEP total elevada:</b> PEEP efetiva (programada + auto-PEEP) muito alta. Risco de hiperinsuflação, comprometimento hemodinâmico.",
+fr_high:"<b>Taquipneia:</b> FR &gt;30/min persistente pode indicar drive elevado, ansiedade, dor, acidose, ou ajuste inadequado de ventilador.",
+fr_low:"<b>Bradipneia:</b> FR &lt;8/min pode refletir sedação profunda, BNM, lesão neurológica, ou ajuste de backup insuficiente.",
+ti_long:"<b>Tempo inspiratório longo:</b> Ti &gt;1.5s pode comprometer tempo expiratório, causar auto-PEEP, ou refletir flow starvation não resolvida.",
+ie_inverted:"<b>Relação I:E invertida:</b> Ti ≥ Te. Estratégia utilizada em SARA grave para melhorar oxigenação, mas requer monitorização rigorosa de auto-PEEP e hemodinâmica.",
+alarm_ppeak:"<b>Alarme de Ppico:</b> Pressão de pico excedendo limite configurado. Investigação de causa (obstrução, broncoespasmo, piora de complacência, esforço, TOT obstruído).",
+alarm_vmin:"<b>Alarme de volume-minuto:</b> Ventilação abaixo do limiar mínimo. Causas: vazamento, apneia, esforços inefetivos, FR/VT insuficientes."
+};
+$("btnMecRun").onclick=()=>{const s=$$(".mec:checked").map(c=>c.value);if(!s.length){$("mecOut").textContent="Nenhum achado selecionado.";return}$("mecOut").innerHTML="<b>Interpretação dos achados:</b><br><br>"+s.map(a=>MEC_INTERP[a]||a).join("<br><br>")};
+$("btnMecClear").onclick=()=>{$$(".mec").forEach(c=>c.checked=false);$("mecOut").textContent="Selecione os achados visuais e clique em 'Interpretar achados'."};
+
+showTab("Casos");
+$("yearNow").textContent=new Date().getFullYear();
+</script>
 </body>
 </html>
