@@ -1052,14 +1052,16 @@ function showTab(t){["Casos","Assin","Mec","Sobre"].forEach(x=>{$("sec"+x).class
 ["tabCasos","tabAssin","tabMec","tabSobre"].forEach((id,i)=>$(id).onclick=()=>showTab(["Casos","Assin","Mec","Sobre"][i]));
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("btnEnter");
-  if (btn) {
-    btn.onclick = function () {
-      document.getElementById("splash").classList.add("hide");
-      showTab("Casos");
-      document.body.style.overflow = "";
-    };
-  }
+  if (!btn) return;
+
+  btn.onclick = function () {
+    const splash = document.getElementById("splash");
+    splash.style.display = "none";
+    showTab("Casos");
+    document.body.style.overflow = "";
+  };
 });
+
 
 
 
