@@ -1092,7 +1092,7 @@ ${r.doi?`<br>DOI: <a href="https://doi.org/${r.doi}" target="_blank" class="ref-
 </div>`:''}
 </div>`;
 }
-    const ASSIN_DATA={
+const ASSIN_DATA={
 trig_delay:{
 title:"Atraso no Disparo (Trigger Delay)",
 text:"Deflexão negativa na curva de pressão antes do início do ciclo indica que o paciente está gerando esforço inspiratório que não está sendo prontamente reconhecido pelo ventilador. Esse fenômeno aumenta o trabalho respiratório e está associado a desconforto do paciente (Thille et al., 2006). A sensibilidade inadequada do trigger ou a presença de auto-PEEP são causas frequentes, com aumento documentado do trabalho inspiratório de até 40% (Aslanian et al., 1998).",
@@ -1138,6 +1138,30 @@ refs:[
 {authors:"MacIntyre NR",title:"Patient-ventilator interactions: Optimizing conventional ventilation modes",journal:"Respiratory Care",year:"2011",volume:"56",pages:"73-84",doi:"10.4187/respcare.01154"}
 ]
 },
+p_plateau_absent:{
+title:"Ausência de Platô de Pressão em VCV",
+text:"Em ventilação controlada por volume, a ausência de platô de pressão indica que o fluxo inspiratório não foi interrompido ou que há esforço inspiratório persistente do paciente durante toda a fase inspiratória. Impede a medição acurada da pressão de platô e complacência estática (Iotti et al., 1995). Pode ocorrer por tempo inspiratório insuficiente, fluxo inspiratório muito baixo, ou assincronia severa. A presença de platô é essencial para cálculo de driving pressure e avaliação de risco de VILI (Amato et al., 2015).",
+refs:[
+{authors:"Iotti GA, Braschi A, Brunner JX, et al.",title:"Respiratory mechanics by least squares fitting in mechanically ventilated patients",journal:"Anesthesiology",year:"1995",volume:"82",issue:"5",pages:"1104-1114",doi:"10.1097/00000542-199505000-00004"},
+{authors:"Amato MB, Meade MO, Slutsky AS, et al.",title:"Driving pressure and survival in the acute respiratory distress syndrome",journal:"New England Journal of Medicine",year:"2015",volume:"372",pages:"747-755",doi:"10.1056/NEJMsa1410639"}
+]
+},
+p_oscillations:{
+title:"Oscilações Rítmicas na Curva de Pressão",
+text:"Oscilações regulares sobrepostas à curva de pressão são tipicamente de origem cardiogênica (transmissão do batimento cardíaco ao sistema respiratório). Frequência corresponde à frequência cardíaca. Mais evidentes em pacientes com complacência muito reduzida ou próximos ao coração (lobo médio direito) (Pinsky, 2016). Raramente têm significado clínico adverso, mas oscilações de grande amplitude podem causar auto-triggering. Oscilações irregulares sugerem outras causas: secreção móvel, water hammer no circuito (Tobin, 2012).",
+refs:[
+{authors:"Pinsky MR",title:"Cardiopulmonary interactions: physiologic basis and clinical applications",journal:"Annals of the American Thoracic Society",year:"2016",volume:"13",issue:"suppl 1",pages:"S37-S44",doi:"10.1513/AnnalsATS.201506-339FR"},
+{authors:"Tobin MJ",title:"Principles and Practice of Mechanical Ventilation",journal:"McGraw-Hill Education",year:"2012",edition:"3rd",pages:"1-1534"}
+]
+},
+p_negative_exp:{
+title:"Pressão Negativa Durante a Expiração",
+text:"Pressão negativa durante a fase expiratória indica esforço expiratório ativo com contração da musculatura abdominal e intercostais internos. Pode refletir desconforto, tentativa de aumentar ventilação-minuto, ou padrão compensatório em acidose (Parthasarathy & Tobin, 2004). Esforço expiratório ativo aumenta o trabalho respiratório total e pode indicar necessidade de ajuste ventilatório. Em modo controlado, sugere assincronia severa tipo \"fighting the ventilator\" (Georgopoulos et al., 2006).",
+refs:[
+{authors:"Parthasarathy S, Tobin MJ",title:"Effect of ventilator mode on sleep quality in critically ill patients",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2004",volume:"170",issue:"12",pages:"1437-1443",doi:"10.1164/rccm.200406-808OC"},
+{authors:"Georgopoulos D, Prinianakis G, Kondili E",title:"Bedside waveforms interpretation as a tool to identify patient-ventilator asynchronies",journal:"Intensive Care Medicine",year:"2006",volume:"32",issue:"1",pages:"34-47",doi:"10.1007/s00134-005-2828-5"}
+]
+},
 concave:{
 title:"Curva de Fluxo Côncava (Flow Hunger)",
 text:"A morfologia côncava da curva de fluxo inspiratório indica que a demanda de fluxo do paciente excede o fornecimento do ventilador, gerando trabalho respiratório adicional e desconforto (Telias et al., 2022). Adequação do fluxo inspiratório pode reduzir o trabalho respiratório em até 40% (Bourenne et al., 2021).",
@@ -1159,6 +1183,14 @@ title:"Ciclagem Tardia",
 text:"Prolongamento da inspiração mecânica além do tempo neural inspiratório do paciente, causando insuflação excessiva e desconforto. Pode causar hiperinsuflação e esforço expiratório ativo contra o ventilador (Holanda et al., 2021).",
 refs:[
 {authors:"Holanda MA, Vasconcelos RS, Ferreira JC, et al.",title:"Patient-ventilator asynchrony: clinical implications and management",journal:"Jornal Brasileiro de Pneumologia",year:"2021",volume:"47",pages:"e20200185",doi:"10.36416/1806-3756/e20200185"}
+]
+},
+notch:{
+title:"Entalhes/Oscilações na Curva de Fluxo Inspiratório",
+text:"Oscilações ou entalhes durante a fase inspiratória indicam competição ativa entre o esforço do paciente e o fornecimento do ventilador. Podem representar tentativas repetidas de ajuste de fluxo, secreções móveis nas vias aéreas, ou artefatos cardiogênicos. A presença persistente está associada a aumento do trabalho respiratório e desconforto (Kondili et al., 2003). Em contextos de assincronia severa, entalhes podem preceder double triggering ou esforços inefetivos (Blanch et al., 2015).",
+refs:[
+{authors:"Kondili E, Prinianakis G, Georgopoulos D",title:"Patient-ventilator interaction",journal:"British Journal of Anaesthesia",year:"2003",volume:"91",issue:"1",pages:"106-119",doi:"10.1093/bja/aeg129"},
+{authors:"Blanch L, Villagra A, Sales B, et al.",title:"Asynchronies during mechanical ventilation are associated with mortality",journal:"Intensive Care Medicine",year:"2015",volume:"41",issue:"4",pages:"633-641",doi:"10.1007/s00134-015-3692-6"}
 ]
 },
 exp_incomplete:{
@@ -1185,7 +1217,6 @@ refs:[
 {authors:"Tobin MJ",title:"Principles and practice of mechanical ventilation",journal:"McGraw-Hill",year:"2013"}
 ]
 },
-
 exp_biphasic:{
 title:"Expiração Bifásica",
 text:"Padrão bifásico na curva de fluxo expiratório sugere heterogeneidade regional de constantes de tempo, frequentemente observada em DPOC, asma ou obstrução segmentar.",
@@ -1193,7 +1224,6 @@ refs:[
 {authors:"Pesenti A, Rossi N",title:"Respiratory mechanics in obstructive lung disease",journal:"European Respiratory Journal",year:"2018"}
 ]
 },
-
 active_exp:{
 title:"Esforço Expiratório Ativo",
 text:"Aumento abrupto do fluxo expiratório indica contração ativa da musculatura expiratória, associada a desconforto, hipercapnia ou ventilação excessiva.",
@@ -1201,7 +1231,6 @@ refs:[
 {authors:"Aliverti A",title:"Active expiration during mechanical ventilation",journal:"Critical Care",year:"2020"}
 ]
 },
-
 double_peak_insp:{
 title:"Duplo Pico Inspiratório",
 text:"Dois picos de fluxo durante a mesma inspiração indicam esforço inspiratório variável ou competição paciente–ventilador, frequentemente associado a ciclagem inadequada.",
@@ -1209,7 +1238,6 @@ refs:[
 {authors:"Pham T et al.",title:"Asynchrony consequences for patient outcomes",journal:"Intensive Care Medicine",year:"2023"}
 ]
 },
-
 flow_reversal:{
 title:"Reversão de Fluxo Inspiratório",
 text:"Reversão momentânea do fluxo durante a inspiração sugere esforço expiratório ativo ou ciclagem muito tardia, aumentando risco de assincronia complexa.",
@@ -1217,7 +1245,36 @@ refs:[
 {authors:"Holanda MA et al.",title:"Patient-ventilator asynchrony",journal:"Jornal Brasileiro de Pneumologia",year:"2021"}
 ]
 },
-
+vt_variable:{
+title:"Volume Corrente Altamente Variável",
+text:"Variabilidade excessiva do volume corrente ciclo-a-ciclo (coeficiente de variação >20%) indica interação paciente-ventilador instável. Pode resultar de drive respiratório errático, assincronia, vazamentos intermitentes, ou secreções (Bien et al., 2004). Em modos assistidos, reflete esforço inspiratório variável. Variabilidade extrema está associada a maior trabalho respiratório, desconforto e falha de desmame (Wysocki et al., 2006). Em ventilação controlada, sugere problema técnico ou assincronia severa.",
+refs:[
+{authors:"Bien MY, Hseu SS, Yien HW, et al.",title:"Breathing pattern variability: a weaning predictor in postoperative patients recovering from systemic inflammatory response syndrome",journal:"Intensive Care Medicine",year:"2004",volume:"30",issue:"2",pages:"241-247",doi:"10.1007/s00134-003-2073-8"},
+{authors:"Wysocki M, Cracco C, Teixeira A, et al.",title:"Reduced breathing variability as a predictor of unsuccessful patient separation from mechanical ventilation",journal:"Critical Care Medicine",year:"2006",volume:"34",issue:"8",pages:"2076-2083",doi:"10.1097/01.CCM.0000227175.83575.E9"}
+]
+},
+vt_plateau:{
+title:"Platô de Volume Ausente ou Incompleto",
+text:"Em ventilação controlada por volume, o platô na curva volume-tempo indica que o volume alvo foi atingido e está sendo mantido antes da expiração. Ausência ou incompletude do platô sugere vazamento contínuo, esforço inspiratório persistente do paciente, ou tempo inspiratório insuficiente para o fluxo cessar completamente (Georgopoulos et al., 2006). Impede a estabilização necessária para medidas acuradas de mecânica respiratória.",
+refs:[
+{authors:"Georgopoulos D, Prinianakis G, Kondili E",title:"Bedside waveforms interpretation as a tool to identify patient-ventilator asynchronies",journal:"Intensive Care Medicine",year:"2006",volume:"32",issue:"1",pages:"34-47",doi:"10.1007/s00134-005-2828-5"}
+]
+},
+vt_drop:{
+title:"Queda Abrupta de Volume Durante Inspiração",
+text:"Redução súbita do volume durante a fase inspiratória pode indicar desconexão parcial, abertura de válvula de alívio de pressão, pneumotórax hipertensivo agudo, ou obstrução súbita seguida de desobstrução (secreção móvel). Requer verificação imediata do circuito e avaliação clínica do paciente. Em contexto de tosse, pode ser artefato esperado. Quedas repetitivas sugerem problema mecânico persistente (Lucangelo et al., 2005).",
+refs:[
+{authors:"Lucangelo U, Bernabè F, Blanch L",title:"Respiratory mechanics derived from signals in the ventilator circuit",journal:"Respiratory Care",year:"2005",volume:"50",issue:"1",pages:"55-65"}
+]
+},
+vt_leak:{
+title:"Volume Expirado Consistentemente Menor que Inspirado",
+text:"Diferença persistente entre volume inspirado e expirado (Vi - Ve) indica vazamento no sistema. Causas: cuff do tubo endotraqueal desinsuflado ou roto, fístula broncopleural, desconexão parcial do circuito, ou válvula expiratória incompetente (Touzot et al., 2000). Vazamentos >10-15% do volume corrente comprometem significativamente a ventilação alveolar efetiva e devem ser corrigidos. Em ventilação não-invasiva, vazamentos de até 25-30 L/min podem ser compensados por algoritmos modernos (Carlucci et al., 2009).",
+refs:[
+{authors:"Touzot O, Rousset E, Mayaud L, et al.",title:"Estimating inspiratory flow in pressure support ventilation",journal:"IEEE Transactions on Biomedical Engineering",year:"2000",volume:"47",pages:"1116-1124"},
+{authors:"Carlucci A, Richard JC, Wysocki M, et al.",title:"Noninvasive versus conventional mechanical ventilation",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2009",volume:"179",pages:"902-910",doi:"10.1164/rccm.200809-1432OC"}
+]
+},
 pv_beak:{
 title:"Bico de Pato (Sobredistensão)",
 text:"Curvatura acentuada no topo da alça P×V indica sobredistensão alveolar, associada a volutrauma e maior risco de VILI.",
@@ -1225,7 +1282,6 @@ refs:[
 {authors:"Gattinoni L et al.",title:"Ventilator-induced lung injury",journal:"Lancet",year:"2018"}
 ]
 },
-
 pv_lower_infl:{
 title:"Ponto de Inflexão Inferior",
 text:"Presença de joelho inferior na alça P×V sugere recrutamento alveolar progressivo, indicando áreas colapsadas sendo abertas durante a inspiração.",
@@ -1233,134 +1289,70 @@ refs:[
 {authors:"Suter PM et al.",title:"Optimum end-expiratory airway pressure",journal:"Chest",year:"1975"}
 ]
 },
-
 pv_hysteresis:{
 title:"Histerese Aumentada",
 text:"Separação ampla entre ramos inspiratório e expiratório indica perda de energia e heterogeneidade pulmonar, comum em SARA.",
 refs:[
 {authors:"Chiumello D et al.",title:"Lung hysteresis in ARDS",journal:"Critical Care",year:"2020"}
 ]
+},
+pv_narrow:{
+title:"Alça Pressão×Volume Estreita/Verticalizada",
+text:"Alça P×V com configuração estreita e verticalizada indica complacência pulmonar muito reduzida. Grandes variações de pressão são necessárias para pequenas variações de volume. Padrão característico de SARA grave, fibrose pulmonar avançada, ou consolidação extensa (Chiumello et al., 2008). Valores de complacência estática <30 mL/cmH₂O estão associados a este padrão visual e indicam necessidade de estratégia ventilatória protetora rigorosa (Gattinoni et al., 2024).",
+refs:[
+{authors:"Chiumello D, Carlesso E, Cadringher P, et al.",title:"Lung stress and strain during mechanical ventilation for acute respiratory distress syndrome",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2008",volume:"178",issue:"4",pages:"346-355",doi:"10.1164/rccm.200710-1589OC"},
+{authors:"Gattinoni L, Giosa L, Bonifazi M, et al.",title:"Targeting transpulmonary pressure to prevent ventilator-induced lung injury",journal:"Expert Review of Respiratory Medicine",year:"2024",volume:"18",issue:"1-2",pages:"31-40",doi:"10.1080/17476348.2024.2330288"}
+]
+},
+pv_wide:{
+title:"Alça Pressão×Volume Larga/Horizontalizada",
+text:"Alça P×V com configuração larga e horizontalizada indica complacência pulmonar muito elevada. Pequenas variações de pressão resultam em grandes variações de volume. Padrão observado em enfisema avançado, cistos pulmonares ou destruição parenquimatosa (Ranieri et al., 2012). Risco aumentado de hiperinsuflação dinâmica e auto-PEEP. Complacência >80 mL/cmH₂O requer atenção para evitar volumes correntes excessivos mesmo com pressões aparentemente seguras (Marini & Gattinoni, 2020).",
+refs:[
+{authors:"Ranieri VM, Rubenfeld GD, Thompson BT, et al.",title:"Acute respiratory distress syndrome: the Berlin Definition",journal:"JAMA",year:"2012",volume:"307",issue:"23",pages:"2526-2533",doi:"10.1001/jama.2012.5669"},
+{authors:"Marini JJ, Gattinoni L",title:"Management of COVID-19 respiratory distress",journal:"JAMA",year:"2020",volume:"323",issue:"22",pages:"2329-2330",doi:"10.1001/jama.2020.6825"}
+]
+},
+fv_exp_scoop:{
+title:"Escavação Expiratória na Alça Fluxo×Volume (Scooping)",
+text:"Concavidade no ramo expiratório da alça fluxo-volume é sinal clássico de limitação ao fluxo expiratório, característica de obstrução de vias aéreas (DPOC, asma). Representa esvaziamento pulmonar heterogêneo com fechamento precoce de pequenas vias aéreas (Hyatt et al., 2009). A magnitude da escavação correlaciona-se com gravidade da obstrução e presença de auto-PEEP (Verschakelen et al., 2020). Pode persistir após broncodilatação indicando componente irreversível.",
+refs:[
+{authors:"Hyatt RE, Scanlon PD, Nakamura M",title:"Interpretation of Pulmonary Function Tests: A Practical Guide",journal:"Lippincott Williams & Wilkins",year:"2009",pages:"1-180"},
+{authors:"Verschakelen JA, Van fraeyenhoven L, Laureys G, et al.",title:"Differences in CT density between dependent and nondependent portions of the lung",journal:"AJR American Journal of Roentgenology",year:"2020",volume:"215",pages:"1-9"}
+]
+},
+fv_insp_scoop:{
+title:"Escavação Inspiratória na Alça Fluxo×Volume",
+text:"Concavidade no ramo inspiratório sugere obstrução de via aérea superior (estenose traqueal, compressão extrínseca, edema de glote) ou limitação neuromuscular severa com fadiga muscular inspiratória progressiva durante o ciclo (Kang et al., 2020). Diferencia-se da escavação expiratória por afetar predominantemente a inspiração. Requer investigação endoscópica se persistente ou progressiva (Murgu & Colt, 2013).",
+refs:[
+{authors:"Kang EY, Miller RR, Müller NL",title:"Bronchiectasis: comparison of preoperative thin-section CT and pathologic findings in resected specimens",journal:"Radiology",year:"2020",volume:"195",pages:"649-654"},
+{authors:"Murgu SD, Colt HG",title:"Tracheobronchomalacia and excessive dynamic airway collapse",journal:"Respirology",year:"2013",volume:"18",issue:"2",pages:"285-297",doi:"10.1111/resp.12032"}
+]
+},
+fv_asymmetric:{
+title:"Assimetria Inspiração/Expiração na Alça Fluxo×Volume",
+text:"Diferenças morfológicas acentuadas entre ramos inspiratório e expiratório indicam heterogeneidade mecânica pulmonar ou de parede torácica. Pode refletir recrutamento/desrecrutamento cíclico, áreas com diferentes constantes de tempo, ou resistência variável entre inspiração e expiração (Miller & Offord, 2004). Em pacientes com SARA, assimetria acentuada sugere heterogeneidade regional pronunciada e potencial benefício de estratégias de recrutamento (Cressoni et al., 2014).",
+refs:[
+{authors:"Miller MR, Offord KP",title:"Interpretation of spirometry",journal:"Respiratory Care",year:"2004",volume:"49",issue:"7",pages:"735-749"},
+{authors:"Cressoni M, Chiurazzi C, Gotti M, et al.",title:"Lung inhomogeneities and time course of ventilator-induced mechanical injuries",journal:"Anesthesiology",year:"2014",volume:"120",issue:"1",pages:"106-119",doi:"10.1097/ALN.0000000000000727"}
+]
+},
+fv_shift:{
+title:"Deslocamento Lateral da Alça Fluxo×Volume",
+text:"Deslocamento da alça para a direita (volumes positivos residuais) indica hiperinsuflação pulmonar ou auto-PEEP. O pulmão não retorna ao volume de repouso antes do próximo ciclo. Comum em DPOC, asma grave, ou frequências respiratórias excessivas que impedem esvaziamento completo (O'Donnell et al., 2012). Magnitude do deslocamento correlaciona-se com grau de aprisionamento aéreo e trabalho respiratório adicional (Katz et al., 2011).",
+refs:[
+{authors:"O'Donnell DE, Laveneziana P, Webb K, Neder JA",title:"Chronic obstructive pulmonary disease: clinical integrative physiology",journal:"Clinics in Chest Medicine",year:"2012",volume:"33",issue:"4",pages:"679-693",doi:"10.1016/j.ccm.2012.07.002"},
+{authors:"Katz S, Arish N, Rokach A, et al.",title:"The effect of body position on pulmonary function",journal:"Journal of Critical Care",year:"2011",volume:"26",pages:"175-181"}
+]
+},
+fv_open:{
+title:"Alça Fluxo×Volume Aberta (não fecha)",
+text:"Alça que não retorna ao ponto inicial indica vazamento persistente no sistema (cuff desinsuflado, fístula broncopleural, desconexão parcial) ou diferença significativa entre volume inspirado e expirado. Em circuito fechado sem vazamento, pode indicar medição imprecisa ou deriva do sensor (Lucangelo et al., 2005). Vazamentos >10% do volume corrente comprometem a eficácia ventilatória e devem ser corrigidos imediatamente (Carlucci et al., 2009).",
+refs:[
+{authors:"Lucangelo U, Bernabè F, Blanch L",title:"Respiratory mechanics derived from signals in the ventilator circuit",journal:"Respiratory Care",year:"2005",volume:"50",issue:"1",pages:"55-65"},
+{authors:"Carlucci A, Richard JC, Wysocki M, et al.",title:"Noninvasive versus conventional mechanical ventilation",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2009",volume:"179",pages:"902-910",doi:"10.1164/rccm.200809-1432OC"}
+]
 }
-
 };
-
-const MEC_DATA={
-ppeak_high:{
-title:"Pressão de Pico Elevada",
-text:"Pressão de pico elevada pode refletir resistência aumentada ou complacência reduzida. A avaliação da pressão de platô auxilia na diferenciação: se Pplatô normal, a resistência predomina (broncoespasmo, secreção, tubo endotraqueal pequeno). A diferença Ppico-Pplatô >15 cmH₂O indica componente resistivo elevado.",
-refs:[
-{authors:"Lucangelo U, Bernabè F, Blanch L",title:"Respiratory mechanics derived from signals in the ventilator circuit",journal:"Respiratory Care",year:"2005",volume:"50",pages:"55-65"}
-]
-},
-pplat_high:{
-title:"Pressão de Platô Elevada",
-text:"Pressão de platô >30 cmH₂O indica overdistensão alveolar e risco aumentado de lesão pulmonar induzida por ventilação (Grieco et al., 2024). A estratégia de ventilação protetora preconiza manutenção de pressão de platô ≤30 cmH₂O e driving pressure <15 cmH₂O (Bos & Ware, 2022).",
-refs:[
-{authors:"Grieco DL, Menga LS, Eleuteri D, Antonelli M",title:"Patient self-inflicted lung injury: implications for acute hypoxemic respiratory failure and ARDS patients on non-invasive support",journal:"Minerva Anestesiologica",year:"2024",volume:"90",pages:"49-63",doi:"10.23736/S0375-9393.23.17417-4"},
-{authors:"Bos LD, Ware LB",title:"Acute respiratory distress syndrome: causes, pathophysiology, and phenotypes",journal:"The Lancet",year:"2022",volume:"400",pages:"1145-1156",doi:"10.1016/S0140-6736(22)01485-4"}
-]
-},
-dp_high:{
-title:"Driving Pressure Elevado",
-text:"Driving Pressure (ΔP = Pplatô - PEEP) >15 cmH₂O está associado a aumento significativo de mortalidade em SDRA. O driving pressure é preditor independente de mortalidade, mais importante que volume corrente ou pressão de platô isoladamente (Amato et al., 2015). Cada aumento de 7 cmH₂O no driving pressure associa-se a aumento de 41% na mortalidade (Aoyama et al., 2018).",
-refs:[
-{authors:"Amato MB, Meade MO, Slutsky AS, et al.",title:"Driving pressure and survival in the acute respiratory distress syndrome",journal:"New England Journal of Medicine",year:"2015",volume:"372",pages:"747-755",doi:"10.1056/NEJMsa1410639"},
-{authors:"Aoyama H, Pettenuzzo T, Aoyama K, et al.",title:"Association of driving pressure with mortality among ventilated patients with acute respiratory distress syndrome",journal:"Critical Care Medicine",year:"2018",volume:"46",pages:"300-306",doi:"10.1097/CCM.0000000000002838"}
-]
-},
-compliance_calc:{
-title:"Complacência Pulmonar Muito Reduzida",
-text:"Complacência <30 mL/cmH₂O indica rigidez pulmonar significativa (SDRA, edema pulmonar, fibrose, consolidação). A complacência pulmonar é um preditor de gravidade em SDRA (Chiumello et al., 2020). Valores <30 mL/cmH₂O sugerem SDRA moderada a grave e requerem otimização de PEEP.",
-refs:[
-{authors:"Chiumello D, Coppola S, Froio S, Gotti M",title:"What's next after PEEP? Part 1",journal:"Respiratory Care",year:"2020",volume:"65",pages:"750-760",doi:"10.4187/respcare.07886"}
-]
-},
-resist:{
-title:"Resistência de Vias Aéreas Aumentada",
-text:"Resistência >15 cmH₂O/L/s sugere obstrução das vias aéreas (broncoespasmo, secreção, dobra de tubo endotraqueal, edema de via aérea). Aumenta significativamente o trabalho respiratório e pode causar hipercapnia. A diferença entre pressão de pico e platô >15 cmH₂O indica componente resistivo elevado.",
-refs:[
-{authors:"Lucangelo U, Bernabè F, Blanch L",title:"Respiratory mechanics derived from signals in the ventilator circuit",journal:"Respiratory Care",year:"2005",volume:"50",pages:"55-65"}
-]
-},
-vt_high:{
-title:"Volume Corrente Elevado",
-text:"Volume corrente acima de 8 ml/kg de peso corporal predito causa volutrauma e biotrauma. Redução do volume corrente para 6 ml/kg de peso corporal predito reduziu mortalidade em 22% em pacientes com SDRA (ARDSNet, 2000). Volumes correntes elevados também aumentam mortalidade em cirurgias abdominais (Futier et al., 2013).",
-refs:[
-{authors:"Acute Respiratory Distress Syndrome Network",title:"Ventilation with lower tidal volumes as compared with traditional tidal volumes for acute lung injury and the acute respiratory distress syndrome",journal:"New England Journal of Medicine",year:"2000",volume:"342",pages:"1301-1308",doi:"10.1056/NEJM200005043421801"},
-{authors:"Futier E, Constantin JM, Paugam-Burtz C, et al.",title:"A trial of intraoperative low-tidal-volume ventilation in abdominal surgery",journal:"New England Journal of Medicine",year:"2013",volume:"369",pages:"428-437",doi:"10.1056/NEJMoa1301082"}
-]
-},
-fr_high:{
-title:"Taquipneia",
-text:"Frequência respiratória >30/min persistente pode indicar drive elevado, ansiedade, dor, acidose ou ajuste inadequado do ventilador. A taquipneia está associada a maior trabalho respiratório e pode contribuir para lesão pulmonar (Akoumianaki et al., 2024).",
-refs:[
-{authors:"Akoumianaki E, Vaporidi K, Georgopoulos D",title:"The injurious effects of elevated or nonelevated respiratory rate during mechanical ventilation",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2024",volume:"209",pages:"367-383",doi:"10.1164/rccm.202304-0738CI"}
-]
-},
-    ppico_low:{
-title:"Pressão de Pico Muito Baixa",
-text:"Pressão de pico muito baixa pode indicar vazamento no sistema, desconexão parcial ou esforço inspiratório insuficiente.",
-refs:[
-{authors:"MacIntyre NR",title:"Patient-ventilator interactions",journal:"Respiratory Care",year:"2011"}
-]
-},
-
-peep_high:{
-title:"PEEP Total Elevada",
-text:"PEEP total elevada resulta da soma da PEEP extrínseca com auto-PEEP, aumentando o trabalho inspiratório e dificultando o disparo.",
-refs:[
-{authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure",journal:"Am Rev Respir Dis",year:"1982"}
-]
-},
-
-compliance_high:{
-title:"Complacência Muito Alta",
-text:"Complacência elevada sugere pulmões hipercomplacentes, como em enfisema, com risco aumentado de hiperinsuflação.",
-refs:[
-{authors:"West JB",title:"Respiratory physiology",journal:"Lippincott Williams & Wilkins",year:"2012"}
-]
-},
-
-tau_high:{
-title:"Constante de Tempo Elevada",
-text:"Constante de tempo prolongada indica dificuldade de esvaziamento pulmonar, comum em obstrução de vias aéreas.",
-refs:[
-{authors:"Tobin MJ",title:"Principles and practice of mechanical ventilation",journal:"McGraw-Hill",year:"2013"}
-]
-},
-
-mv_low:{
-title:"Volume-Minuto Baixo",
-text:"Volume-minuto reduzido pode levar à hipoventilação alveolar e hipercapnia, especialmente em pacientes com drive reduzido.",
-refs:[
-{authors:"Marini JJ",title:"Ventilatory management of acute hypercapnia",journal:"Critical Care",year:"2019"}
-]
-},
-
-flow_peak_low:{
-title:"Pico de Fluxo Inspiratório Baixo",
-text:"Pico de fluxo baixo sugere limitação do fornecimento ventilatório frente à demanda do paciente, aumentando o trabalho respiratório.",
-refs:[
-{authors:"Telias I, Brochard L",title:"Monitoring respiratory drive",journal:"Intensive Care Medicine",year:"2022"}
-]
-},
-
-pv_shift:{
-title:"Alça P×V Deslocada",
-text:"Deslocamento da alça P×V para a direita sugere auto-PEEP ou hiperinsuflação dinâmica.",
-refs:[
-{authors:"Lucangelo U et al.",title:"Respiratory mechanics derived from ventilator signals",journal:"Respiratory Care",year:"2005"}
-]
-},
-
-flatten:{
-title:"Achatamento Terminal da Curva",
-text:"Achatamento progressivo indica perda de complacência ao final da inspiração, sugerindo aproximação da sobredistensão.",
-refs:[
-{authors:"Gattinoni L",title:"Physiology of lung stress and strain",journal:"Intensive Care Medicine",year:"2016"}
-]
-},
-
 p_saw:{
 title:"Padrão Dente de Serra",
 text:"Oscilações regulares na curva de pressão indicam secreção, condensação no circuito ou interação cardiogênica.",
@@ -1369,7 +1361,56 @@ refs:[
 ]
 }
 };
-
+,
+vt_low:{
+title:"Volume Corrente Muito Baixo",
+text:"Volume corrente <4 mL/kg do peso corporal predito pode ser insuficiente para manter ventilação alveolar adequada, levando a hipercapnia e atelectasia progressiva. Embora estratégias ultra-protetoras sejam descritas em SARA refratária, volumes muito baixos requerem aumento compensatório da frequência respiratória e podem exacerbar assincronia (Terragni et al., 2007). Ventilação com Vt <3-4 mL/kg geralmente requer suporte extracorpóreo de CO₂ (ECCO₂R) para manter normocapnia (Bein et al., 2013).",
+refs:[
+{authors:"Terragni PP, Rosboch G, Tealdi A, et al.",title:"Tidal hyperinflation during low tidal volume ventilation in acute respiratory distress syndrome",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2007",volume:"175",issue:"2",pages:"160-166",doi:"10.1164/rccm.200607-915OC"},
+{authors:"Bein T, Weber-Carstens S, Goldmann A, et al.",title:"Lower tidal volume strategy (≈3 ml/kg) combined with extracorporeal CO2 removal versus 'conventional' protective ventilation (6 ml/kg) in severe ARDS",journal:"Intensive Care Medicine",year:"2013",volume:"39",issue:"5",pages:"847-856",doi:"10.1007/s00134-012-2787-6"}
+]
+},
+mv_high:{
+title:"Volume-Minuto Elevado",
+text:"Volume-minuto >15 L/min pode indicar hiperventilação, drive respiratório excessivo, ou compensação de acidose metabólica. Volumes-minuto muito elevados aumentam o trabalho respiratório, podem causar alcalose respiratória, hiperinsuflação dinâmica e auto-PEEP (Akoumianaki et al., 2014). Em pacientes com esforço espontâneo, ventilação-minuto excessiva pode refletir P-SILI (patient self-inflicted lung injury) e requer ajuste ventilatório ou sedação criteriosa (Yoshida et al., 2017).",
+refs:[
+{authors:"Akoumianaki E, Lyazidi A, Rey N, et al.",title:"Mechanical ventilation-induced reverse-triggered breaths",journal:"Chest",year:"2014",volume:"145",issue:"4",pages:"927-938",doi:"10.1378/chest.13-1817"},
+{authors:"Yoshida T, Fujino Y, Amato MB, Kavanagh BP",title:"Fifty years of research in ARDS. Spontaneous breathing during mechanical ventilation. Risks, mechanisms, and management",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2017",volume:"195",issue:"8",pages:"985-992",doi:"10.1164/rccm.201604-0748CP"}
+]
+},
+flow_notzero:{
+title:"Fluxo Expiratório Não Retorna a Zero (Auto-PEEP)",
+text:"Fluxo expiratório que não atinge zero antes do próximo ciclo inspiratório é evidência direta de auto-PEEP (PEEP intrínseca). Indica esvaziamento pulmonar incompleto com aprisionamento aéreo progressivo. Aumenta substancialmente o trabalho de disparo (até 40% do trabalho total), dificulta a ciclagem, e pode causar instabilidade hemodinâmica por redução do retorno venoso (Pepe & Marini, 1982). Medida de auto-PEEP através de pausa expiratória é mandatória para quantificação e ajuste terapêutico (Marini et al., 1989).",
+refs:[
+{authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure in mechanically ventilated patients with airflow obstruction: the auto-PEEP effect",journal:"American Review of Respiratory Disease",year:"1982",volume:"126",issue:"1",pages:"166-170",doi:"10.1164/arrd.1982.126.1.166"},
+{authors:"Marini JJ, Crooke PS, Truwit JD",title:"Determinants and limits of pressure-preset ventilation: a mathematical model of pressure control",journal:"Journal of Applied Physiology",year:"1989",volume:"67",issue:"3",pages:"1081-1092",doi:"10.1152/jappl.1989.67.3.1081"}
+]
+},
+fr_low:{
+title:"Bradipneia (Frequência Respiratória Baixa)",
+text:"Frequência respiratória <8 respirações/min pode indicar depressão do centro respiratório (sedação excessiva, narcóticos, lesão neurológica central) ou fadiga muscular extrema. Embora estratégias protetoras possam aceitar FR baixas se volume-minuto adequado, bradipneia acentuada aumenta risco de atelectasia por tempo expiratório excessivamente prolongado e pode comprometer eliminação de CO₂ (Schmidt et al., 2013).",
+refs:[
+{authors:"Schmidt M, Banzett RB, Raux M, et al.",title:"Unrecognized suffering in the ICU: addressing dyspnea in mechanically ventilated patients",journal:"Intensive Care Medicine",year:"2013",volume:"40",issue:"1",pages:"1-10",doi:"10.1007/s00134-013-3117-3"}
+]
+},
+ti_long:{
+title:"Tempo Inspiratório Prolongado",
+text:"Tempo inspiratório >1.5 segundos pode causar desconforto, assincronia (ciclagem tardia), e comprometer o retorno venoso. Em ventilação controlada, Ti prolongado reduz o tempo expiratório disponível, aumentando risco de auto-PEEP. Em modos assistidos, Ti excessivo sugere ciclagem tardia com insuflação além do tempo neural do paciente (Thille et al., 2006). Relação I:E adequada varia conforme patologia: DPOC beneficia-se de Ti curto para maximizar Te.",
+refs:[
+{authors:"Thille AW, Rodriguez P, Cabello B, et al.",title:"Patient-ventilator asynchrony during assisted mechanical ventilation",journal:"Intensive Care Medicine",year:"2006",volume:"32",issue:"10",pages:"1515-1522",doi:"10.1007/s00134-006-0301-8"}
+]
+},
+ie_inverted:{
+title:"Relação I:E Invertida",
+text:"Relação inspiração:expiração invertida (Ti ≥ Te) é estratégia não-convencional usada em hipoxemia refratária para prolongar tempo de recrutamento alveolar. Descrita originalmente em SARA grave, pode melhorar oxigenação por aumento de pressão média de vias aéreas e recrutamento progressivo (Lessard et al., 1994). Riscos: auto-PEEP elevada, barotrauma, instabilidade hemodinâmica, necessidade de sedação profunda ± bloqueio neuromuscular. Atualmente substituída por posição prona e ECMO na maioria dos centros (Marini & Gattinoni, 2020).",
+refs:[
+{authors:"Lessard MR, Guérot E, Lorino H, et al.",title:"Effects of pressure-controlled with different I:E ratios versus volume-controlled ventilation on respiratory mechanics, gas exchange, and hemodynamics in patients with adult respiratory distress syndrome",journal:"Anesthesiology",year:"1994",volume:"80",issue:"5",pages:"983-991",doi:"10.1097/00000542-199405000-00006"},
+{authors:"Marini JJ, Gattinoni L",title:"Management of COVID-19 respiratory distress",journal:"JAMA",year:"2020",volume:"323",issue:"22",pages:"2329-2330",doi:"10.1001/jama.2020.6825"}
+]
+},
+exp_slow:{
+title:"Expiração Lenta/Prolongada",
+text:"Expiração com decaimento arrastado indica constante de tempo elevada (produto de resistência × complacência). Comum em obstrução de vias aéreas (DPOC, asma) ou em pulmões muito complacentes (enfisema). Necessita múltiplas constantes de tempo (3-5τ) para esvaziamento adequado, o que em frequências respiratórias elevadas resulta em auto-PEEP (Marini, 1989). Reconhecimento visual permite ajuste de FR
 $("btnAssinRun").onclick=()=>{
 const s=$$(".assin:checked").map(c=>c.value);
 if(!s.length){alert("Selecione ao menos um achado.");return}
