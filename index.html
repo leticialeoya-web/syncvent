@@ -1362,57 +1362,288 @@ refs:[
 }
 };
 
+<script>
 const MEC_DATA = {
+  ppeak_high:{
+    title:"Ppico Elevado",
+    text:"Pressão de pico elevada reflete a soma do componente elástico (pressão alveolar/platô) e do componente resistivo (fluxo × resistência). Quando Ppico sobe isoladamente, com platô proporcionalmente menor, o achado é compatível com maior componente resistivo (tubo, secreção, broncoespasmo, fluxo elevado). A leitura educacional recomendada é interpretar Ppico sempre em conjunto com platô/fluxo e com a morfologia das curvas e loops (P×T, F×T, P×V, F×V).",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Giani M, et al.",title:"How to measure respiratory mechanics during controlled mechanical ventilation",journal:"Journal of Thoracic Disease",year:"2019",volume:"11",issue:"suppl 17",pages:"S2268-S2276"}
+    ]
+  },
+
+  pplat_high:{
+    title:"Pplatô Elevada",
+    text:"Platô elevado indica maior componente elástico (baixa complacência do sistema respiratório) e se associa a maior risco de lesão relacionada à ventilação quando sustentado em níveis altos. A interpretação educacional central é que Pplat representa pressão alveolar durante fluxo zero; por isso é parâmetro-chave de mecânica (complacência estática) e de carga elástica.",
+    refs:[
+      {authors:"Amato MBP, et al.",title:"Driving pressure and survival in the acute respiratory distress syndrome",journal:"New England Journal of Medicine",year:"2015",volume:"372",issue:"8",pages:"747-755",doi:"10.1056/NEJMsa1410639"},
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"}
+    ]
+  },
+
+  dp_high:{
+    title:"Driving Pressure Elevada (ΔP)",
+    text:"ΔP elevada (Pplat − PEEP total) representa maior estresse elástico efetivo aplicado ao volume corrente sobre o pulmão recrutado. Estudos observacionais em ARDS mostram que ΔP estratifica risco de mortalidade de forma robusta e é útil como síntese da carga elástica quando interpretada junto à complacência e ao tamanho do “pulmão funcional”.",
+    refs:[
+      {authors:"Amato MBP, et al.",title:"Driving pressure and survival in the acute respiratory distress syndrome",journal:"New England Journal of Medicine",year:"2015",volume:"372",issue:"8",pages:"747-755",doi:"10.1056/NEJMsa1410639"},
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"}
+    ]
+  },
+
+  ppico_low:{
+    title:"Ppico Muito Baixa",
+    text:"Pressão de pico muito baixa pode ocorrer em cenários de baixa carga elástica/resistiva (pulmão muito complacente e/ou fluxo reduzido), ou quando há suporte pressórico/volume efetivo baixo. A leitura educacional é integrar o achado ao Vt, ao loop P×V (horizontalização sugere alta complacência), ao fluxo e à ventilação-minuto para contextualizar a carga mecânica entregue.",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Gattinoni L, Collino F, Camporota L",title:"Mechanical power: meaning, uses and limitations",journal:"Intensive Care Medicine",year:"2023",volume:"49",issue:"4",pages:"465-467",doi:"10.1007/s00134-023-06991-3"}
+    ]
+  },
+
+  peep_high:{
+    title:"PEEP Total Elevada (PEEP + auto-PEEP)",
+    text:"PEEP total elevada pode refletir PEEP aplicada alta e/ou auto-PEEP relevante (aprisionamento aéreo). A interpretação educacional combina: (1) curva F×T com expiração que não zera, (2) deslocamento no loop F×V (alça “à direita”/não retorna ao ponto basal) e (3) aumento do trabalho para disparo quando há esforço. Em obstrução, o componente auto-PEEP pode ser dominante.",
+    refs:[
+      {authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure in mechanically ventilated patients with airflow obstruction",journal:"American Review of Respiratory Disease",year:"1982",volume:"126",issue:"1",pages:"166-170",doi:"10.1164/arrd.1982.126.1.166"},
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"}
+    ]
+  },
+
+  compliance_calc:{
+    title:"Complacência Muito Baixa",
+    text:"Complacência baixa significa que pequenas variações de volume exigem grandes variações de pressão. Visualmente, tende a verticalizar o loop P×V. A interpretação educacional é associar o achado a maior carga elástica e maior potencial de lesão por estresse/strain quando o volume corrente e a ΔP são altos, especialmente em pulmões heterogêneos.",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"}
+    ]
+  },
+
+  compliance_high:{
+    title:"Complacência Muito Alta",
+    text:"Complacência muito alta sugere que pequenas variações de pressão produzem grandes variações de volume. No loop P×V, tende à horizontalização. Em cenários obstrutivos e/ou hiperinsuflação, alta complacência pode coexistir com alta resistência e constante de tempo elevada, o que aparece como expiração prolongada e aprisionamento aéreo.",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Depta F, et al.",title:"Expiratory time constants in mechanically ventilated patients: rethinking the old concept (narrative review)",journal:"—",year:"2025"}
+    ]
+  },
+
+  resist:{
+    title:"Resistência Aumentada (Ppico − Pplatô)",
+    text:"Diferença aumentada entre Ppico e Pplatô, para um mesmo fluxo, é compatível com maior componente resistivo. A interpretação educacional é integrar o achado a: (1) loop F×V com escavação expiratória (limitação ao fluxo), (2) tempo expiratório prolongado/constante de tempo elevada, e (3) possíveis causas de aumento resistivo (vias aéreas/tubo/circuito).",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Giani M, et al.",title:"How to measure respiratory mechanics during controlled mechanical ventilation",journal:"Journal of Thoracic Disease",year:"2019",volume:"11",issue:"suppl 17",pages:"S2268-S2276"}
+    ]
+  },
+
+  tau_high:{
+    title:"Constante de Tempo Elevada (τ)",
+    text:"Constante de tempo elevada (τ = R × C) indica esvaziamento lento. Em ventilação mecânica, τ alta se manifesta como cauda expiratória prolongada e maior risco de expiração incompleta quando a frequência respiratória é alta ou o tempo expiratório é curto. A leitura educacional usa τ para explicar por que a curva F×T pode não retornar a zero e por que loops podem mostrar aprisionamento.",
+    refs:[
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients: a prospective observational physiology study",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"},
+      {authors:"Depta F, et al.",title:"Expiratory time constants in mechanically ventilated patients: rethinking the old concept (narrative review)",journal:"—",year:"2025"}
+    ]
+  },
+
+  vt_high:{
+    title:"VT Elevado",
+    text:"Volume corrente elevado aumenta strain (deformação) e, quando associado a pressões/ΔP elevadas e maior frequência, contribui para maior energia/potência mecânica entregue ao sistema respiratório. A interpretação educacional recomenda integrar Vt ao loop P×V (sinais de achatamento terminal/overdistensão) e aos parâmetros derivados (ΔP, potência mecânica).",
+    refs:[
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"},
+      {authors:"Gattinoni L, Collino F, Camporota L",title:"Mechanical power: meaning, uses and limitations",journal:"Intensive Care Medicine",year:"2023",volume:"49",issue:"4",pages:"465-467",doi:"10.1007/s00134-023-06991-3"}
+    ]
+  },
+
   vt_low:{
     title:"Volume Corrente Muito Baixo",
-    text:"Volume corrente <4 mL/kg do peso corporal predito pode ser insuficiente para manter ventilação alveolar adequada, levando a hipercapnia e atelectasia progressiva. Embora estratégias ultra-protetoras sejam descritas em SARA refratária, volumes muito baixos requerem aumento compensatório da frequência respiratória e podem exacerbar assincronia (Terragni et al., 2007). Ventilação com Vt <3-4 mL/kg geralmente requer suporte extracorpóreo de CO₂ (ECCO₂R) para manter normocapnia (Bein et al., 2013).",
+    text:"Volume corrente <4 mL/kg do peso corporal predito pode ser insuficiente para manter ventilação alveolar, com risco de hipercapnia e atelectasia progressiva. Estratégias ultra-protetoras foram descritas em SARA grave selecionada, frequentemente exigindo suporte adicional para controle de CO₂.",
     refs:[
       {authors:"Terragni PP, Rosboch G, Tealdi A, et al.",title:"Tidal hyperinflation during low tidal volume ventilation in acute respiratory distress syndrome",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2007",volume:"175",issue:"2",pages:"160-166",doi:"10.1164/rccm.200607-915OC"},
       {authors:"Bein T, Weber-Carstens S, Goldmann A, et al.",title:"Lower tidal volume strategy (≈3 ml/kg) combined with extracorporeal CO2 removal versus 'conventional' protective ventilation (6 ml/kg) in severe ARDS",journal:"Intensive Care Medicine",year:"2013",volume:"39",issue:"5",pages:"847-856",doi:"10.1007/s00134-012-2787-6"}
     ]
   },
+
   mv_high:{
     title:"Volume-Minuto Elevado",
-    text:"Volume-minuto >15 L/min pode indicar hiperventilação, drive respiratório excessivo, ou compensação de acidose metabólica. Volumes-minuto muito elevados aumentam o trabalho respiratório, podem causar alcalose respiratória, hiperinsuflação dinâmica e auto-PEEP (Akoumianaki et al., 2014). Em pacientes com esforço espontâneo, ventilação-minuto excessiva pode refletir P-SILI (patient self-inflicted lung injury) e requer ajuste ventilatório ou sedação criteriosa (Yoshida et al., 2017).",
+    text:"Volume-minuto alto pode indicar hiperventilação, drive respiratório elevado ou compensação de acidose metabólica. Quando sustentado, ele aumenta o componente de potência mecânica relacionado à frequência, e pode se associar a maior carga ventilatória total, especialmente se acompanhado de volumes correntes/pressões elevadas.",
     refs:[
-      {authors:"Akoumianaki E, Lyazidi A, Rey N, et al.",title:"Mechanical ventilation-induced reverse-triggered breaths",journal:"Chest",year:"2014",volume:"145",issue:"4",pages:"927-938",doi:"10.1378/chest.13-1817"},
-      {authors:"Yoshida T, Fujino Y, Amato MB, Kavanagh BP",title:"Fifty years of research in ARDS. Spontaneous breathing during mechanical ventilation. Risks, mechanisms, and management",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2017",volume:"195",issue:"8",pages:"985-992",doi:"10.1164/rccm.201604-0748CP"}
+      {authors:"Yoshida T, Fujino Y, Amato MB, Kavanagh BP",title:"Spontaneous breathing during mechanical ventilation. Risks, mechanisms, and management",journal:"American Journal of Respiratory and Critical Care Medicine",year:"2017",volume:"195",issue:"8",pages:"985-992",doi:"10.1164/rccm.201604-0748CP"},
+      {authors:"Gattinoni L, Collino F, Camporota L",title:"Mechanical power: meaning, uses and limitations",journal:"Intensive Care Medicine",year:"2023",volume:"49",issue:"4",pages:"465-467",doi:"10.1007/s00134-023-06991-3"}
     ]
   },
+
+  mv_low:{
+    title:"Volume-Minuto Baixo",
+    text:"Volume-minuto baixo pode ser compatível com hipoventilação global, redução de drive, fadiga ou limitação mecânica. A interpretação educacional recomenda integrar o achado ao padrão ventilatório (FR, Vt), à curva de volume/fluxo e ao contexto clínico, reconhecendo que volume-minuto é variável síntese de ventilação total.",
+    refs:[
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"},
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"}
+    ]
+  },
+
   flow_notzero:{
     title:"Fluxo Expiratório Não Retorna a Zero (Auto-PEEP)",
-    text:"Fluxo expiratório que não atinge zero antes do próximo ciclo inspiratório é evidência direta de auto-PEEP (PEEP intrínseca). Indica esvaziamento pulmonar incompleto com aprisionamento aéreo progressivo. Aumenta substancialmente o trabalho de disparo (até 40% do trabalho total), dificulta a ciclagem, e pode causar instabilidade hemodinâmica por redução do retorno venoso (Pepe & Marini, 1982). Medida de auto-PEEP através de pausa expiratória é usada para quantificação.",
+    text:"Fluxo expiratório que não atinge zero antes do próximo ciclo inspiratório é evidência direta de auto-PEEP (PEEP intrínseca). Indica esvaziamento incompleto e aprisionamento aéreo. Aumenta o trabalho para disparo e pode se associar a efeitos hemodinâmicos por elevação da pressão intratorácica.",
     refs:[
-      {authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure in mechanically ventilated patients with airflow obstruction",journal:"American Review of Respiratory Disease",year:"1982",volume:"126",issue:"1",pages:"166-170",doi:"10.1164/arrd.1982.126.1.166"}
+      {authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure in mechanically ventilated patients with airflow obstruction",journal:"American Review of Respiratory Disease",year:"1982",volume:"126",issue:"1",pages:"166-170",doi:"10.1164/arrd.1982.126.1.166"},
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"}
     ]
   },
+
+  flow_peak_low:{
+    title:"Pico de Fluxo Baixo",
+    text:"Pico de fluxo baixo pode indicar rampa/pressurização lenta (em modos pressóricos), limitação de fluxo programada, ou incapacidade do sistema em atingir fluxos mais altos sob demanda. A leitura educacional é correlacionar o pico de fluxo ao formato do fluxo inspiratório, ao tempo inspiratório e à sensação de “fluxo insuficiente” (quando presente) na análise de curvas.",
+    refs:[
+      {authors:"Chiumello D, Pelosi P, Croci M, et al.",title:"The effects of pressurization rate on breathing pattern, work of breathing, gas exchange and patient comfort in pressure support ventilation",journal:"European Respiratory Journal",year:"2001",volume:"18",issue:"1",pages:"107-114"},
+      {authors:"Chiumello D, et al.",title:"Effect of different inspiratory rise time and cycling off criteria during pressure support ventilation",journal:"Critical Care Medicine",year:"2003",volume:"31",issue:"7",pages:"1991-1997",doi:"10.1097/01.CCM.0000074273.79332.3E"}
+    ]
+  },
+
+  fr_high:{
+    title:"Taquipneia (Frequência Respiratória Alta)",
+    text:"Frequência elevada reduz o tempo expiratório disponível e aumenta o componente da potência mecânica associado à taxa de ciclos. Em τ elevada, taquipneia favorece expiração incompleta e auto-PEEP, observável na curva F×T (não zera) e em loops (aprisionamento).",
+    refs:[
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"},
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"}
+    ]
+  },
+
   fr_low:{
     title:"Bradipneia (Frequência Respiratória Baixa)",
-    text:"Frequência respiratória <8 respirações/min pode indicar depressão do centro respiratório (sedação excessiva, narcóticos, lesão neurológica central) ou fadiga muscular extrema. Bradipneia acentuada pode aumentar risco de atelectasia e comprometer eliminação de CO₂.",
+    text:"Frequência respiratória baixa pode refletir depressão do drive, sedação, alterações neurológicas centrais ou fadiga. A interpretação educacional integra FR à ventilação-minuto e ao padrão de curvas para reconhecer risco de hipoventilação global em determinados contextos.",
     refs:[
-      {authors:"Schmidt M, Banzett RB, Raux M, et al.",title:"Unrecognized suffering in the ICU: addressing dyspnea in mechanically ventilated patients",journal:"Intensive Care Medicine",year:"2013",volume:"40",issue:"1",pages:"1-10",doi:"10.1007/s00134-013-3117-3"}
+      {authors:"Schmidt M, Banzett RB, Raux M, et al.",title:"Unrecognized suffering in the ICU: addressing dyspnea in mechanically ventilated patients",journal:"Intensive Care Medicine",year:"2014",volume:"40",issue:"1",pages:"1-10",doi:"10.1007/s00134-013-3117-3"},
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"}
     ]
   },
+
   ti_long:{
     title:"Tempo Inspiratório Prolongado",
-    text:"Tempo inspiratório >1.5 segundos pode causar desconforto, assincronia (ciclagem tardia), e comprometer o retorno venoso. Em ventilação controlada, Ti prolongado reduz o tempo expiratório disponível, aumentando risco de auto-PEEP.",
+    text:"Tempo inspiratório longo pode reduzir o tempo expiratório e, em presença de resistência/τ elevadas, favorecer expiração incompleta. Também pode se associar a ciclagem tardia em modos assistidos quando o tempo neural inspiratório é menor que o tempo mecânico, aumentando risco de desconforto/assincronia.",
     refs:[
-      {authors:"Thille AW, Rodriguez P, Cabello B, et al.",title:"Patient-ventilator asynchrony during assisted mechanical ventilation",journal:"Intensive Care Medicine",year:"2006",volume:"32",issue:"10",pages:"1515-1522",doi:"10.1007/s00134-006-0301-8"}
+      {authors:"Thille AW, Rodriguez P, Cabello B, et al.",title:"Patient-ventilator asynchrony during assisted mechanical ventilation",journal:"Intensive Care Medicine",year:"2006",volume:"32",issue:"10",pages:"1515-1522",doi:"10.1007/s00134-006-0301-8"},
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"}
     ]
   },
+
   ie_inverted:{
     title:"Relação I:E Invertida",
-    text:"Relação inspiração:expiração invertida (Ti ≥ Te) é estratégia não-convencional descrita em hipoxemia refratária para prolongar tempo de recrutamento. Riscos incluem auto-PEEP elevada, barotrauma e instabilidade hemodinâmica.",
+    text:"Relação I:E invertida (Ti ≥ Te) altera profundamente a mecânica temporal do ciclo ventilatório. A leitura educacional enfatiza o potencial de aumento de aprisionamento aéreo em cenários obstrutivos e o impacto hemodinâmico por aumento do tempo sob pressão intratorácica elevada, além de mudanças no perfil de energia entregue por ciclo.",
     refs:[
-      {authors:"Lessard MR, Guérot E, Lorino H, et al.",title:"Effects of pressure-controlled with different I:E ratios versus volume-controlled ventilation on respiratory mechanics, gas exchange, and hemodynamics in ARDS",journal:"Anesthesiology",year:"1994",volume:"80",issue:"5",pages:"983-991",doi:"10.1097/00000542-199405000-00006"}
+      {authors:"Lessard MR, Guérot E, Lorino H, et al.",title:"Effects of pressure-controlled with different I:E ratios versus volume-controlled ventilation on mechanics, gas exchange, and hemodynamics in ARDS",journal:"Anesthesiology",year:"1994",volume:"80",issue:"5",pages:"983-991",doi:"10.1097/00000542-199405000-00006"},
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"}
     ]
   },
+
   exp_slow:{
     title:"Expiração Lenta/Prolongada",
-    text:"Expiração com decaimento arrastado indica constante de tempo elevada (produto de resistência × complacência). Comum em obstrução de vias aéreas ou em pulmões muito complacentes. Frequências respiratórias elevadas podem impedir esvaziamento completo e favorecer auto-PEEP.",
-    refs:[]
+    text:"Expiração com decaimento arrastado é compatível com τ elevada e heterogeneidade de constantes de tempo. Na leitura educacional, o achado explica por que o fluxo pode não retornar a zero quando o tempo expiratório é insuficiente, e por que loops podem mostrar aprisionamento e deslocamentos.",
+    refs:[
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"},
+      {authors:"Depta F, et al.",title:"Expiratory time constants in mechanically ventilated patients: rethinking the old concept (narrative review)",journal:"—",year:"2025"}
+    ]
+  },
+
+  pv_steep:{
+    title:"Alça P×V Verticalizada (Baixa Complacência Visual)",
+    text:"Loop P×V verticalizado sugere baixa complacência: grande variação de pressão para pequena variação de volume. A interpretação educacional integra este padrão com Pplat/ΔP e com possíveis sinais de recrutamento (joelho inferior) e de sobredistensão (achatamento terminal/joelho superior).",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"}
+    ]
+  },
+
+  pv_flat:{
+    title:"Alça P×V Horizontal (Alta Complacência Visual)",
+    text:"Loop P×V horizontal sugere alta complacência: pequena variação de pressão para grande variação de volume. A interpretação educacional associa o padrão a pulmões muito complacentes (ex.: enfisema) e recomenda integrar com resistência/τ e com sinais de hiperinsuflação/auto-PEEP nos fluxos e loops.",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"}
+    ]
+  },
+
+  lowerinfl:{
+    title:"Ponto de Inflexão Inferior (Joelho de Recrutamento)",
+    text:"O joelho inferior na alça P×V é descrito como mudança de inclinação compatível com abertura progressiva de unidades previamente colapsadas. A leitura educacional enfatiza que este padrão depende da heterogeneidade pulmonar e das condições de medida (fluxo, tempo, viscoelasticidade), devendo ser interpretado em conjunto com complacência, histerese e resposta global do loop.",
+    refs:[
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"},
+      {authors:"Lucangelo U, Bernabè F, Blanch L",title:"Respiratory mechanics derived from signals in the ventilator circuit",journal:"Respiratory Care",year:"2005",volume:"50",issue:"1",pages:"55-65"}
+    ]
+  },
+
+  upperinfl:{
+    title:"Ponto de Inflexão Superior (Sinal de Sobredistensão)",
+    text:"O joelho superior/achatamento terminal no loop P×V sugere redução progressiva da complacência em volumes mais altos, compatível com sobredistensão. A interpretação educacional integra este sinal com ΔP, Vt e potência mecânica, reconhecendo o caráter multifatorial e dependente do contexto do traçado.",
+    refs:[
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"},
+      {authors:"Gattinoni L, Collino F, Camporota L",title:"Mechanical power: meaning, uses and limitations",journal:"Intensive Care Medicine",year:"2023",volume:"49",issue:"4",pages:"465-467",doi:"10.1007/s00134-023-06991-3"}
+    ]
+  },
+
+  pv_shift:{
+    title:"Alça P×V Deslocada (Compatível com Auto-PEEP/Hiperinsuflação)",
+    text:"Deslocamento da alça P×V (com volumes residuais acima do basal) pode ser compatível com hiperinsuflação dinâmica/auto-PEEP. A leitura educacional correlaciona este padrão com F×T que não zera, expiração encurtada frente a τ elevada e sinais de aprisionamento em loops.",
+    refs:[
+      {authors:"Pepe PE, Marini JJ",title:"Occult positive end-expiratory pressure in mechanically ventilated patients with airflow obstruction",journal:"American Review of Respiratory Disease",year:"1982",volume:"126",issue:"1",pages:"166-170",doi:"10.1164/arrd.1982.126.1.166"},
+      {authors:"Depta F, et al.",title:"Six methods to determine expiratory time constants in mechanically ventilated patients",journal:"Intensive Care Medicine Experimental",year:"2024",volume:"12",pages:"25",doi:"10.1186/s40635-024-00612-z"}
+    ]
+  },
+
+  flatten:{
+    title:"Achatamento Terminal da Curva/Loop (Perda de Complacência em Altos Volumes)",
+    text:"Achatamento terminal em P×V sugere que, em volumes mais altos, a complacência cai e mais pressão é necessária para pequenos incrementos de volume. A leitura educacional associa o achado a sobredistensão e a maior energia elástica por ciclo, especialmente quando Vt e ΔP são altos.",
+    refs:[
+      {authors:"Gattinoni L, Tonetti T, Cressoni M, et al.",title:"Ventilator-related causes of lung injury: the mechanical power",journal:"Intensive Care Medicine",year:"2016",volume:"42",issue:"10",pages:"1567-1575",doi:"10.1007/s00134-016-4505-2"},
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"}
+    ]
+  },
+
+  p_rise_slow:{
+    title:"Subida Lenta de Pressão (Rampa/Pressurização Lenta)",
+    text:"Pressurização lenta em modos pressóricos reduz o pico inicial de fluxo e pode alterar trabalho inspiratório e conforto, dependendo da demanda do paciente. A leitura educacional foca na relação entre rampa, formato do fluxo inspiratório e esforço observado nas curvas.",
+    refs:[
+      {authors:"Chiumello D, Pelosi P, Croci M, et al.",title:"The effects of pressurization rate on breathing pattern, work of breathing, gas exchange and patient comfort in pressure support ventilation",journal:"European Respiratory Journal",year:"2001",volume:"18",issue:"1",pages:"107-114"},
+      {authors:"Chiumello D, et al.",title:"Effect of different inspiratory rise time and cycling off criteria during pressure support ventilation",journal:"Critical Care Medicine",year:"2003",volume:"31",issue:"7",pages:"1991-1997",doi:"10.1097/01.CCM.0000074273.79332.3E"}
+    ]
+  },
+
+  p_rise_fast:{
+    title:"Subida Rápida de Pressão (Rampa/Pressurização Muito Rápida)",
+    text:"Pressurização muito rápida eleva o fluxo inicial e pode gerar overshoot/oscilações, alterando conforto e interação paciente–ventilador. A leitura educacional integra o formato das curvas (pressão e fluxo) e a presença de oscilações/entalhes como marcadores do impacto da rampa no traçado.",
+    refs:[
+      {authors:"Chiumello D, Pelosi P, Croci M, et al.",title:"The effects of pressurization rate on breathing pattern, work of breathing, gas exchange and patient comfort in pressure support ventilation",journal:"European Respiratory Journal",year:"2001",volume:"18",issue:"1",pages:"107-114"},
+      {authors:"Chiumello D, et al.",title:"Effect of different inspiratory rise time and cycling off criteria during pressure support ventilation",journal:"Critical Care Medicine",year:"2003",volume:"31",issue:"7",pages:"1991-1997",doi:"10.1097/01.CCM.0000074273.79332.3E"}
+    ]
+  },
+
+  p_saw:{
+    title:"Padrão Dente de Serra (Oscilações)",
+    text:"Oscilações com padrão serrilhado em curvas e loops são descritas em cenários de secreções, condensado no circuito e outros eventos do circuito, podendo também aparecer por vibrações/artefatos. A leitura educacional é reconhecer o padrão como pista de evento no sistema paciente–circuito–ventilador, e correlacionar com outros sinais gráficos e alarmes, quando presentes.",
+    refs:[
+      {authors:"Das SK, et al.",title:"“Undulation on ventilator wave” may indicate serious lung condition",journal:"—",year:"2016"},
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"}
+    ]
+  },
+
+  alarm_ppeak:{
+    title:"Alarme de Ppico",
+    text:"Alarmes de pressão de pico são tipicamente relacionados a mudanças de resistência/fluxo e/ou mudanças na carga elástica (quando o platô também se eleva). A interpretação educacional é analisar simultaneamente o traçado de pressão, o fluxo e a diferença Ppico–Pplat, além da evolução temporal do evento.",
+    refs:[
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"},
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"}
+    ]
+  },
+
+  alarm_vmin:{
+    title:"Alarme de Volume-Minuto",
+    text:"Alarmes de volume-minuto se relacionam a mudanças em FR, Vt e/ou vazamentos e desconexões, dependendo do modo e do algoritmo do ventilador. A leitura educacional é correlacionar o alarme com a curva de volume/fluxo e com o fechamento dos loops (alça aberta sugere vazamento), além da estabilidade do padrão ventilatório.",
+    refs:[
+      {authors:"Goodfellow LT, et al.",title:"AARC Clinical Practice Guideline: Patient-Ventilator Assessment",journal:"Respiratory Care",year:"2024",volume:"69",issue:"8",pages:"1042-1054",doi:"10.4187/respcare.12007"},
+      {authors:"Silva PL, Rocco PRM",title:"The basics of respiratory mechanics: ventilator-derived parameters",journal:"Annals of Translational Medicine",year:"2018",volume:"6",issue:"19",pages:"376",doi:"10.21037/atm.2018.06.06"}
+    ]
   }
 };
+</script>
 
 $("btnAssinRun").onclick=()=>{
 const s=$$(".assin:checked").map(c=>c.value);
